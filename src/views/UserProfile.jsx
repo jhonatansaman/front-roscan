@@ -1064,14 +1064,14 @@ class UserProfile extends Component {
                             label: 'Orçamento',
                             type: 'text',
                             bsClass: 'form-control',
-                            // onChange: self.updateInput,
+                            onChange: self.updateInput,
                           },
                           {
                             label: 'Pedido',
                             type: 'text',
                             bsClass: 'form-control',
                             placeholder: 'Username',
-                            // onChange: self.updateInput2,
+                            onChange: self.updateInput2,
                           },
                         ]}
                       />
@@ -1082,13 +1082,13 @@ class UserProfile extends Component {
                             label: 'Cliente',
                             type: 'text',
                             bsClass: 'form-control',
-                            // onChange: self.updateInput3,
+                            onChange: self.updateInput3,
                           },
                           {
                             label: 'Tipo',
                             type: 'text',
                             bsClass: 'form-control',
-                            // onChange: self.updateInput4,
+                            onChange: self.updateInput4,
                           },
                         ]}
                       />
