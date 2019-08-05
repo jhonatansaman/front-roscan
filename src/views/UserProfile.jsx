@@ -375,6 +375,16 @@ class UserProfile extends Component {
     }
     return legend;
   }
+
+  async modalConsultarImportacoes() {
+    const responseConsultarImportacao = await api.get(
+      '/get/consultarImportacao'
+    );
+
+    await this.setState({arrayConsultaImportacao: responseConsultarImportacao.data});
+
+    this.setState({ showModalConsultaImportacao: true })
+  }
   render() {
     const self = this;
 
@@ -457,7 +467,7 @@ class UserProfile extends Component {
               >
                 <MenuItem
                   onClick={() =>
-                    this.setState({showModalConsultaImportacao: true})
+                    this.modalConsultarImportacoes()
                   }
                   eventKey={2.1}
                 >
