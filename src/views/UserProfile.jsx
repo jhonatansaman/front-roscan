@@ -58,6 +58,8 @@ import ToolkitProvider, {
   CSVExport,
 } from 'react-bootstrap-table2-toolkit';
 import Select from 'react-select';
+import { AST_Accessor } from 'terser';
+import { thisTypeAnnotation } from '@babel/types';
 
 const {SearchBar, ClearSearchButton} = Search;
 const {ExportCSVButton} = CSVExport;
@@ -65,15 +67,7 @@ const {ExportCSVButton} = CSVExport;
 // import avatar from 'assets/img/faces/face-3.jpg';
 
 
-var dataPie2 = {
-  labels: ["50%", "39%", "7%", "3%", "1%" ],
-  series: [50, 39, 7, 3, 1]
-};
-var legendPie2 = {
-  names: ["Importação", "Fabricação", "Projeto", "Finalização", "Pedido"],
-  types: ["info", "danger", "warning"]
-};
-
+// 
 
 class UserProfile extends Component {
   constructor(props) {
@@ -83,6 +77,21 @@ class UserProfile extends Component {
     this.updateInput2 = this.updateInput2.bind(this);
     this.updateInput3 = this.updateInput3.bind(this);
     this.updateInput4 = this.updateInput4.bind(this);
+    this.InputEditarTempo = this.InputEditarTempo.bind(this);
+    this.InputEditarTempoProjeto = this.InputEditarTempoProjeto.bind(this);
+    this.InputEditarTempoProjeto2 = this.InputEditarTempoProjeto2.bind(this);
+    this.InputEditarTempoProjeto3 = this.InputEditarTempoProjeto3.bind(this);
+    this.InputEditarTempoProjeto4 = this.InputEditarTempoProjeto4.bind(this);
+    this.InputEditarTempoFabricacao = this.InputEditarTempoFabricacao.bind(this);
+    this.InputEditarTempoImportacao = this.InputEditarTempoImportacao.bind(this);
+    this.InputEditarTempoImportacao2 = this.InputEditarTempoImportacao2.bind(this);
+    this.InputEditarTempoImportacao3 = this.InputEditarTempoImportacao3.bind(this);
+    this.InputEditarTempoImportacao4 = this.InputEditarTempoImportacao4.bind(this);
+    this.InputEditarTempoFinalizacao = this.InputEditarTempoFinalizacao.bind(this);
+    this.InputEditarTempoFinalizacao2 = this.InputEditarTempoFinalizacao2.bind(this);
+    this.InputEditarTempoFinalizacao3 = this.InputEditarTempoFinalizacao3.bind(this);
+    this.InputEditarTempoFinalizacao4 = this.InputEditarTempoFinalizacao4.bind(this);
+    this.InputEditarTempoFinalizacao5 = this.InputEditarTempoFinalizacao5.bind(this);
 
     this.state = {
       orcamento: '',
@@ -125,6 +134,16 @@ class UserProfile extends Component {
       showModalTempoFabricacao: false,
       showModalTempoImportacao: false,
       showModalTempoFinalizacao: false,
+      tempoPedidoEditar: '',
+      dataPie2: {
+        labels: [],
+        series:[]
+      },
+      legendPie2: {
+        names: ["Importação", "Fabricação", "Projeto", "Finalização", "Pedido"],
+        types: ["info", "danger", "warning"]
+      }
+
     };
   }
 
@@ -161,6 +180,52 @@ class UserProfile extends Component {
   updateInput4(event) {
     this.setState({tipo: event.target.value});
   }
+  InputEditarTempo(event) {
+    this.setState({tempo_pedidoEditar: event.target.value});
+  }
+  InputEditarTempoProjeto(event) {
+    this.setState({tempo_projetoViagemEditar: event.target.value});
+  }
+  InputEditarTempoProjeto2(event) {
+    this.setState({tempo_projetoMedidasEditar: event.target.value});
+  }
+  InputEditarTempoProjeto3(event) {
+    this.setState({tempo_projetoDesenhoTecnicoEditar: event.target.value});
+  }
+  InputEditarTempoProjeto4(event) {
+    this.setState({tempo_projetoRevisaoEditar: event.target.value});
+  }
+  InputEditarTempoFabricacao(event) {
+    this.setState({tempo_FabricacaoEditar: event.target.value});
+  }
+  InputEditarTempoImportacao(event) {
+    this.setState({tempo_importacaoArmazemEditar: event.target.value});
+  }
+  InputEditarTempoImportacao2(event) {
+    this.setState({tempo_importacaoViagemNavioEditar: event.target.value});
+  }
+  InputEditarTempoImportacao3(event) {
+    this.setState({tempo_importacaoNacionalizacaoEditar: event.target.value});
+  }
+  InputEditarTempoImportacao4(event) {
+    this.setState({tempo_importacaoFreteEditar: event.target.value});
+  }
+  InputEditarTempoFinalizacao(event) {
+    this.setState({tempo_finalizacaoDesembarqueEditar: event.target.value});
+  }
+  InputEditarTempoFinalizacao2(event) {
+    this.setState({tempo_finalizacaoConferenciaEditar: event.target.value});
+  }
+  InputEditarTempoFinalizacao3(event) {
+    this.setState({tempo_finalizacaoFreteClienteEditar: event.target.value});
+  }
+  InputEditarTempoFinalizacao4(event) {
+    this.setState({tempo_finalizacaoTrocaEditar: event.target.value});
+  }
+  InputEditarTempoFinalizacao5(event) {
+    this.setState({tempo_finalizacaoEmbarqueEditar: event.target.value});
+  }
+  
 
   async cadastro_dias_padrao() {
     await api.post('/posts/cadTempoPedido',{
@@ -171,7 +236,7 @@ class UserProfile extends Component {
       viagem: 1,
       medidas: 1,
       desenho_tecnico: 5,
-      revisao: 5
+      revisao: 1
     });
 
     await api.post('/posts/cadTempoFabricacao',{
@@ -359,6 +424,75 @@ class UserProfile extends Component {
   async visualizarGrafico() {
 
 
+    const responseIdTempoPedido = await api.post('/posts/buscaTempoPedidoId', {
+      id_tempo_pedido: this.state.id_tempo_pedidoEditar
+    })
+
+    console.log("tempo pedido: ", responseIdTempoPedido.data[0].tempo);
+    let percentual = (responseIdTempoPedido.data[0].tempo*100)/116
+    console.log("PERCENTUAL: ", Math.round(percentual));
+    console.log("________________");
+
+    const responseIdTempoImportacao = await api.post('/posts/buscaTempoImportacaoId', {
+      id_tempo_importacao: this.state.id_tempo_importacaoEditar
+    })
+
+    console.log("tempo importação (armazem): ", responseIdTempoImportacao.data[0].espera_armazem);
+    console.log("tempo importação (viagem navio): ", responseIdTempoImportacao.data[0].viagem_navio);
+    console.log("tempo importação(nacionalização): ", responseIdTempoImportacao.data[0].nacionalizacao);
+    console.log("tempo importação(frete roscan): ", responseIdTempoImportacao.data[0].frete_roscan);
+    let percentual2 = ((responseIdTempoImportacao.data[0].espera_armazem+responseIdTempoImportacao.data[0].viagem_navio+responseIdTempoImportacao.data[0].nacionalizacao+responseIdTempoImportacao.data[0].frete_roscan)*100)/116
+    console.log("PERCENTUAL: ", Math.round(percentual2));
+    console.log("________________");
+
+    const responseIdFabricacao = await api.post('/posts/buscaTempoFabricacaoId', {
+      id_tempo_fabricacao: this.state.id_tempo_fabricacaoEditar
+    })
+
+    console.log("tempo fabricação: ", responseIdFabricacao.data[0].tempo_fabricacao);
+    let percentual3 = (responseIdFabricacao.data[0].tempo_fabricacao*100)/116
+    console.log("PERCENTUAL: ", Math.round(percentual3));
+    console.log("________________");
+
+    const responseIdTempoProjeto = await api.post('/posts/buscaTempoProjetoId', {
+      id_tempo_projeto: this.state.id_tempo_projetoEditar
+    })
+
+    console.log("tempo projeto(viagem): ", responseIdTempoProjeto.data[0].viagem);
+    console.log("tempo projeto(MEDIDAS): ", responseIdTempoProjeto.data[0].medidas);
+    console.log("tempo projeto(desenho técnico): ", responseIdTempoProjeto.data[0].desenho_tecnico);
+    console.log("tempo projeto(revisao): ", responseIdTempoProjeto.data[0].revisao);
+    let percentual4 = ((responseIdTempoProjeto.data[0].viagem+responseIdTempoProjeto.data[0].medidas+responseIdTempoProjeto.data[0].desenho_tecnico+responseIdTempoProjeto.data[0].revisao)*100)/116
+    console.log("PERCENTUAL: ", Math.round(percentual4));
+    console.log("________________");
+
+
+    const responseIdTempoFinalizacao = await api.post('/posts/buscaTempoFinalizacaoId', {
+      id_tempo_finalizacao: this.state.id_tempo_finalizacaoEditar
+    })
+
+    console.log("tempo finaliação(desembarque): ", responseIdTempoFinalizacao.data[0].desembarque);
+    console.log("tempo finaliação(conferencia projeto): ", responseIdTempoFinalizacao.data[0].conferencia_projeto);
+    console.log("tempo finaliação(troca embalagem): ", responseIdTempoFinalizacao.data[0].troca_embalagem);
+    console.log("tempo finaliação(embarque): ", responseIdTempoFinalizacao.data[0].embarque);
+    console.log("tempo finaliação(frete_cliente): ", responseIdTempoFinalizacao.data[0].frete_cliente);
+    let calculardia = ((responseIdTempoFinalizacao.data[0].desembarque+responseIdTempoFinalizacao.data[0].conferencia_projeto+responseIdTempoFinalizacao.data[0].troca_embalagem+responseIdTempoFinalizacao.data[0].embarque))/24
+    let percentual5  = (calculardia+responseIdTempoFinalizacao.data[0].frete_cliente*100)/116
+    console.log("PERCENTUAL: ", Math.round(percentual5));
+    console.log("________________");
+
+     // var legendPie2 = {
+        //   names: ["Importação", "Fabricação", "Projeto", "Finalização", "Pedido"],
+        //   types: ["info", "danger", "warning"]
+        // };
+    
+    await this.setState({ 
+      dataPie2: {
+        labels: [Math.round(percentual2), Math.round(percentual3), Math.round(percentual4), Math.round(percentual5), Math.round(percentual)],
+        series: [Math.round(percentual2), Math.round(percentual3), Math.round(percentual4), Math.round(percentual5), Math.round(percentual)]
+      }
+    })
+
     this.setState({
       showModalViewGrafico: true,
       showModalEditar: false,
@@ -385,6 +519,96 @@ class UserProfile extends Component {
 
     this.setState({ showModalConsultaImportacao: true })
   }
+
+  async editarTempoPedidoFato(){
+
+    console.log("tempo pedido editar: ", this.state.tempo_pedidoEditar);
+
+    await api.post('/posts/attTempos', {
+      tempoPedido: this.state.tempo_pedidoEditar,
+      id_tempo_pedido: this.state.id_tempo_pedidoEditar,
+      escolha: 1
+    })
+
+    this.setState({ showModalTempoPedido: false })
+  }
+  async editarTempoProjetoFato(){
+
+    console.log("tempo projeot viagem: ", this.state.tempo_projetoViagemEditar);
+    console.log("tempo projeto medidas: ", this.state.tempo_projetoMedidasEditar);
+    console.log("tempo projeot tecnico: ", this.state.tempo_projetoDesenhoTecnicoEditar);
+    console.log("tempo projeot revisao: ", this.state.tempo_projetoRevisaoEditar);
+
+    await api.post('/posts/attTempos', {
+      tempoViagem: this.state.tempo_projetoViagemEditar,
+      tempoMedidas: this.state.tempo_projetoMedidasEditar,
+      tempoDesenho: this.state.tempo_projetoDesenhoTecnicoEditar,
+      tempoRevisao: this.state.tempo_projetoRevisaoEditar,
+      id_tempo_projeto: this.state.id_tempo_projetoEditar,
+      escolha: 2
+    })
+
+    this.setState({ showModalTempoProjeto: false })
+
+  }
+  
+  async editarTempoImportacaoFato(){
+
+    console.log("tempo importação armazem: ", this.state.tempo_importacaoArmazemEditar);
+    console.log("tempo importação navio: ", this.state.tempo_importacaoViagemNavioEditar);
+    console.log("tempo importação nacionalização: ", this.state.tempo_importacaoNacionalizacaoEditar);
+    console.log("tempo importação frete editar: ", this.state.tempo_importacaoFreteEditar);
+
+    await api.post('/posts/attTempos', {
+      tempoArmazem: this.state.tempo_importacaoArmazemEditar,
+      tempoImportacaoNavio: this.state.tempo_importacaoViagemNavioEditar,
+      tempoNacionalizacao: this.state.tempo_importacaoNacionalizacaoEditar,
+      tempoFrete: this.state.tempo_importacaoFreteEditar,
+      id_tempo_importacao: this.state.id_tempo_importacaoEditar,
+      escolha: 3
+    })
+
+    this.setState({ showModalTempoImportacao: false })
+
+  }
+ 
+  async editarTempoFinalizacaoFato(){
+
+    console.log("tempo finalização desembarque: ", this.state.tempo_finalizacaoDesembarqueEditar);
+    console.log("tempo finalização conferencia: ", this.state.tempo_finalizacaoConferenciaEditar);
+    console.log("tempo finalização frete cliente: ", this.state.tempo_finalizacaoFreteClienteEditar);
+    console.log("tempo finalização troca: ", this.state.tempo_finalizacaoTrocaEditar);
+    console.log("tempo finalização embarque: ", this.state.tempo_finalizacaoEmbarqueEditar);
+
+    await api.post('/posts/attTempos', {
+      tempoDesembarque: this.state.tempo_finalizacaoDesembarqueEditar,
+      tempoConferencia: this.state.tempo_finalizacaoConferenciaEditar,
+      tempoFreteCliente: this.state.tempo_finalizacaoFreteClienteEditar,
+      tempoTroca: this.state.tempo_finalizacaoTrocaEditar,
+      tempoEmbarque: this.state.tempo_finalizacaoEmbarqueEditar,
+      id_tempo_finalizacao: this.state.id_tempo_finalizacaoEditar,
+      escolha: 4
+    })
+
+    this.setState({ showModalTempoFinalizacao: false })
+
+  }
+  async editarTempoFabricacaoFato(){
+
+    console.log("tempo pedido editar: ", this.state.tempo_FabricacaoEditar);
+
+    await api.post('/posts/attTempos', {
+      tempoFabricacao: this.state.tempo_FabricacaoEditar,
+      id_tempo_fabricacao: this.state.id_tempo_fabricacaoEditar,
+      escolha: 5
+    })
+
+    this.setState({ showModalTempoFabricacao: false })
+
+  }
+  
+
+
   render() {
     const self = this;
 
@@ -542,10 +766,10 @@ class UserProfile extends Component {
           <Modal.Body>
             <ChartistGraph
               style={{width: 350, height: 250, marginLeft: '20%'}}
-              data={dataPie2}
+              data={this.state.dataPie2}
               type="Pie"
             />
-           <div className="legend">{this.createLegend(legendPie2)}</div>
+           <div className="legend">{this.createLegend(this.state.legendPie2)}</div>
           </Modal.Body>
           <Modal.Footer>
             <Button
@@ -700,8 +924,8 @@ class UserProfile extends Component {
                     type: 'text',
                     bsClass: 'form-control',
                     placeholder: 'Nome',
-                    // onChange: self.updateInput2Editar,
-                    value: self.state.tempo_pedidoEditar,
+                    onChange: self.InputEditarTempo,
+                    // value: self.state.tempo_pedidoEditar,
                     placeholder: self.state.tempo_pedidoEditar,
                   },
                 ]}
@@ -712,10 +936,7 @@ class UserProfile extends Component {
             <Button
               variant="secondary"
               onClick={() =>
-                this.setState({
-                  showModalViewGrafico: false,
-                  showModalEditar: true,
-                })
+                this.editarTempoPedidoFato()
               }
             >
               Editar
@@ -754,8 +975,8 @@ class UserProfile extends Component {
                     type: 'text',
                     bsClass: 'form-control',
                     placeholder: 'Nome',
-                    // onChange: self.updateInput2Editar,
-                    value: self.state.tempo_projetoViagemEditar,
+                    onChange: self.InputEditarTempoProjeto,
+                    // value: self.state.InputEditarTempo,
                     placeholder: self.state.tempo_projetoViagemEditar,
                   },
                   {
@@ -763,8 +984,8 @@ class UserProfile extends Component {
                     type: 'text',
                     bsClass: 'form-control',
                     placeholder: 'Nome',
-                    // onChange: self.updateInput2Editar,
-                    value: self.state.tempo_projetoMedidasEditar,
+                    onChange: self.InputEditarTempoProjeto2,
+                    // value: self.state.tempo_projetoMedidasEditar,
                     placeholder: self.state.tempo_projetoMedidasEditar,
                   },
                 ]}
@@ -778,8 +999,8 @@ class UserProfile extends Component {
                     type: 'text',
                     bsClass: 'form-control',
                     placeholder: 'Nome',
-                    // onChange: self.updateInput2Editar,
-                    value: self.state.tempo_projetoDesenhoTecnicoEditar,
+                    onChange: self.InputEditarTempoProjeto3,
+                    // value: self.state.tempo_projetoDesenhoTecnicoEditar,
                     placeholder: self.state.tempo_projetoDesenhoTecnicoEditar,
                   },
                   {
@@ -787,8 +1008,8 @@ class UserProfile extends Component {
                     type: 'text',
                     bsClass: 'form-control',
                     placeholder: 'Nome',
-                    // onChange: self.updateInput2Editar,
-                    value: self.state.tempo_projetoRevisaoEditar,
+                    onChange: self.InputEditarTempoProjeto4,
+                    // value: self.state.tempo_projetoRevisaoEditar,
                     placeholder: self.state.tempo_projetoRevisaoEditar,
                   },
                 ]}
@@ -799,10 +1020,7 @@ class UserProfile extends Component {
             <Button
               variant="secondary"
               onClick={() =>
-                this.setState({
-                  showModalViewGrafico: false,
-                  showModalEditar: true,
-                })
+                this.editarTempoProjetoFato()
               }
             >
               Editar
@@ -841,8 +1059,8 @@ class UserProfile extends Component {
                     type: 'text',
                     bsClass: 'form-control',
                     placeholder: 'Nome',
-                    // onChange: self.updateInput2Editar,
-                    value: self.state.tempo_importacaoArmazemEditar,
+                    onChange: self.InputEditarTempoImportacao,
+                    // value: self.state.tempo_importacaoArmazemEditar,
                     placeholder: self.state.tempo_importacaoArmazemEditar,
                   },
                   {
@@ -850,8 +1068,8 @@ class UserProfile extends Component {
                     type: 'text',
                     bsClass: 'form-control',
                     placeholder: 'Nome',
-                    // onChange: self.updateInput2Editar,
-                    value: self.state.tempo_importacaoViagemNavioEditar,
+                    onChange: self.InputEditarTempoImportacao2,
+                    // value: self.state.tempo_importacaoViagemNavioEditar,
                     placeholder: self.state.tempo_importacaoViagemNavioEditar,
                   },
                 ]}
@@ -865,8 +1083,8 @@ class UserProfile extends Component {
                     type: 'text',
                     bsClass: 'form-control',
                     placeholder: 'Nome',
-                    // onChange: self.updateInput2Editar,
-                    value: self.state.tempo_importacaoNacionalizacaoEditar,
+                    onChange: self.InputEditarTempoImportacao3,
+                    // value: self.state.tempo_importacaoNacionalizacaoEditar,
                     placeholder: self.state.tempo_importacaoNacionalizacaoEditar,
                   },
                   {
@@ -874,8 +1092,8 @@ class UserProfile extends Component {
                     type: 'text',
                     bsClass: 'form-control',
                     placeholder: 'Nome',
-                    // onChange: self.updateInput2Editar,
-                    value: self.state.tempo_importacaoFreteEditar,
+                    onChange: self.InputEditarTempoImportacao4,
+                    // value: self.state.tempo_importacaoFreteEditar,
                     placeholder: self.state.tempo_importacaoFreteEditar,
                   },
                 ]}
@@ -886,10 +1104,7 @@ class UserProfile extends Component {
             <Button
               variant="secondary"
               onClick={() =>
-                this.setState({
-                  showModalViewGrafico: false,
-                  showModalEditar: true,
-                })
+                this.editarTempoImportacaoFato()
               }
             >
               Editar
@@ -916,7 +1131,7 @@ class UserProfile extends Component {
           }
         >
           <Modal.Header closeButton>
-            <Modal.Title>Tempo Importação</Modal.Title>
+            <Modal.Title>Tempo Finalização</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -928,8 +1143,8 @@ class UserProfile extends Component {
                     type: 'text',
                     bsClass: 'form-control',
                     placeholder: 'Nome',
-                    // onChange: self.updateInput2Editar,
-                    value: self.state.tempo_finalizacaoDesembarqueEditar,
+                    onChange: self.InputEditarTempoFinalizacao,
+                    // value: self.state.tempo_finalizacaoDesembarqueEditar,
                     placeholder: self.state.tempo_finalizacaoDesembarqueEditar,
                   },
                   {
@@ -937,8 +1152,8 @@ class UserProfile extends Component {
                     type: 'text',
                     bsClass: 'form-control',
                     placeholder: 'Nome',
-                    // onChange: self.updateInput2Editar,
-                    value:  self.state.tempo_finalizacaoConferenciaEditar,
+                    onChange: self.InputEditarTempoFinalizacao2,
+                    // value:  self.state.tempo_finalizacaoConferenciaEditar,
                     placeholder: self.state.tempo_finalizacaoConferenciaEditar,
                   },
                   {
@@ -946,8 +1161,8 @@ class UserProfile extends Component {
                     type: 'text',
                     bsClass: 'form-control',
                     placeholder: 'Nome',
-                    // onChange: self.updateInput2Editar,
-                    value: self.state.tempo_finalizacaoFreteClienteEditar,
+                    onChange: self.InputEditarTempoFinalizacao3,
+                    // value: self.state.tempo_finalizacaoFreteClienteEditar,
                     placeholder: self.state.tempo_finalizacaoFreteClienteEditar,
                   },
                 ]}
@@ -961,8 +1176,8 @@ class UserProfile extends Component {
                     type: 'text',
                     bsClass: 'form-control',
                     placeholder: 'Nome',
-                    // onChange: self.updateInput2Editar,
-                    value: self.state.tempo_finalizacaoTrocaEditar,
+                    onChange: self.InputEditarTempoFinalizacao4,
+                    // value: self.state.tempo_finalizacaoTrocaEditar,
                     placeholder: self.state.tempo_finalizacaoTrocaEditar,
                   },
                   {
@@ -970,8 +1185,8 @@ class UserProfile extends Component {
                     type: 'text',
                     bsClass: 'form-control',
                     placeholder: 'Nome',
-                    // onChange: self.updateInput2Editar,
-                    value: self.state.tempo_finalizacaoEmbarqueEditar,
+                    onChange: self.InputEditarTempoFinalizacao5,
+                    // value: self.state.tempo_finalizacaoEmbarqueEditar,
                     placeholder: self.state.tempo_finalizacaoEmbarqueEditar,
                   },
                 ]}
@@ -982,10 +1197,7 @@ class UserProfile extends Component {
             <Button
               variant="secondary"
               onClick={() =>
-                this.setState({
-                  showModalViewGrafico: false,
-                  showModalEditar: true,
-                })
+                this.editarTempoFinalizacaoFato()
               }
             >
               Editar
@@ -1012,7 +1224,7 @@ class UserProfile extends Component {
           }
         >
           <Modal.Header closeButton>
-            <Modal.Title>Tempo Projeto</Modal.Title>
+            <Modal.Title>Tempo Fabricação</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -1024,8 +1236,8 @@ class UserProfile extends Component {
                     type: 'text',
                     bsClass: 'form-control',
                     placeholder: 'Nome',
-                    // onChange: self.updateInput2Editar,
-                    value: self.state.tempo_FabricacaoEditar,
+                    onChange: self.InputEditarTempoFabricacao,
+                    // value: self.state.tempo_FabricacaoEditar,
                     placeholder: self.state.tempo_FabricacaoEditar,
                   },
                 ]}
@@ -1037,10 +1249,7 @@ class UserProfile extends Component {
             <Button
               variant="secondary"
               onClick={() =>
-                this.setState({
-                  showModalViewGrafico: false,
-                  showModalEditar: true,
-                })
+                this.editarTempoFabricacaoFato()
               }
             >
               Editar
