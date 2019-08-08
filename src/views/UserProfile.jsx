@@ -477,7 +477,10 @@ class UserProfile extends Component {
     console.log("tempo finaliação(embarque): ", responseIdTempoFinalizacao.data[0].embarque);
     console.log("tempo finaliação(frete_cliente): ", responseIdTempoFinalizacao.data[0].frete_cliente);
     let calculardia = ((responseIdTempoFinalizacao.data[0].desembarque+responseIdTempoFinalizacao.data[0].conferencia_projeto+responseIdTempoFinalizacao.data[0].troca_embalagem+responseIdTempoFinalizacao.data[0].embarque))/24
-    let percentual5  = (calculardia+responseIdTempoFinalizacao.data[0].frete_cliente*100)/116
+    console.log("CALCULAR DIA CALCULADO: ", Math.round(calculardia))
+    console.log("FRETE CLIENTE : ", responseIdTempoFinalizacao.data[0].frete_cliente)
+
+    let percentual5  = ((Math.round(calculardia)+responseIdTempoFinalizacao.data[0].frete_cliente)*100)/116
     console.log("PERCENTUAL: ", Math.round(percentual5));
     console.log("________________");
 
@@ -1289,7 +1292,7 @@ class UserProfile extends Component {
                             label: 'Pedido',
                             type: 'text',
                             bsClass: 'form-control',
-                            placeholder: 'Username',
+                            // placeholder: 'Username',
                             onChange: self.updateInput2,
                           },
                         ]}
