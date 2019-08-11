@@ -41,11 +41,11 @@ class Login extends Component {
     this.setState({senha: event.target.value});
   }
 
-//   login = e => {
-//     e.preventDefault();
+  //   login = e => {
+  //     e.preventDefault();
 
-//     let errors = this.validateLoginForm();
-//   };
+  //     let errors = this.validateLoginForm();
+  //   };
 
   entrar = async () => {
     let email = this.state.email;
@@ -59,21 +59,25 @@ class Login extends Component {
     if (response.data == 1) {
       alert('Login efetuado com sucesso');
       this.props.history.push({
-        pathname: '/admin/dashboard',
+        pathname: '/admin/importacao',
       });
     } else {
       alert('Login/senha inválidos');
     }
   };
   render() {
-    const {errors, formSubmitted} = this.state;
-
     return (
       <div className="Login">
         <Row>
           <form>
+            <div style={{textAlign: 'center'}}>
+              <img
+                src={require('../assets/img/reactlogo.png')}
+                style={{width: 250, height: 100, marginBottom: 10}}
+              />
+            </div>
             <FormGroup controlId="email">
-              Email
+              E-mail
               <FormControl
                 type="text"
                 name="email"
@@ -96,12 +100,11 @@ class Login extends Component {
                                 // <HelpBlock>{errors.password}</HelpBlock>
                             } */}
             </FormGroup>
-            <Button
-              onClick={() => this.entrar()}
-              bsStyle="primary"
-            >
-              Entrar
-            </Button>
+            <div style={{textAlign: 'center'}}>
+              <Button onClick={() => this.entrar()} bsStyle="primary">
+                Entrar
+              </Button>
+            </div>
           </form>
         </Row>
       </div>

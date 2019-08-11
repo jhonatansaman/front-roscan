@@ -141,9 +141,13 @@ class UserProfile extends Component {
       },
       legendPie2: {
         names: ["Importação", "Fabricação", "Projeto", "Finalização", "Pedido"],
-        types: ["info", "danger", "warning"]
-      }
-
+        types: ["info", "danger", "warning", "success", "white"]
+      },
+      habilitarBtnCadastrar: true,
+      esOrcamento: false,
+      escPedido: false,
+      escCliente: false,
+      escTipo: false,
     };
   }
 
@@ -168,17 +172,32 @@ class UserProfile extends Component {
     this.setState({isOpen: !this.state.isOpen});
   };
 
-  updateInput(event) {
-    this.setState({orcamento: event.target.value});
+  async updateInput(event) {
+    await this.setState({orcamento: event.target.value, escOrcamento: true});
+    console.log("escOrcamento: ", this.state.escOrcamento);
+    console.log("escPedido: ", this.state.escPedido);
+    console.log("escCliente: ", this.state.escCliente);
+    console.log("escTipo: ", this.state.escTipo);
+    if(this.state.escTipo==true && this.state.escCliente==true && this.state.escPedido==true && this.state.escOrcamento==true)
+    this.setState({ habilitarBtnCadastrar: false })
   }
-  updateInput2(event) {
-    this.setState({pedido: event.target.value});
+  async updateInput2(event) {
+    await this.setState({pedido: event.target.value, escPedido: true});
+    
+    if(this.state.escTipo==true && this.state.escCliente==true && this.state.escPedido==true && this.state.escOrcamento==true)
+    this.setState({ habilitarBtnCadastrar: false })
   }
-  updateInput3(event) {
-    this.setState({cliente: event.target.value});
+  async updateInput3(event) {
+    await this.setState({cliente: event.target.value, escCliente: true});
+
+    if(this.state.escTipo==true && this.state.escCliente==true && this.state.escPedido==true && this.state.escOrcamento==true)
+    this.setState({ habilitarBtnCadastrar: false })
   }
-  updateInput4(event) {
-    this.setState({tipo: event.target.value});
+  async updateInput4(event) {
+    await this.setState({tipo: event.target.value, escTipo: true});
+  
+    if(this.state.escTipo==true && this.state.escCliente==true && this.state.escPedido==true && this.state.escOrcamento==true)
+    this.setState({ habilitarBtnCadastrar: false })
   }
   InputEditarTempo(event) {
     this.setState({tempo_pedidoEditar: event.target.value});
@@ -488,10 +507,17 @@ class UserProfile extends Component {
         //   names: ["Importação", "Fabricação", "Projeto", "Finalização", "Pedido"],
         //   types: ["info", "danger", "warning"]
         // };
+
+    var percentual2Correto = Math.round(percentual2)+'%';
+    var percentual3Correto = Math.round(percentual3)+'%';
+    var percentual4Correto = Math.round(percentual4)+'%';
+    var percentual5Correto = Math.round(percentual5)+'%';
+    var percentualCorreto = Math.round(percentual)+'%';
+    
     
     await this.setState({ 
       dataPie2: {
-        labels: [Math.round(percentual2), Math.round(percentual3), Math.round(percentual4), Math.round(percentual5), Math.round(percentual)],
+        labels: [percentual2Correto, percentual3Correto, percentual4Correto, percentualCorreto, percentualCorreto],
         series: [Math.round(percentual2), Math.round(percentual3), Math.round(percentual4), Math.round(percentual5), Math.round(percentual)]
       }
     })
@@ -1332,6 +1358,7 @@ class UserProfile extends Component {
                         onClick={() => this.cadastrar()}
                         pullRight
                         fill
+                        disabled={this.state.habilitarBtnCadastrar}
                       >
                         Cadastrar
                       </Button>

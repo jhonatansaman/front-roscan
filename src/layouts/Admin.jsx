@@ -137,13 +137,13 @@ class Admin extends Component {
       default:
         break;
     }
-    _notificationSystem.addNotification({
-      title: <span data-notify="icon" className="pe-7s-gift" />,
-      message: <div>Roscan Web</div>,
-      level: level,
-      position: 'tr',
-      autoDismiss: 15,
-    });
+    // _notificationSystem.addNotification({
+    //   title: <span data-notify="icon" className="pe-7s-gift" />,
+    //   message: <div>Roscan Web</div>,
+    //   level: level,
+    //   position: 'tr',
+    //   autoDismiss: 15,
+    // });
   }
   componentDidUpdate(e) {
     if (
