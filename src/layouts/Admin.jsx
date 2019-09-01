@@ -171,7 +171,7 @@ class Admin extends Component {
           hasImage={this.state.hasImage}
         />
         <div id="main-panel" className="main-panel" ref="mainPanel">
-          {this.props.location.pathname != '/admin/importacao' ? (
+          {this.props.location.pathname != '/admin/importacao' && this.props.location.pathname != '/admin/recuperacao'  ? (
             <AdminNavbar
               {...this.props}
               brandText={this.getBrandText(this.props.location.pathname)}

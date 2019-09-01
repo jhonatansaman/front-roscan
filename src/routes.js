@@ -39,6 +39,13 @@ const dashboardRoutes = [
     component: UserProfile,
     layout: "/admin"
   },
+  {
+    path: "/recuperacao",
+    name: "Recuperação",
+    icon: "pe-7s-user",
+    component: TableList,
+    layout: "/admin"
+  },
   // {
   //   path: "/table",
   //   name: "Table List",

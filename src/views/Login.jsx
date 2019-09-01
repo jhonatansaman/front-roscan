@@ -73,7 +73,7 @@ class Login extends Component {
             <div style={{textAlign: 'center'}}>
               <img
                 src={require('../assets/img/reactlogo.png')}
-                style={{width: 250, height: 100, marginBottom: 10}}
+                style={{width: 200, height: 80, marginBottom: 10}}
               />
             </div>
             <FormGroup controlId="email">
