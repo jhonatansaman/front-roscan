@@ -194,6 +194,7 @@ class TableList extends Component {
     // console.log("tempo solda: ", this.state.tempo_usinagem_medida);
 
     for(let i = 0; i < this.state.arrayEtapas.length; i++){
+      console.log("Tamanho do arrayEtaoas",this.state.arrayEtapas.length)
       if(this.state.arrayEtapas[i] == 1){
         await this.setState({ etapa1: true })
         await api.post('/posts/etapaCadastro', {
