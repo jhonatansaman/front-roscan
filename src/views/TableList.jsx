@@ -229,6 +229,7 @@ class TableList extends Component {
           id_segunda_etapa: response2.data[0].id_segunda_etapa,
           etapa: 2,
         });
+        console.log("RESPONSE 2", response2)
       }
       if(this.state.arrayEtapas[i] == 3){
         await this.setState({ etapa3: true })
