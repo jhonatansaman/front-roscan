@@ -181,6 +181,7 @@ class TableList extends Component {
   async check(opcao){
     await this.setState({ arrayEtapas: [...this.state.arrayEtapas, opcao] })
     this.setState({ habilitarBtnCadastrar: false })
+    console.log("array Etapas: ", this.state.arrayEtapas);
   }
 
   async cadastrar() {
