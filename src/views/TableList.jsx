@@ -214,6 +214,7 @@ class TableList extends Component {
 
       }
       if(this.state.arrayEtapas[i] == 2){
+        console.log("Entrou na 2")
         await this.setState({ etapa2: true })
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
