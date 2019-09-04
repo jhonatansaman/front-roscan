@@ -211,7 +211,7 @@ class TableList extends Component {
           id_primeira_etapa: response.data[0].id_primeira_etapa,
           etapa: 1,
         });
-
+        console.log("RESPONSE 1", response)
       }
       if(this.state.arrayEtapas[i] == 2){
         console.log("Entrou na 2")
