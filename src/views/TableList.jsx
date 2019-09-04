@@ -231,55 +231,55 @@ class TableList extends Component {
         });
         console.log("RESPONSE 2", response2)
       }
-    //   if(this.state.arrayEtapas[i] == 3){
-    //     await this.setState({ etapa3: true })
-    //     await api.post('/posts/etapaCadastro', {
-    //       tempo_parcial: 0,
-    //       tempo_pre: this.state.tempo_usinagem,
-    //       etapa: 3
-    //     });
-    //     const response3 = await api.post('/posts/pegarUltimoCadastro', {
-    //       etapa: 3
-    //     })
-    //     await api.post('posts/updateRecuperacao', {
-    //       id_recuperacao: this.state.id_recuperacao,
-    //       id_terceira_etapa: response3.data[0].id_terceira_etapa,
-    //       etapa: 3,
-    //     });
-    //   }
-    //   if(this.state.arrayEtapas[i] == 4){
-    //     await this.setState({ etapa4: true })
-    //     await api.post('/posts/etapaCadastro', {
-    //       tempo_parcial: 0,
-    //       tempo_pre: this.state.tempo_desbaste,
-    //       etapa: 4
-    //     });
-    //     const response4 = await api.post('/posts/pegarUltimoCadastro', {
-    //       etapa: 4
-    //     })
-    //     await api.post('posts/updateRecuperacao', {
-    //       id_recuperacao: this.state.id_recuperacao,
-    //       id_quarta_etapa: response4.data[0].id_quarta_etapa,
-    //       etapa: 4,
-    //     });
-    //   }
-    //   if(this.state.arrayEtapas[i] == 5){
-    //     await this.setState({ etapa5: true })
-    //     await api.post('/posts/etapaCadastro', {
-    //       tempo_parcial: 0,
-    //       tempo_pre: this.state.tempo_usinagem_medida,
-    //       etapa: 5
-    //     });
-    //     const response5 = await api.post('/posts/pegarUltimoCadastro', {
-    //       etapa: 5
-    //     })
-    //     await api.post('posts/updateRecuperacao', {
-    //       id_recuperacao: this.state.id_recuperacao,
-    //       id_quinta_etapa: response5.data[0].id_quinta_etapa,
-    //       etapa: 5,
-    //     });
-    //   }
-     }
+      if(this.state.arrayEtapas[i] == 3){
+        await this.setState({ etapa3: true })
+        await api.post('/posts/etapaCadastro', {
+          tempo_parcial: 0,
+          tempo_pre: this.state.tempo_usinagem,
+          etapa: 3
+        });
+        const response3 = await api.post('/posts/pegarUltimoCadastro', {
+          etapa: 3
+        })
+        await api.post('posts/updateRecuperacao', {
+          id_recuperacao: this.state.id_recuperacao,
+          id_terceira_etapa: response3.data[0].id_terceira_etapa,
+          etapa: 3,
+        });
+      }
+      if(this.state.arrayEtapas[i] == 4){
+        await this.setState({ etapa4: true })
+        await api.post('/posts/etapaCadastro', {
+          tempo_parcial: 0,
+          tempo_pre: this.state.tempo_desbaste,
+          etapa: 4
+        });
+        const response4 = await api.post('/posts/pegarUltimoCadastro', {
+          etapa: 4
+        })
+        await api.post('posts/updateRecuperacao', {
+          id_recuperacao: this.state.id_recuperacao,
+          id_quarta_etapa: response4.data[0].id_quarta_etapa,
+          etapa: 4,
+        });
+      }
+      if(this.state.arrayEtapas[i] == 5){
+        await this.setState({ etapa5: true })
+        await api.post('/posts/etapaCadastro', {
+          tempo_parcial: 0,
+          tempo_pre: this.state.tempo_usinagem_medida,
+          etapa: 5
+        });
+        const response5 = await api.post('/posts/pegarUltimoCadastro', {
+          etapa: 5
+        })
+        await api.post('posts/updateRecuperacao', {
+          id_recuperacao: this.state.id_recuperacao,
+          id_quinta_etapa: response5.data[0].id_quinta_etapa,
+          etapa: 5,
+        });
+      }
+    }
 
   }
 
