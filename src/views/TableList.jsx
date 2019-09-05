@@ -195,24 +195,24 @@ class TableList extends Component {
 
     for(let i = 0; i < this.state.arrayEtapas.length; i++){
       console.log("Tamanho do arrayEtaoas",this.state.arrayEtapas.length)
-      // if(this.state.arrayEtapas[i] == 1){
-      //   await this.setState({ etapa1: true })
-      //   await api.post('/posts/etapaCadastro', {
-      //     tempo_parcial: 0,
-      //     tempo_pre: this.state.tempo_soldar_ponteira,
-      //     etapa: 1
-      //   });
-      //   const response = await api.post('/posts/pegarUltimoCadastro', {
-      //     etapa: 1
-      //   })
-      //   console.log("response id cadastrado: ", response.data[0].id_primeira_etapa)
-      //   await api.post('posts/updateRecuperacao', {
-      //     id_recuperacao: this.state.id_recuperacao,
-      //     id_primeira_etapa: response.data[0].id_primeira_etapa,
-      //     etapa: 1,
-      //   });
-      //   console.log("RESPONSE 1", response)
-      // }
+      if(this.state.arrayEtapas[i] == 1){
+        await this.setState({ etapa1: true })
+        await api.post('/posts/etapaCadastro', {
+          tempo_parcial: 0,
+          tempo_pre: this.state.tempo_soldar_ponteira,
+          etapa: 1
+        });
+        const response = await api.post('/posts/pegarUltimoCadastro', {
+          etapa: 1
+        })
+        console.log("response id cadastrado: ", response.data[0].id_primeira_etapa)
+        await api.post('posts/updateRecuperacao', {
+          id_recuperacao: this.state.id_recuperacao,
+          id_primeira_etapa: response.data[0].id_primeira_etapa,
+          etapa: 1,
+        });
+        console.log("RESPONSE 1", response)
+      }
       if(this.state.arrayEtapas[i] == 2){
         console.log("Entrou na 2")
         await this.setState({ etapa2: true })
