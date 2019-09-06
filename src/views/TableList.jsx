@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Grid,
   Row,
@@ -34,18 +34,26 @@ import {
 import { Checkbox } from 'semantic-ui-react'
 
 
-import {Card} from 'components/Card/Card.jsx';
-import {FormInputs} from 'components/FormInputs/FormInputs.jsx';
-import {UserCard} from 'components/UserCard/UserCard.jsx';
+import { Card } from 'components/Card/Card.jsx';
+import { FormInputs } from 'components/FormInputs/FormInputs.jsx';
+import { UserCard } from 'components/UserCard/UserCard.jsx';
 import Button from 'components/CustomButton/CustomButton.jsx';
 import api from '../services/api';
+import { ClipLoader, BounceLoader } from 'react-spinners';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginator from 'react-bootstrap-table2-paginator';
+import { css } from '@emotion/core';
 import ToolkitProvider, {
   Search,
   CSVExport,
 } from 'react-bootstrap-table2-toolkit';
 
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 
 class TableList extends Component {
@@ -129,9 +137,13 @@ class TableList extends Component {
       tempo_usinagem: '',
       tempo_desbaste: '',
       tempo_usinagem_medida: '',
-
+      showLoading: false,
+      loading: true,
+      showModalConfirmar: false,
     };
   }
+
+
 
   async updateInput(event) {
     await this.setState({ tempo_soldar_ponteira: event.target.value });
@@ -154,13 +166,22 @@ class TableList extends Component {
   async componentDidMount() {
     const response = await api.get('/get/consultarStatusRecuperacao');
 
-    if(response.data != 0){
-      await this.setState({arrayPreCadastro: response.data, carregou: true});
+    if (response.data != 0) {
+      await this.setState({ arrayPreCadastro: response.data, carregou: true });
     }
+
+    const responseEtapa1 = await api.post('/posts/buscarTempoPreDefinido', {
+      etapa: 1,
+      id_primeira_etapa: 372
+    })
+
+
+    console.log("response etapa 1: ", responseEtapa1.data[0].tempo_pre);
+
   }
 
   toggleCollapse = () => {
-    this.setState({isOpen: !this.state.isOpen});
+    this.setState({ isOpen: !this.state.isOpen });
   };
 
   async buscar(item) {
@@ -178,7 +199,7 @@ class TableList extends Component {
     console.log("tipo: ", this.state.tipo);
   }
 
-  async check(opcao){
+  async check(opcao) {
     await this.setState({ arrayEtapas: [...this.state.arrayEtapas, opcao] })
     this.setState({ habilitarBtnCadastrar: false })
     console.log("array Etapas: ", this.state.arrayEtapas);
@@ -193,8 +214,21 @@ class TableList extends Component {
     // console.log("tempo solda: ", this.state.tempo_desbaste);
     // console.log("tempo solda: ", this.state.tempo_usinagem_medida);
 
-    for(let i = 0; i < this.state.arrayEtapas.length; i++){
-      if(this.state.arrayEtapas[i] == 1){
+    await this.setState({ showLoading: true });
+
+    const sleep = m => new Promise(r => setTimeout(r, m));
+
+    await Promise.all([
+      setTimeout(() => this.setState({ showLoading: false }), 2000),
+    ]);
+
+    await sleep(2250);
+
+    this.setState({ showModalConfirmar: true })
+
+
+    for (let i = 0; i < this.state.arrayEtapas.length; i++) {
+      if (this.state.arrayEtapas[i] == 1) {
         await this.setState({ etapa1: true })
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
@@ -212,7 +246,7 @@ class TableList extends Component {
         });
 
       }
-      if(this.state.arrayEtapas[i] == 2){
+      if (this.state.arrayEtapas[i] == 2) {
         await this.setState({ etapa2: true })
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
@@ -228,7 +262,7 @@ class TableList extends Component {
           etapa: 2,
         });
       }
-      if(this.state.arrayEtapas[i] == 3){
+      if (this.state.arrayEtapas[i] == 3) {
         await this.setState({ etapa3: true })
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
@@ -244,7 +278,7 @@ class TableList extends Component {
           etapa: 3,
         });
       }
-      if(this.state.arrayEtapas[i] == 4){
+      if (this.state.arrayEtapas[i] == 4) {
         await this.setState({ etapa4: true })
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
@@ -260,7 +294,7 @@ class TableList extends Component {
           etapa: 4,
         });
       }
-      if(this.state.arrayEtapas[i] == 5){
+      if (this.state.arrayEtapas[i] == 5) {
         await this.setState({ etapa5: true })
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
@@ -277,6 +311,11 @@ class TableList extends Component {
         });
       }
     }
+
+  }
+
+  mudarPage(){
+    this.props.history.push({ pathname: '/admin/importacao' })
 
   }
 
@@ -298,7 +337,7 @@ class TableList extends Component {
   render() {
     const self = this;
 
-    
+
 
     const botoes = (cell, row, rowIndex) => {
       return (
@@ -322,12 +361,12 @@ class TableList extends Component {
               )
             }
             className="fa fa-edit"
-            style={{color: 'green', fontSize: 20}}
+            style={{ color: 'green', fontSize: 20 }}
           />
           <i
             className="fa fa-trash"
-            onClick={() => {}}
-            style={{color: 'red', marginLeft: 20, fontSize: 20}}
+            onClick={() => { }}
+            style={{ color: 'red', marginLeft: 20, fontSize: 20 }}
           />
         </div>
       );
@@ -370,9 +409,50 @@ class TableList extends Component {
         <p className="hidden-lg hidden-md">Notification</p>
       </div>
     );
-    
+
     return (
       <div>
+        <Modal
+          show={this.state.showLoading}
+          onHide={this.handleClose}
+          size="sm"
+        >
+          <Modal.Header closeButton>Carregando...</Modal.Header>
+          <Modal.Body
+            style={{
+              // background: 'transparent',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <div style={{ marginTop: 50, marginBottom: 50 }}>
+              <BounceLoader
+                css={override}
+                sizeUnit={'px'}
+                size={60}
+                color={'#123b7a'}
+                loading={this.state.loading}
+              />
+
+            </div>
+          </Modal.Body>
+        </Modal>
+
+        <Modal
+          show={this.state.showModalConfirmar}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Alerta</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <p>Salvo com sucesso!</p>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button onClick={() => this.mudarPage()} variant="primary">Ok</Button>
+          </Modal.Footer>
+        </Modal>
         <Navbar fluid>
           <Navbar.Header>
             <Navbar.Brand>
@@ -388,13 +468,13 @@ class TableList extends Component {
                 noCaret
                 id="basic-nav-dropdown"
               >
-              {this.state.carregou ? 
-                this.state.arrayPreCadastro.map((item) => (
-                  <MenuItem eventKey={2.1} onClick  ={() => self.buscar(item)} >Ordem de Serviço: {item.ordem_servico}</MenuItem>
-                ))
-              : 
-              <MenuItem eventKey={2.1}>0</MenuItem>
-              }
+                {this.state.carregou ?
+                  this.state.arrayPreCadastro.map((item) => (
+                    <MenuItem eventKey={2.1} onClick={() => self.buscar(item)} >Ordem de Serviço: {item.ordem_servico}</MenuItem>
+                  ))
+                  :
+                  <MenuItem eventKey={2.1}>0</MenuItem>
+                }
               </NavDropdown>
             </Nav>
             <Nav pullRight>
@@ -417,7 +497,7 @@ class TableList extends Component {
           </Navbar.Collapse>
         </Navbar>
 
-        <div className="content" style={{marginTop: '3%'}}>
+        <div className="content" style={{ marginTop: '3%' }}>
           <Grid fluid>
             <Row>
               <Col md={12}>
@@ -462,20 +542,20 @@ class TableList extends Component {
 
                       <Row>
                         <Col md={12}>
-                        <div style={{flexDirection: 'row'}}>
-                          <FormGroup controlId="formControlsTextarea">
-                            <ControlLabel>Selecione a(s) etapa(s)</ControlLabel>
-                            <Checkbox label='Soldar Ponteira' onClick={() => this.check(1)}/>
-                            <input onChange={this.updateInput} type="time"/>
-                            <Checkbox label='Camada de Solda' onClick={() => this.check(2)} />
-                            <input onChange={this.updateInput2} type="time"/>
-                            <Checkbox label='Usinagem Para Desbaste' onClick={() => this.check(3)}/>
-                            <input onChange={this.updateInput3} type="time"/>
-                            <Checkbox label='Desbaste na Lixeira' onClick={() => this.check(4)}/>
-                            <input onChange={this.updateInput4} type="time"/>
-                            <Checkbox label='Usinagem Medida Final' onClick={() => this.check(5)}/>
-                            <input onChange={this.updateInput5} type="time"/>
-                          </FormGroup>
+                          <div style={{ flexDirection: 'row' }}>
+                            <FormGroup controlId="formControlsTextarea">
+                              <ControlLabel>Selecione a(s) etapa(s)</ControlLabel>
+                              <Checkbox label='Soldar Ponteira' onClick={() => this.check(1)} />
+                              <input onChange={this.updateInput} type="time" />
+                              <Checkbox label='Camada de Solda' onClick={() => this.check(2)} />
+                              <input onChange={this.updateInput2} type="time" />
+                              <Checkbox label='Usinagem Para Desbaste' onClick={() => this.check(3)} />
+                              <input onChange={this.updateInput3} type="time" />
+                              <Checkbox label='Desbaste na Lixeira' onClick={() => this.check(4)} />
+                              <input onChange={this.updateInput4} type="time" />
+                              <Checkbox label='Usinagem Medida Final' onClick={() => this.check(5)} />
+                              <input onChange={this.updateInput5} type="time" />
+                            </FormGroup>
                           </div>
                         </Col>
                       </Row>
