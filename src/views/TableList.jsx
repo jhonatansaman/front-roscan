@@ -164,11 +164,11 @@ class TableList extends Component {
   }
 
   async componentDidMount() {
-    //const response = await api.get('/get/consultarStatusRecuperacao');
+    const response = await api.get('/get/consultarStatusRecuperacao');
 
-    // if (response.data != 0) {
-    //   await this.setState({ arrayPreCadastro: response.data, carregou: true });
-    // }
+    if (response.data != 0) {
+      await this.setState({ arrayPreCadastro: response.data, carregou: true });
+    }
 
     // const responseEtapa1 = await api.post('/posts/buscarTempoPreDefinido', {
     //   etapa: 1,
