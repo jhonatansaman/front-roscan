@@ -214,6 +214,7 @@ class TableList extends Component {
     // console.log("tempo solda: ", this.state.tempo_desbaste);
     // console.log("tempo solda: ", this.state.tempo_usinagem_medida);
 
+<<<<<<< HEAD
     await this.setState({ showLoading: true });
 
     const sleep = m => new Promise(r => setTimeout(r, m));
@@ -229,6 +230,11 @@ class TableList extends Component {
 
     for (let i = 0; i < this.state.arrayEtapas.length; i++) {
       if (this.state.arrayEtapas[i] == 1) {
+=======
+    for(let i = 0; i < this.state.arrayEtapas.length; i++){
+      console.log("Tamanho do arrayEtaoas",this.state.arrayEtapas.length)
+      if(this.state.arrayEtapas[i] == 1){
+>>>>>>> c21080198ef9d657632d29d6d975cf6076b4b158
         await this.setState({ etapa1: true })
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
@@ -244,9 +250,14 @@ class TableList extends Component {
           id_primeira_etapa: response.data[0].id_primeira_etapa,
           etapa: 1,
         });
-
+        console.log("RESPONSE 1", response)
       }
+<<<<<<< HEAD
       if (this.state.arrayEtapas[i] == 2) {
+=======
+      if(this.state.arrayEtapas[i] == 2){
+        console.log("Entrou na 2")
+>>>>>>> c21080198ef9d657632d29d6d975cf6076b4b158
         await this.setState({ etapa2: true })
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
@@ -261,6 +272,7 @@ class TableList extends Component {
           id_segunda_etapa: response2.data[0].id_segunda_etapa,
           etapa: 2,
         });
+        console.log("RESPONSE 2", response2)
       }
       if (this.state.arrayEtapas[i] == 3) {
         await this.setState({ etapa3: true })
