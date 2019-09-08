@@ -407,18 +407,6 @@ class TableList extends Component {
               </NavDropdown>
             </Nav>
             <Nav pullRight>
-              <NavDropdown
-                eventKey={2}
-                title="Ações"
-                id="basic-nav-dropdown-right"
-              >
-                <MenuItem
-                  onClick={() => this.modalConsultarImportacoes()}
-                  eventKey={2.1}
-                >
-                  Consultar Importações
-                </MenuItem>
-              </NavDropdown>
               <NavItem eventKey={3} href="#">
                 Sair
               </NavItem>
@@ -475,15 +463,15 @@ class TableList extends Component {
                             <FormGroup controlId="formControlsTextarea">
                               <ControlLabel>Selecione a(s) etapa(s)</ControlLabel>
                               <Checkbox label='Soldar Ponteira' onClick={() => this.check(1)} />
-                              <input disabled={this.state.habilitarInput[0]} onChange={this.updateInput} type="time" />
+                              <input disabled={this.state.habilitarInput[0]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInput} type="time" />
                               <Checkbox label='Camada de Solda' onClick={() => this.check(2)} />
-                              <input disabled={this.state.habilitarInput[1]} onChange={this.updateInput2} type="time" />
+                              <input disabled={this.state.habilitarInput[1]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInput2} type="time" />
                               <Checkbox label='Usinagem Para Desbaste' onClick={() => this.check(3)} />
-                              <input disabled={this.state.habilitarInput[2]} onChange={this.updateInput3} type="time" />
+                              <input disabled={this.state.habilitarInput[2]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInput3} type="time" />
                               <Checkbox label='Desbaste na Lixeira' onClick={() => this.check(4)} />
-                              <input disabled={this.state.habilitarInput[3]} onChange={this.updateInput4} type="time" />
+                              <input disabled={this.state.habilitarInput[3]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInput4} type="time" />
                               <Checkbox label='Usinagem Medida Final' onClick={() => this.check(5)} />
-                              <input disabled={this.state.habilitarInput[4]} onChange={this.updateInput5} type="time" />
+                              <input disabled={this.state.habilitarInput[4]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInput5} type="time" />
                             </FormGroup>
                           </div>
                         </Col>
