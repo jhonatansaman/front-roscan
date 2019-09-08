@@ -32,8 +32,6 @@ import {
   Form,
 } from 'react-bootstrap';
 import { Checkbox } from 'semantic-ui-react'
-
-
 import { Card } from 'components/Card/Card.jsx';
 import { FormInputs } from 'components/FormInputs/FormInputs.jsx';
 import { UserCard } from 'components/UserCard/UserCard.jsx';
@@ -82,40 +80,6 @@ class TableList extends Component {
       clienteEditar: '',
       tipoEditar: '',
       selectedOption: null,
-      showModalViewGrafico: false,
-      showModalTempoPedido: false,
-      id_tempo_fabricacaoEditar: '',
-      id_tempo_finalizacaoEditar: '',
-      id_tempo_importacaoEditar: '',
-      id_tempo_pedidoEditar: '',
-      id_tempo_projetoEditar: '',
-      tempo_pedidoEditar: '',
-      showModalTempoProjeto: false,
-      tempo_projetoViagemEditar: '',
-      tempo_projetoMedidasEditar: '',
-      tempo_projetoDesenhoTecnicoEditar: '',
-      tempo_projetoRevisaoEditar: '',
-      tempo_importacaoArmazemEditar: '',
-      tempo_importacaoViagemNavioEditar: '',
-      tempo_importacaoNacionalizacaoEditar: '',
-      tempo_importacaoFreteEditar: '',
-      tempo_finalizacaoDesembarqueEditar: '',
-      tempo_finalizacaoConferenciaEditar: '',
-      tempo_finalizacaoTrocaEditar: '',
-      tempo_finalizacaoEmbarqueEditar: '',
-      tempo_finalizacaoFreteClienteEditar: '',
-      showModalTempoFabricacao: false,
-      showModalTempoImportacao: false,
-      showModalTempoFinalizacao: false,
-      tempoPedidoEditar: '',
-      dataPie2: {
-        labels: [],
-        series: [],
-      },
-      legendPie2: {
-        names: ['Importação', 'Fabricação', 'Projeto', 'Finalização', 'Pedido'],
-        types: ['info', 'danger', 'warning', 'success', 'white'],
-      },
       habilitarBtnCadastrar: true,
       esOrcamento: false,
       escPedido: false,
@@ -125,7 +89,7 @@ class TableList extends Component {
       carregou: false,
       os: '',
       data: '',
-      arrayEtapas: '',
+      arrayEtapas: [],
       etapa1: false,
       etapa2: false,
       etapa3: false,
@@ -140,10 +104,9 @@ class TableList extends Component {
       showLoading: false,
       loading: true,
       showModalConfirmar: false,
+      habilitarInput: [true, true, true, true, true],
     };
   }
-
-
 
   async updateInput(event) {
     await this.setState({ tempo_soldar_ponteira: event.target.value });
@@ -170,14 +133,6 @@ class TableList extends Component {
       await this.setState({ arrayPreCadastro: response.data, carregou: true });
     }
 
-    // const responseEtapa1 = await api.post('/posts/buscarTempoPreDefinido', {
-    //   etapa: 1,
-    //   id_primeira_etapa: 372
-    // })
-
-
-    // console.log("response etapa 1: ", responseEtapa1.data[0].tempo_pre);
-
   }
 
   toggleCollapse = () => {
@@ -200,19 +155,70 @@ class TableList extends Component {
   }
 
   async check(opcao) {
-    await this.setState({ arrayEtapas: [...this.state.arrayEtapas, opcao] })
+    if (opcao == 1) {
+      if (this.state.arrayEtapas[0] == 1) {
+        this.state.arrayEtapas.splice(0, 1);
+        this.state.habilitarInput[0] = !this.state.habilitarInput[0];
+        this.forceUpdate();
+      } else {
+        this.state.arrayEtapas[0] = opcao;
+        this.state.habilitarInput[0] = false;
+        this.forceUpdate();
+      }
+    }
+    if (opcao == 2) {
+      if (this.state.arrayEtapas[1] == 2) {
+        this.state.arrayEtapas.splice(1, 1);
+        this.state.habilitarInput[1] = !this.state.habilitarInput[1];
+        this.forceUpdate();
+      } else {
+        this.state.arrayEtapas[1] = opcao;
+        this.state.habilitarInput[1] = false;
+        this.forceUpdate();
+      }
+    }
+    if (opcao == 3) {
+      if (this.state.arrayEtapas[2] == 3) {
+        this.state.arrayEtapas.splice(2, 1);
+        this.state.habilitarInput[2] = !this.state.habilitarInput[2];
+        this.forceUpdate();
+      } else {
+        this.state.arrayEtapas[2] = opcao;
+        this.state.habilitarInput[2] = false;
+        this.forceUpdate();
+      }
+    }
+    if (opcao == 4) {
+      if (this.state.arrayEtapas[3] == 4) {
+        this.state.arrayEtapas.splice(3, 1);
+        this.state.habilitarInput[3] = !this.state.habilitarInput[3];
+        this.forceUpdate();
+      } else {
+        this.state.arrayEtapas[3] = opcao;
+        this.state.habilitarInput[3] = false;
+        this.forceUpdate();
+      }
+    }
+    if (opcao == 5) {
+      if (this.state.arrayEtapas[4] == 5) {
+        this.state.arrayEtapas.splice(4, 1);
+        this.state.habilitarInput[4] = !this.state.habilitarInput[4];
+        this.forceUpdate();
+      } else {
+        this.state.arrayEtapas[4] = opcao;
+        this.state.habilitarInput[4] = false;
+        this.forceUpdate();
+      }
+    }
+
     this.setState({ habilitarBtnCadastrar: false })
-    console.log("array Etapas: ", this.state.arrayEtapas);
+    console.log("array etapas: ", this.state.arrayEtapas);
+    console.log("input habilitar: ", this.state.habilitarInput);
   }
 
   async cadastrar() {
     console.log("array Etapas: ", this.state.arrayEtapas);
 
-    // console.log("tempo solda: ", this.state.tempo_soldar_ponteira);
-    // console.log("tempo camada: ", this.state.tempo_camada_solda);
-    // console.log("tempo solda: ", this.state.tempo_usinagem);
-    // console.log("tempo solda: ", this.state.tempo_desbaste);
-    // console.log("tempo solda: ", this.state.tempo_usinagem_medida);
 
     await this.setState({ showLoading: true });
 
@@ -314,91 +320,14 @@ class TableList extends Component {
 
   }
 
-  mudarPage(){
+  mudarPage() {
     this.props.history.push({ pathname: '/admin/importacao' })
 
   }
 
-  async tempo(event) {
-
-    console.log("o que é: ", event)
-    // if(op == 1)
-    //   this.setState({ tempo_soldar_ponteira: event.target.value })
-    // if(op == 2)
-    //   this.setState({ tempo_camada_solda: event.target.value })
-    // if(op == 3)
-    //   this.setState({ tempo_usinagem: event.target.value })
-    // if(op == 4)
-    //   this.setState({ tempo_desbaste: event.target.value })
-    // if(op == 5)
-    //   this.setState({ tempo_usinagem_medida: event.target.value })
-  }
-
   render() {
     const self = this;
-
-
-
-    const botoes = (cell, row, rowIndex) => {
-      return (
-        <div>
-          {/* <a href={cell} onClick={() => alert(JSON.stringify(row.id_estoque))}>
-                    See mail
-                  </a> */}
-          <i
-            onClick={() =>
-              this.editarTabela(
-                JSON.stringify(row.id_importacao),
-                JSON.stringify(row.orcamento),
-                JSON.stringify(row.pedido),
-                JSON.stringify(row.cliente),
-                JSON.stringify(row.tipo),
-                JSON.stringify(row.id_tempo_fabricacao),
-                JSON.stringify(row.id_tempo_finalizacao),
-                JSON.stringify(row.id_tempo_importacao),
-                JSON.stringify(row.id_tempo_pedido),
-                JSON.stringify(row.id_tempo_projeto)
-              )
-            }
-            className="fa fa-edit"
-            style={{ color: 'green', fontSize: 20 }}
-          />
-          <i
-            className="fa fa-trash"
-            onClick={() => { }}
-            style={{ color: 'red', marginLeft: 20, fontSize: 20 }}
-          />
-        </div>
-      );
-    };
-
-    const columns = [
-      {
-        dataField: 'id_importacao',
-        text: 'ID',
-      },
-      {
-        dataField: 'orcamento',
-        text: 'Orçamento',
-      },
-      {
-        dataField: 'pedido',
-        text: 'Pedido',
-      },
-      {
-        dataField: 'cliente',
-        text: 'Cliente',
-      },
-      {
-        dataField: 'tipo',
-        text: 'Tipo',
-      },
-      {
-        dataField: 'button',
-        text: 'Ações',
-        formatter: botoes,
-      },
-    ];
+    
     const notification = (
       <div>
         <i className="fa fa-globe" />
@@ -546,15 +475,15 @@ class TableList extends Component {
                             <FormGroup controlId="formControlsTextarea">
                               <ControlLabel>Selecione a(s) etapa(s)</ControlLabel>
                               <Checkbox label='Soldar Ponteira' onClick={() => this.check(1)} />
-                              <input onChange={this.updateInput} type="time" />
+                              <input disabled={this.state.habilitarInput[0]} onChange={this.updateInput} type="time" />
                               <Checkbox label='Camada de Solda' onClick={() => this.check(2)} />
-                              <input onChange={this.updateInput2} type="time" />
+                              <input disabled={this.state.habilitarInput[1]} onChange={this.updateInput2} type="time" />
                               <Checkbox label='Usinagem Para Desbaste' onClick={() => this.check(3)} />
-                              <input onChange={this.updateInput3} type="time" />
+                              <input disabled={this.state.habilitarInput[2]} onChange={this.updateInput3} type="time" />
                               <Checkbox label='Desbaste na Lixeira' onClick={() => this.check(4)} />
-                              <input onChange={this.updateInput4} type="time" />
+                              <input disabled={this.state.habilitarInput[3]} onChange={this.updateInput4} type="time" />
                               <Checkbox label='Usinagem Medida Final' onClick={() => this.check(5)} />
-                              <input onChange={this.updateInput5} type="time" />
+                              <input disabled={this.state.habilitarInput[4]} onChange={this.updateInput5} type="time" />
                             </FormGroup>
                           </div>
                         </Col>
