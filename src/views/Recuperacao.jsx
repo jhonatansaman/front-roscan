@@ -54,7 +54,7 @@ const override = css`
 `;
 
 
-class TableList extends Component {
+class Recuperacao extends Component {
   constructor(props) {
     super(props);
 
@@ -63,6 +63,14 @@ class TableList extends Component {
     this.updateInput3 = this.updateInput3.bind(this);
     this.updateInput4 = this.updateInput4.bind(this);
     this.updateInput5 = this.updateInput5.bind(this);
+    this.ordem_servico = this.ordem_servico.bind(this);
+    this.updateInputSolda2 = this.updateInputSolda2.bind(this);
+    this.updateInputSolda3 = this.updateInputSolda3.bind(this);
+    this.updateInputUsinagem2 = this.updateInputUsinagem2.bind(this);
+    this.updateInputUsinagem3 = this.updateInputUsinagem3.bind(this);
+    this.cliente = this.cliente.bind(this);
+    this.tipo = this.tipo.bind(this);
+    this.data_inicial = this.data_inicial.bind(this);
 
     this.state = {
       orcamento: '',
@@ -77,8 +85,6 @@ class TableList extends Component {
       idEditar: '',
       orcamentoEditar: '',
       pedidoEditar: '',
-      clienteEditar: '',
-      tipoEditar: '',
       selectedOption: null,
       habilitarBtnCadastrar: true,
       esOrcamento: false,
@@ -105,6 +111,15 @@ class TableList extends Component {
       loading: true,
       showModalConfirmar: false,
       habilitarInput: [true, true, true, true, true],
+      ordem_servico: '',
+      data_inicial: '',
+      clienteEditar: '',
+      tipoEditar: '',
+      buscouRecuperacao: false,
+      tempo_camada_solda2: '',
+      tempo_camada_solda3: '',
+      tempo_usinagem_medida2: '',
+      updateInputUsinagem3: '',
     };
   }
 
@@ -124,6 +139,18 @@ class TableList extends Component {
   }
   async updateInput5(event) {
     await this.setState({ tempo_usinagem_medida: event.target.value });
+  }
+  async updateInputSolda2(event) {
+    await this.setState({ tempo_camada_solda2: event.target.value });
+  }
+  async updateInputSolda3(event) {
+    await this.setState({ tempo_camada_solda3: event.target.value });
+  }
+  async updateInputUsinagem2(event) {
+    await this.setState({ tempo_usinagem_medida2: event.target.value });
+  }
+  async updateInputUsinagem3(event) {
+    await this.setState({ tempo_usinagem_medida3: event.target.value });
   }
 
   async componentDidMount() {
@@ -146,6 +173,7 @@ class TableList extends Component {
       data: item.date,
       cliente: item.cliente,
       tipo: item.tipo,
+      buscouRecuperacao: true,
     })
 
     console.log("os: ", this.state.os);
@@ -217,8 +245,6 @@ class TableList extends Component {
   }
 
   async cadastrar() {
-    console.log("array Etapas: ", this.state.arrayEtapas);
-
 
     await this.setState({ showLoading: true });
 
@@ -231,6 +257,32 @@ class TableList extends Component {
     await sleep(2250);
 
     this.setState({ showModalConfirmar: true })
+
+    if (this.state.buscouRecuperacao) {
+      await api.post('/posts/attCadastroRecuperacao', {
+        id_recuperacao: this.state.id_recuperacao,
+        ordem_servico: this.state.os,
+        cliente: this.state.cliente,
+        data_inicial: this.state.data,
+        tipo: this.state.tipo
+      });
+    }
+
+    //Cadastrar recuperaçao a partir da web
+    if (!this.state.buscouRecuperacao) {
+      await api.post('/posts/preCadastroRecuperacao', {
+        ordem_servico: this.state.os,
+        cliente: this.state.cliente,
+        tipo: this.state.tipo,
+        date: this.state.data,
+        info: this.state.info,
+        status: 1,
+      });
+      const responseIdRecuperacao = await api.post('posts/pegarUltimoCadastroRecuperacao');
+
+      await this.setState({ id_recuperacao: responseIdRecuperacao.data[0].idrecuperacao });
+
+    }
 
 
     for (let i = 0; i < this.state.arrayEtapas.length; i++) {
@@ -325,9 +377,23 @@ class TableList extends Component {
 
   }
 
+  async ordem_servico(event) {
+    await this.setState({ os: event.target.value });
+  }
+  async data_inicial(event) {
+    await this.setState({ data: event.target.value });
+
+  }
+  async cliente(event) {
+    await this.setState({ cliente: event.target.value });
+  }
+  async tipo(event) {
+    await this.setState({ tipo: event.target.value });
+  }
+
   render() {
     const self = this;
-    
+
     const notification = (
       <div>
         <i className="fa fa-globe" />
@@ -407,6 +473,20 @@ class TableList extends Component {
               </NavDropdown>
             </Nav>
             <Nav pullRight>
+              <NavDropdown
+                eventKey={2}
+                title="Ações"
+                id="basic-nav-dropdown-right"
+              >
+                <MenuItem
+                  onClick={() =>
+                    this.adicionarRecuperacao()
+                  }
+                  eventKey={2.1}
+                >
+                  Consultar Importações
+                </MenuItem>
+              </NavDropdown>
               <NavItem eventKey={3} href="#">
                 Sair
               </NavItem>
@@ -429,13 +509,15 @@ class TableList extends Component {
                             label: 'Ordem de Serviço',
                             type: 'text',
                             bsClass: 'form-control',
-                            value: self.state.os
+                            onChange: self.ordem_servico,
+                            defaultValue: self.state.os
                           },
                           {
                             label: 'Data Inicial',
                             type: 'text',
                             bsClass: 'form-control',
-                            value: self.state.data
+                            onChange: self.data_inicial,
+                            defaultValue: self.state.data
                           },
                         ]}
                       />
@@ -446,13 +528,15 @@ class TableList extends Component {
                             label: 'Cliente',
                             type: 'text',
                             bsClass: 'form-control',
-                            value: self.state.cliente
+                            onChange: self.cliente,
+                            defaultValue: self.state.cliente
                           },
                           {
                             label: 'Tipo',
                             type: 'text',
                             bsClass: 'form-control',
-                            value: self.state.tipo
+                            onChange: self.tipo,
+                            defaultValue: self.state.tipo
                           },
                         ]}
                       />
@@ -462,16 +546,24 @@ class TableList extends Component {
                           <div style={{ flexDirection: 'row' }}>
                             <FormGroup controlId="formControlsTextarea">
                               <ControlLabel>Selecione a(s) etapa(s)</ControlLabel>
-                              <Checkbox label='Soldar Ponteira' onClick={() => this.check(1)} />
+                              <Checkbox label='Soldar Ponteira 1' onClick={() => this.check(1)} />
                               <input disabled={this.state.habilitarInput[0]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInput} type="time" />
-                              <Checkbox label='Camada de Solda' onClick={() => this.check(2)} />
-                              <input disabled={this.state.habilitarInput[1]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInput2} type="time" />
-                              <Checkbox label='Usinagem Para Desbaste' onClick={() => this.check(3)} />
-                              <input disabled={this.state.habilitarInput[2]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInput3} type="time" />
-                              <Checkbox label='Desbaste na Lixeira' onClick={() => this.check(4)} />
-                              <input disabled={this.state.habilitarInput[3]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInput4} type="time" />
-                              <Checkbox label='Usinagem Medida Final' onClick={() => this.check(5)} />
-                              <input disabled={this.state.habilitarInput[4]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInput5} type="time" />
+                              <Checkbox label='Soldar Ponteira 2' onClick={() => this.check(1)} />
+                              <input disabled={this.state.habilitarInput[1]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInputSolda2} type="time" />
+                              <Checkbox label='Soldar Ponteira 3' onClick={() => this.check(2)} />
+                              <input disabled={this.state.habilitarInput[2]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInputSolda3} type="time" />
+                              <Checkbox label='Camada de Solda' onClick={() => this.check(3)} />
+                              <input disabled={this.state.habilitarInput[3]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInput2} type="time" />
+                              <Checkbox label='Usinagem Para Desbaste 1' onClick={() => this.check(4)} />
+                              <input disabled={this.state.habilitarInput[4]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInput3} type="time" />
+                              <Checkbox label='Usinagem Para Desbaste 2' onClick={() => this.check(5)} />
+                              <input disabled={this.state.habilitarInput[5]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInputUsinagem2} type="time" />
+                              <Checkbox label='Usinagem Para Desbaste 3' onClick={() => this.check(6)} />
+                              <input disabled={this.state.habilitarInput[6]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInputUsinagem3} type="time" />
+                              <Checkbox label='Desbaste na Lixeira' onClick={() => this.check(7)} />
+                              <input disabled={this.state.habilitarInput[7]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInput4} type="time" />
+                              <Checkbox label='Usinagem Medida Final' onClick={() => this.check(8)} />
+                              <input disabled={this.state.habilitarInput[8]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInput5} type="time" />
                             </FormGroup>
                           </div>
                         </Col>
@@ -498,4 +590,4 @@ class TableList extends Component {
   }
 }
 
-export default TableList;
+export default Recuperacao;
