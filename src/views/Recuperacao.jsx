@@ -687,40 +687,40 @@ class Recuperacao extends Component {
 
     if (this.state.idEtapa_validacao[0] == true && this.state.tempo_id_primeira_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Soldar Ponteira I'] },
+        options: { labels: [...this.state.options.labels, 'Soldar Ponteira I'], responsive: [{ breakpoint: 480, options: {chart: {width: 200}, legend: {position: 'bottom'}}}]},
         series: [...this.state.series, parseFloat(this.state.tempo_id_primeira_etapa)]
         })
     }
     if (this.state.idEtapa_validacao[1] == true && this.state.tempo_id_terceira_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Usinagem I'] },
+        options: { labels: [...this.state.options.labels, 'Usinagem I'], responsive: [{ breakpoint: 480, options: {chart: {width: 200}, legend: {position: 'bottom'}}}]},
         series: [...this.state.series, parseFloat(this.state.tempo_id_terceira_etapa)]
       })
 
     }
     if (this.state.idEtapa_validacao[2] == true && this.state.tempo_camada_solda2 != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Soldar Ponteira II']},
+        options: { labels: [...this.state.options.labels, 'Soldar Ponteira II'], responsive: [{ breakpoint: 480, options: {chart: {width: 200}, legend: {position: 'bottom'}}}]},
         series:  [...this.state.series, parseFloat(this.state.tempo_camada_solda2)] 
       })
 
     }
     if (this.state.idEtapa_validacao[3] == true && this.state.tempo_usinagem2 != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Usinagem II']},
+        options: { labels: [...this.state.options.labels, 'Usinagem II'], responsive: [{ breakpoint: 480, options: {chart: {width: 200}, legend: {position: 'bottom'}}}]},
         series:  [...this.state.series, parseFloat(this.state.tempo_usinagem2)] 
       })
     }
     if (this.state.idEtapa_validacao[4] == true && this.state.tempo_solda3 != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Soldar Ponteira III']},
+        options: { labels: [...this.state.options.labels, 'Soldar Ponteira III'], responsive: [{ breakpoint: 480, options: {chart: {width: 200}, legend: {position: 'bottom'}}}]},
         series:  [...this.state.series, parseFloat(this.state.tempo_solda3)] 
       })
 
     }
     if (this.state.idEtapa_validacao[5] == true && this.state.tempo_usinagem3 != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Usinagem III']},
+        options: { labels: [...this.state.options.labels, 'Usinagem III'], responsive: [{ breakpoint: 480, options: {chart: {width: 200}, legend: {position: 'bottom'}}}]},
         series:  [...this.state.series, parseFloat(this.state.tempo_usinagem3)] 
       })
 
@@ -728,7 +728,7 @@ class Recuperacao extends Component {
     }
     if (this.state.idEtapa_validacao[6] == true && this.state.tempo_id_segunda_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Camada de Solda']},
+        options: { labels: [...this.state.options.labels, 'Camada de Solda'], responsive: [{ breakpoint: 480, options: {chart: {width: 200}, legend: {position: 'bottom'}}}]},
         series:  [...this.state.series, parseFloat(this.state.tempo_id_segunda_etapa)] 
       })
 
@@ -736,14 +736,14 @@ class Recuperacao extends Component {
 
     if (this.state.idEtapa_validacao[7] == true && this.state.tempo_id_quarta_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Desbaste na Lixeira']},
+        options: { labels: [...this.state.options.labels, 'Desbaste na Lixeira'], responsive: [{ breakpoint: 480, options: {chart: {width: 200}, legend: {position: 'bottom'}}}]},
         series:  [...this.state.series, parseFloat(this.state.tempo_id_quarta_etapa)] 
       })
 
     }
     if (this.state.idEtapa_validacao[8] == true && this.state.tempo_id_quinta_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Usinagem Medida Final']},
+        options: { labels: [...this.state.options.labels, 'Usinagem Medida Final'], responsive: [{ breakpoint: 480, options: {chart: {width: 200}, legend: {position: 'bottom'}}}]},
         series:  [...this.state.series, parseFloat(this.state.tempo_id_quinta_etapa)] 
       })
     }
@@ -751,6 +751,14 @@ class Recuperacao extends Component {
     console.log("options para ver label: ", this.state.options);
     console.log("para ver as series: ", this.state.series);
 
+  }
+
+  async limparDados(){
+    await this.setState({
+      showModalChart: false, showModalConsultaRecuperacao: true,
+      options: {labels: [], responsive: [{ breakpoint: 480, options: { chart: { width: 200}, legend: { position: 'bottom'}}}] }, 
+      series: [], idEtapa_validacao: []
+    })
   }
 
   render() {
@@ -905,16 +913,13 @@ class Recuperacao extends Component {
         {/* modal de gráfico */}
         <Modal
           show={this.state.showModalChart}
-          onHide={() => this.setState({ showModalChart: false, showModalConsultaRecuperacao: true })}
+          onHide={() => this.limparDados()}
         >
           <Modal.Header closeButton>
             <Modal.Title>Consulta de Recuperação</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <ReactApexChart options={this.state.options} series={this.state.series} type="pie" width="380" />
-
-            {/* <ChartistGraph data={this.state.dataPie} type="Pie" />
-            <div className="legend">{this.createLegend(this.state.legendPie)}</div> */}
           </Modal.Body>
           <Modal.Footer>
             <Button
