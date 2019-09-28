@@ -72,15 +72,7 @@ class Recuperacao extends Component {
     super(props);
 
     this.updateInput = this.updateInput.bind(this);
-    this.updateInput2 = this.updateInput2.bind(this);
-    this.updateInput3 = this.updateInput3.bind(this);
-    this.updateInput4 = this.updateInput4.bind(this);
-    this.updateInput5 = this.updateInput5.bind(this);
     this.ordem_servico = this.ordem_servico.bind(this);
-    this.updateInputSolda2 = this.updateInputSolda2.bind(this);
-    this.updateInputSolda3 = this.updateInputSolda3.bind(this);
-    this.updateInputUsinagem2 = this.updateInputUsinagem2.bind(this);
-    this.updateInputUsinagem3 = this.updateInputUsinagem3.bind(this);
     this.cliente = this.cliente.bind(this);
     this.tipo = this.tipo.bind(this);
     this.data_inicial = this.data_inicial.bind(this);
@@ -115,9 +107,14 @@ class Recuperacao extends Component {
       id_recuperacao: '',
       tempo_soldar_ponteira: '',
       tempo_camada_solda: '',
-      tempo_usinagem: '',
-      tempo_desbaste: '',
-      tempo_usinagem_medida: '',
+      tempo_camada_solda2: '',
+      tempo_camada_solda3: '',
+      tempo_usinagem_desbaste: '',
+      tempo_usinagem_desbaste2: '',
+      tempo_usinagem_desbaste3: '',
+      tempo_desbaste_limpeza: '',
+      tempo_usinagem_final: '',
+      tempo_desbaste_lixadeira: '',
       showLoading: false,
       loading: true,
       showModalConfirmar: false,
@@ -127,21 +124,8 @@ class Recuperacao extends Component {
       clienteEditar: '',
       tipoEditar: '',
       buscouRecuperacao: false,
-      tempo_camada_solda2: '',
-      tempo_camada_solda3: '',
-      tempo_usinagem_medida2: '',
-      updateInputUsinagem3: '',
       arrayConsultarRecuperacao: '',
       showModalConsultaRecuperacao: false,
-      tempo_id_primeira_etapa: '',
-      tempo_id_segunda_etapa: '',
-      tempo_id_terceira_etapa: '',
-      tempo_id_quarta_etapa: '',
-      tempo_id_quinta_etapa: '',
-      tempo_solda2: '',
-      tempo_solda3: '',
-      tempo_usinagem2: '',
-      tempo_usinagem3: '',
       idEtapa_validacao: [],
       options: {
         labels: [],
@@ -159,43 +143,42 @@ class Recuperacao extends Component {
       },
       series: [],
       tempoTotal: '',
+      tempo_id_primeira_etapa: '',
+      tempo_id_segunda_etapa: '',
+      tempo_id_terceira_etapa: '',
+      tempo_id_quarta_etapa: '',
+      tempo_id_quinta_etapa: '',
+      tempo_id_sexta_etapa: '',
+      tempo_id_setima_etapa: '',
+      tempo_id_oitava_etapa: '',
+      tempo_id_nona_etapa: '',
+      tempo_id_decima_etapa: '',
     }
   };
 
-  async updateInput(event) {
-    await this.setState({ tempo_soldar_ponteira: event.target.value });
+  async updateInput(event, i) {
+    if(i==1)
+      await this.setState({ tempo_soldar_ponteira: event.target.value }) 
+    if(i==2)
+      await this.setState({ tempo_desbaste_limpeza: event.target.value })    
+    if(i==3)
+      await this.setState({ tempo_camada_solda: event.target.value })    
+    if(i==4)
+      await this.setState({ tempo_usinagem_desbaste: event.target.value })    
+    if(i==5)
+      await this.setState({ tempo_camada_solda2: event.target.value })    
+    if(i==6)
+      await this.setState({ tempo_usinagem_desbaste2: event.target.value })    
+    if(i==7)
+      await this.setState({ tempo_camada_solda3: event.target.value })    
+    if(i==8)
+      await this.setState({ tempo_usinagem_desbaste3: event.target.value })    
+    if(i==9)
+      await this.setState({ tempo_desbaste_lixadeira: event.target.value })    
+    if(i==10)
+      await this.setState({ tempo_usinagem_final: event.target.value })    
   }
-  async updateInput2(event) {
-    await this.setState({ tempo_camada_solda: event.target.value });
-  }
-  async updateInput3(event) {
-    await this.setState({ tempo_usinagem: event.target.value });
 
-  }
-  async updateInput4(event) {
-    await this.setState({ tempo_desbaste: event.target.value });
-
-  }
-  async updateInput5(event) {
-    await this.setState({ tempo_usinagem_medida: event.target.value });
-
-  }
-  async updateInputSolda2(event) {
-    await this.setState({ tempo_camada_solda2: event.target.value });
-
-  }
-  async updateInputSolda3(event) {
-    await this.setState({ tempo_camada_solda3: event.target.value });
-
-  }
-  async updateInputUsinagem2(event) {
-    await this.setState({ tempo_usinagem_medida2: event.target.value });
-
-  }
-  async updateInputUsinagem3(event) {
-    await this.setState({ tempo_usinagem_medida3: event.target.value });
-
-  }
 
   async componentDidMount() {
     const response = await api.get('/get/consultarStatusRecuperacao');
@@ -325,6 +308,17 @@ class Recuperacao extends Component {
         this.forceUpdate();
       }
     }
+    if (opcao == 10) {
+      if (this.state.arrayEtapas[9] == 10) {
+        this.state.arrayEtapas.splice(9, 1);
+        this.state.habilitarInput[9] = !this.state.habilitarInput[9];
+        this.forceUpdate();
+      } else {
+        this.state.arrayEtapas[9] = opcao;
+        this.state.habilitarInput[9] = false;
+        this.forceUpdate();
+      }
+    }
 
     this.setState({ habilitarBtnCadastrar: false })
     console.log("array etapas: ", this.state.arrayEtapas);
@@ -345,6 +339,7 @@ class Recuperacao extends Component {
 
     this.setState({ showModalConfirmar: true })
 
+    //se buscou recuperação, cadastrar a partir do que veio do app
     if (this.state.buscouRecuperacao) {
       await api.post('/posts/attCadastroRecuperacao', {
         id_recuperacao: this.state.id_recuperacao,
@@ -357,8 +352,6 @@ class Recuperacao extends Component {
 
     //Cadastrar recuperaçao a partir da web
     if (!this.state.buscouRecuperacao) {
-      console.log("entrou aqui nnn");
-
       await api.post('/posts/preCadastroRecuperacao', {
         ordem_servico: this.state.os,
         cliente: this.state.cliente,
@@ -397,7 +390,7 @@ class Recuperacao extends Component {
         await this.setState({ etapa2: true })
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
-          tempo_pre: this.state.tempo_usinagem,
+          tempo_pre: this.state.tempo_desbaste_limpeza,
           etapa: 2
         });
         const response2 = await api.post('/posts/pegarUltimoCadastro', {
@@ -405,7 +398,7 @@ class Recuperacao extends Component {
         })
         await api.post('posts/updateRecuperacao', {
           id_recuperacao: this.state.id_recuperacao,
-          id_terceira_etapa: response2.data[0].id_terceira_etapa,
+          id_segunda_etapa: response2.data[0].id_segunda_etapa,
           etapa: 2,
         });
       }
@@ -414,7 +407,7 @@ class Recuperacao extends Component {
         await this.setState({ etapa3: true })
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
-          tempo_pre: this.state.tempo_camada_solda2,
+          tempo_pre: this.state.tempo_camada_solda,
           etapa: 3
         });
         const response3 = await api.post('/posts/pegarUltimoCadastro', {
@@ -422,7 +415,7 @@ class Recuperacao extends Component {
         })
         await api.post('posts/updateRecuperacao', {
           id_recuperacao: this.state.id_recuperacao,
-          id_solda2: response3.data[0].id_solda2,
+          id_terceira_etapa: response3.data[0].id_terceira_etapa,
           etapa: 3,
         });
       }
@@ -430,7 +423,7 @@ class Recuperacao extends Component {
         await this.setState({ etapa4: true })
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
-          tempo_pre: this.state.tempo_usinagem_medida2,
+          tempo_pre: this.state.tempo_usinagem_desbaste,
           etapa: 4
         });
         const response4 = await api.post('/posts/pegarUltimoCadastro', {
@@ -438,7 +431,7 @@ class Recuperacao extends Component {
         })
         await api.post('posts/updateRecuperacao', {
           id_recuperacao: this.state.id_recuperacao,
-          id_usinagem2: response4.data[0].id_usinagem2,
+          id_quarta_etapa: response4.data[0].id_quarta_etapa,
           etapa: 4,
         });
       }
@@ -446,7 +439,7 @@ class Recuperacao extends Component {
         await this.setState({ etapa5: true })
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
-          tempo_pre: this.state.tempo_camada_solda3,
+          tempo_pre: this.state.tempo_camada_solda2,
           etapa: 5
         });
         const response5 = await api.post('/posts/pegarUltimoCadastro', {
@@ -454,7 +447,7 @@ class Recuperacao extends Component {
         })
         await api.post('posts/updateRecuperacao', {
           id_recuperacao: this.state.id_recuperacao,
-          id_solda3: response5.data[0].id_solda3,
+          id_quinta_etapa: response5.data[0].id_quinta_etapa,
           etapa: 5,
         });
       }
@@ -462,7 +455,7 @@ class Recuperacao extends Component {
         await this.setState({ etapa2: true })
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
-          tempo_pre: this.state.tempo_usinagem_medida3,
+          tempo_pre: this.state.tempo_usinagem_desbaste2,
           etapa: 6
         });
         const response6 = await api.post('/posts/pegarUltimoCadastro', {
@@ -470,7 +463,7 @@ class Recuperacao extends Component {
         })
         await api.post('posts/updateRecuperacao', {
           id_recuperacao: this.state.id_recuperacao,
-          id_usinagem3: response6.data[0].id_usinagem3,
+          id_sexta_etapa: response6.data[0].id_sexta_etapa,
           etapa: 6,
         });
       }
@@ -478,7 +471,7 @@ class Recuperacao extends Component {
         await this.setState({ etapa7: true })
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
-          tempo_pre: this.state.tempo_camada_solda,
+          tempo_pre: this.state.tempo_camada_solda3,
           etapa: 7
         });
         const response7 = await api.post('/posts/pegarUltimoCadastro', {
@@ -486,7 +479,7 @@ class Recuperacao extends Component {
         })
         await api.post('posts/updateRecuperacao', {
           id_recuperacao: this.state.id_recuperacao,
-          id_segunda_etapa: response7.data[0].id_segunda_etapa,
+          id_setima_etapa: response7.data[0].id_setima_etapa,
           etapa: 7,
         });
       }
@@ -494,7 +487,7 @@ class Recuperacao extends Component {
         await this.setState({ etapa8: true })
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
-          tempo_pre: this.state.tempo_desbaste,
+          tempo_pre: this.state.tempo_usinagem_desbaste3,
           etapa: 8
         });
         const response8 = await api.post('/posts/pegarUltimoCadastro', {
@@ -502,7 +495,7 @@ class Recuperacao extends Component {
         })
         await api.post('posts/updateRecuperacao', {
           id_recuperacao: this.state.id_recuperacao,
-          id_quarta_etapa: response8.data[0].id_quarta_etapa,
+          id_oitava_etapa: response8.data[0].id_oitava_etapa,
           etapa: 8,
         });
       }
@@ -510,7 +503,7 @@ class Recuperacao extends Component {
         await this.setState({ etapa9: true })
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
-          tempo_pre: this.state.tempo_usinagem_medida,
+          tempo_pre: this.state.tempo_desbaste_lixadeira,
           etapa: 9
         });
         const response9 = await api.post('/posts/pegarUltimoCadastro', {
@@ -518,8 +511,24 @@ class Recuperacao extends Component {
         })
         await api.post('posts/updateRecuperacao', {
           id_recuperacao: this.state.id_recuperacao,
-          id_quinta_etapa: response9.data[0].id_quinta_etapa,
+          id_nona_etapa: response9.data[0].id_nona_etapa,
           etapa: 9,
+        });
+      }
+      if (this.state.arrayEtapas[i] == 10) {
+        await this.setState({ etapa9: true })
+        await api.post('/posts/etapaCadastro', {
+          tempo_parcial: 0,
+          tempo_pre: this.state.tempo_usinagem_final,
+          etapa: 10
+        });
+        const response9 = await api.post('/posts/pegarUltimoCadastro', {
+          etapa: 10
+        })
+        await api.post('posts/updateRecuperacao', {
+          id_recuperacao: this.state.id_recuperacao,
+          id_decima_etapa: response9.data[0].id_decima_etapa,
+          etapa: 10,
         });
       }
     }
@@ -559,38 +568,41 @@ class Recuperacao extends Component {
       this.forceUpdate();
     }
     if (etapa.id_segunda_etapa != null) {
-      this.state.idEtapa_validacao[6] = true;
-      this.forceUpdate();
-    }
-    if (etapa.id_terceira_etapa != null) {
       this.state.idEtapa_validacao[1] = true;
       this.forceUpdate();
     }
-    if (etapa.id_quarta_etapa != null) {
-      this.state.idEtapa_validacao[7] = true;
-      this.forceUpdate();
-    }
-    if (etapa.id_quinta_etapa != null) {
-      this.state.idEtapa_validacao[8] = true;
-      this.forceUpdate();
-    }
-    if (etapa.id_solda2 != null) {
+    if (etapa.id_terceira_etapa != null) {
       this.state.idEtapa_validacao[2] = true;
       this.forceUpdate();
     }
-    if (etapa.id_usinagem2 != null) {
+    if (etapa.id_quarta_etapa != null) {
       this.state.idEtapa_validacao[3] = true;
       this.forceUpdate();
     }
-    if (etapa.id_solda3 != null) {
+    if (etapa.id_quinta_etapa != null) {
       this.state.idEtapa_validacao[4] = true;
       this.forceUpdate();
     }
-    if (etapa.id_usinagem3 != null) {
+    if (etapa.id_sexta_etapa != null) {
       this.state.idEtapa_validacao[5] = true;
       this.forceUpdate();
     }
-    console.log("etapas: ", etapa);
+    if (etapa.id_setima_etapa != null) {
+      this.state.idEtapa_validacao[6] = true;
+      this.forceUpdate();
+    }
+    if (etapa.id_oitava_etapa != null) {
+      this.state.idEtapa_validacao[7] = true;
+      this.forceUpdate();
+    }
+    if (etapa.id_nona_etapa != null) {
+      this.state.idEtapa_validacao[8] = true;
+      this.forceUpdate();
+    }
+    if (etapa.id_decima_etapa != null) {
+      this.state.idEtapa_validacao[9] = true;
+      this.forceUpdate();
+    }
 
   }
   async buscarTempos() {
@@ -604,72 +616,80 @@ class Recuperacao extends Component {
       }
     }
     if (this.state.idEtapa_validacao[1] == true) {
-      const receberTempo2 = await api.post('/posts/buscarTempoPreDefinido', { id_terceira_etapa: etapa.id_terceira_etapa, etapa: 2 })
+      const receberTempo2 = await api.post('/posts/buscarTempoPreDefinido', { id_segunda_etapa: etapa.id_segunda_etapa, etapa: 2 })
       console.log("Receber Tempo: ", receberTempo2.data[0].tempo_pre)
       if (receberTempo2.data[0].tempo_pre != null) {
-        this.setState({ tempo_id_terceira_etapa: receberTempo2.data[0].tempo_pre })
+        this.setState({ tempo_id_segunda_etapa: receberTempo2.data[0].tempo_pre })
       }
     }
     if (this.state.idEtapa_validacao[2] == true) {
-      const receberTempo3 = await api.post('/posts/buscarTempoPreDefinido', { id_solda2: etapa.id_solda2, etapa: 3 })
+      const receberTempo3 = await api.post('/posts/buscarTempoPreDefinido', { id_terceira_etapa: etapa.id_terceira_etapa, etapa: 3 })
       console.log("Receber Tempo: ", receberTempo3.data[0].tempo_pre)
       if (receberTempo3.data[0].tempo_pre != null) {
-        this.setState({ tempo_solda2: receberTempo3.data[0].tempo_pre })
+        this.setState({ tempo_id_terceira_etapa: receberTempo3.data[0].tempo_pre })
       }
     }
     if (this.state.idEtapa_validacao[3] == true) {
-      const receberTempo4 = await api.post('/posts/buscarTempoPreDefinido', { id_usinagem2: etapa.id_usinagem2, etapa: 4 })
+      const receberTempo4 = await api.post('/posts/buscarTempoPreDefinido', { id_quarta_etapa: etapa.id_quarta_etapa, etapa: 4 })
       console.log("Receber Tempo: ", receberTempo4.data[0].tempo_pre)
       if (receberTempo4.data[0].tempo_pre != null) {
-        this.setState({ tempo_usinagem2: receberTempo4.data[0].tempo_pre })
+        this.setState({ tempo_id_quarta_etapa: receberTempo4.data[0].tempo_pre })
       }
     }
 
     if (this.state.idEtapa_validacao[4] == true) {
-      const receberTempo5 = await api.post('/posts/buscarTempoPreDefinido', { id_solda3: etapa.id_solda3, etapa: 5 })
+      const receberTempo5 = await api.post('/posts/buscarTempoPreDefinido', { id_quinta_etapa: etapa.id_quinta_etapa, etapa: 5 })
       console.log("Receber Tempo: ", receberTempo5.data[0].tempo_pre)
       if (receberTempo5.data[0].tempo_pre != null) {
-        this.setState({ tempo_solda3: receberTempo5.data[0].tempo_pre })
+        this.setState({ tempo_id_quinta_etapa: receberTempo5.data[0].tempo_pre })
       }
     }
     if (this.state.idEtapa_validacao[5] == true) {
-      const receberTempo6 = await api.post('/posts/buscarTempoPreDefinido', { id_usinagem3: etapa.id_usinagem3, etapa: 6 })
+      const receberTempo6 = await api.post('/posts/buscarTempoPreDefinido', { id_sexta_etapa: etapa.id_sexta_etapa, etapa: 6 })
       console.log("Receber Tempo: ", receberTempo6.data[0].tempo_pre)
       if (receberTempo6.data[0].tempo_pre != null) {
-        this.setState({ tempo_usinagem3: receberTempo6.data[0].tempo_pre })
+        this.setState({ tempo_id_sexta_etapa: receberTempo6.data[0].tempo_pre })
       }
     }
     if (this.state.idEtapa_validacao[6] == true) {
-      const receberTempo7 = await api.post('/posts/buscarTempoPreDefinido', { id_segunda_etapa: etapa.id_segunda_etapa, etapa: 7 })
+      const receberTempo7 = await api.post('/posts/buscarTempoPreDefinido', { id_setima_etapa: etapa.id_setima_etapa, etapa: 7 })
       console.log("Receber Tempo: ", receberTempo7.data[0].tempo_pre)
       if (receberTempo7.data[0].tempo_pre != null) {
-        this.setState({ tempo_id_segunda_etapa: receberTempo7.data[0].tempo_pre })
+        this.setState({ tempo_id_setima_etapa: receberTempo7.data[0].tempo_pre })
       }
     }
     if (this.state.idEtapa_validacao[7] == true) {
-      const receberTempo8 = await api.post('/posts/buscarTempoPreDefinido', { id_quarta_etapa: etapa.id_quarta_etapa, etapa: 8 })
+      const receberTempo8 = await api.post('/posts/buscarTempoPreDefinido', { id_oitava_etapa: etapa.id_oitava_etapa, etapa: 8 })
       console.log("Receber Tempo: ", receberTempo8.data[0].tempo_pre)
       if (receberTempo8.data[0].tempo_pre != null) {
-        this.setState({ tempo_id_segunda_etapa: receberTempo8.data[0].tempo_pre })
+        this.setState({ tempo_id_oitava_etapa: receberTempo8.data[0].tempo_pre })
       }
     }
     if (this.state.idEtapa_validacao[8] == true) {
-      const receberTempo9 = await api.post('/posts/buscarTempoPreDefinido', { id_quinta_etapa: etapa.id_quinta_etapa, etapa: 9 })
+      const receberTempo9 = await api.post('/posts/buscarTempoPreDefinido', { id_nona_etapa: etapa.id_nona_etapa, etapa: 9 })
       console.log("Receber Tempo: ", receberTempo9.data[0].tempo_pre)
       if (receberTempo9.data[0].tempo_pre != null) {
-        this.setState({ tempo_id_quinta_etapa: receberTempo9.data[0].tempo_pre })
+        this.setState({ tempo_id_nona_etapa: receberTempo9.data[0].tempo_pre })
+      }
+    }
+    if (this.state.idEtapa_validacao[9] == true) {
+      const receberTempo10 = await api.post('/posts/buscarTempoPreDefinido', { id_decima_etapa: etapa.id_decima_etapa, etapa: 10 })
+      console.log("Receber Tempo: ", receberTempo10.data[0].tempo_pre)
+      if (receberTempo10.data[0].tempo_pre != null) {
+        this.setState({ tempo_id_decima_etapa: receberTempo10.data[0].tempo_pre })
       }
     }
 
-    await this.setState({ tempoTotal: parseInt(this.state.tempo_id_primeira_etapa) + parseInt(this.state.tempo_id_segunda_etapa) + parseInt(this.state.tempo_id_terceira_etapa) + parseInt(this.state.tempo_id_quarta_etapa) + parseInt(this.state.tempo_id_quinta_etapa) + parseInt(this.state.tempo_solda2) + parseInt(this.state.tempo_solda3) + parseInt(this.state.tempo_usinagem2) + parseInt(this.state.tempo_usinagem3) })
-    console.log("tempo total: ", parseInt(this.state.tempoTotal));
+    // await this.setState({ tempoTotal: parseInt(this.state.tempo_id_primeira_etapa) + parseInt(this.state.tempo_id_segunda_etapa) + parseInt(this.state.tempo_id_terceira_etapa) + parseInt(this.state.tempo_id_quarta_etapa) + parseInt(this.state.tempo_id_quinta_etapa) + parseInt(this.state.tempo_solda2) + parseInt(this.state.tempo_solda3) + parseInt(this.state.tempo_usinagem2) + parseInt(this.state.tempo_usinagem3) })
+    // console.log("tempo total: ", parseInt(this.state.tempoTotal));
     
     this.setarValoresGrafico();
   }
 
   async editarTabela(idrecuperacao) {
-    console.log("id recuperacao: ", idrecuperacao);
     const response = await api.post('/posts/consultarRecuperacao', { idrecuperacao: idrecuperacao })
+    console.log("consultar recuperação: ", response.data);
+    
     await this.setState({ etapasSetadas: response.data[0] })
     this.validarEtapas();
     this.buscarTempos();
@@ -682,64 +702,70 @@ class Recuperacao extends Component {
 
     if (this.state.idEtapa_validacao[0] == true && this.state.tempo_id_primeira_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Soldar Ponteira I'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
+        options: { labels: [...this.state.options.labels, 'Soldar Ponteira e Alinhamento'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
         series: [...this.state.series, parseFloat(this.state.tempo_id_primeira_etapa)]
         })
     }
-    if (this.state.idEtapa_validacao[1] == true && this.state.tempo_id_terceira_etapa != 0) {
+    if (this.state.idEtapa_validacao[1] == true && this.state.tempo_id_segunda_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Usinagem I'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
-        series: [...this.state.series, parseFloat(this.state.tempo_id_terceira_etapa)]
+        options: { labels: [...this.state.options.labels, 'Desbaste para Limpeza'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
+        series: [...this.state.series, parseFloat(this.state.tempo_id_segunda_etapa)]
       })
 
     }
-    if (this.state.idEtapa_validacao[2] == true && this.state.tempo_camada_solda2 != 0) {
+    if (this.state.idEtapa_validacao[2] == true && this.state.tempo_id_terceira_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Soldar Ponteira II'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
-        series:  [...this.state.series, parseFloat(this.state.tempo_camada_solda2)] 
+        options: { labels: [...this.state.options.labels, 'Camada de Solda I'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
+        series:  [...this.state.series, parseFloat(this.state.tempo_id_terceira_etapa)] 
       })
 
     }
-    if (this.state.idEtapa_validacao[3] == true && this.state.tempo_usinagem2 != 0) {
+    if (this.state.idEtapa_validacao[3] == true && this.state.tempo_id_quarta_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Usinagem II'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
-        series:  [...this.state.series, parseFloat(this.state.tempo_usinagem2)] 
-      })
-    }
-    if (this.state.idEtapa_validacao[4] == true && this.state.tempo_solda3 != 0) {
-      await this.setState({
-        options: { labels: [...this.state.options.labels, 'Soldar Ponteira III'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
-        series:  [...this.state.series, parseFloat(this.state.tempo_solda3)] 
-      })
-
-    }
-    if (this.state.idEtapa_validacao[5] == true && this.state.tempo_usinagem3 != 0) {
-      await this.setState({
-        options: { labels: [...this.state.options.labels, 'Usinagem III'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
-        series:  [...this.state.series, parseFloat(this.state.tempo_usinagem3)] 
-      })
-
-
-    }
-    if (this.state.idEtapa_validacao[6] == true && this.state.tempo_id_segunda_etapa != 0) {
-      await this.setState({
-        options: { labels: [...this.state.options.labels, 'Camada de Solda'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
-        series:  [...this.state.series, parseFloat(this.state.tempo_id_segunda_etapa)] 
-      })
-
-    }
-
-    if (this.state.idEtapa_validacao[7] == true && this.state.tempo_id_quarta_etapa != 0) {
-      await this.setState({
-        options: { labels: [...this.state.options.labels, 'Desbaste na Lixeira'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
+        options: { labels: [...this.state.options.labels, 'Usinagem para Desbaste I'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
         series:  [...this.state.series, parseFloat(this.state.tempo_id_quarta_etapa)] 
       })
+    }
+    if (this.state.idEtapa_validacao[4] == true && this.state.tempo_id_quinta_etapa != 0) {
+      await this.setState({
+        options: { labels: [...this.state.options.labels, 'Camada de Solda II'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
+        series:  [...this.state.series, parseFloat(this.state.tempo_id_quinta_etapa)] 
+      })
 
     }
-    if (this.state.idEtapa_validacao[8] == true && this.state.tempo_id_quinta_etapa != 0) {
+    if (this.state.idEtapa_validacao[5] == true && this.state.tempo_id_sexta_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Usinagem Medida Final'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
-        series:  [...this.state.series, parseFloat(this.state.tempo_id_quinta_etapa)] 
+        options: { labels: [...this.state.options.labels, 'Usinagem para Desbaste II'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
+        series:  [...this.state.series, parseFloat(this.state.tempo_id_sexta_etapa)] 
+      })
+
+
+    }
+    if (this.state.idEtapa_validacao[6] == true && this.state.tempo_id_setima_etapa != 0) {
+      await this.setState({
+        options: { labels: [...this.state.options.labels, 'Camada de Solda III'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
+        series:  [...this.state.series, parseFloat(this.state.tempo_id_setima_etapa)] 
+      })
+
+    }
+
+    if (this.state.idEtapa_validacao[7] == true && this.state.tempo_id_oitava_etapa != 0) {
+      await this.setState({
+        options: { labels: [...this.state.options.labels, 'Usinagem para Desbaste III'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
+        series:  [...this.state.series, parseFloat(this.state.tempo_id_oitava_etapa)] 
+      })
+
+    }
+    if (this.state.idEtapa_validacao[8] == true && this.state.tempo_id_nona_etapa != 0) {
+      await this.setState({
+        options: { labels: [...this.state.options.labels, 'Desbaste na Lixadeira'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
+        series:  [...this.state.series, parseFloat(this.state.tempo_id_nona_etapa)] 
+      })
+    }
+    if (this.state.idEtapa_validacao[8] == true && this.state.tempo_id_nona_etapa != 0) {
+      await this.setState({
+        options: { labels: [...this.state.options.labels, 'Usinagem Final'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
+        series:  [...this.state.series, parseFloat(this.state.tempo_id_decima_etapa)] 
       })
     }
     console.log("options para ver label: ", this.state.options);
@@ -1025,24 +1051,26 @@ class Recuperacao extends Component {
                           <div style={{ flexDirection: 'row' }}>
                             <FormGroup controlId="formControlsTextarea">
                               <ControlLabel>Selecione a(s) etapa(s)</ControlLabel>
-                              <Checkbox label='Soldar Ponteira 1' onClick={() => this.check(1)} />
-                              <input disabled={this.state.habilitarInput[0]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInput} type="time" />
-                              <Checkbox label='Usinagem Para Desbaste 1' onClick={() => this.check(2)} />
-                              <input disabled={this.state.habilitarInput[1]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInput3} type="time" />
-                              <Checkbox label='Soldar Ponteira 2' onClick={() => this.check(3)} />
-                              <input disabled={this.state.habilitarInput[2]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInputSolda2} type="time" />
-                              <Checkbox label='Usinagem Para Desbaste 2' onClick={() => this.check(4)} />
-                              <input disabled={this.state.habilitarInput[3]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInputUsinagem2} type="time" />
-                              <Checkbox label='Soldar Ponteira 3' onClick={() => this.check(5)} />
-                              <input disabled={this.state.habilitarInput[4]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInputSolda3} type="time" />
-                              <Checkbox label='Usinagem Para Desbaste 3' onClick={() => this.check(6)} />
-                              <input disabled={this.state.habilitarInput[5]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInputUsinagem3} type="time" />
-                              <Checkbox label='Camada de Solda' onClick={() => this.check(7)} />
-                              <input disabled={this.state.habilitarInput[6]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInput2} type="time" />
-                              <Checkbox label='Desbaste na Lixeira' onClick={() => this.check(8)} />
-                              <input disabled={this.state.habilitarInput[7]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInput4} type="time" />
-                              <Checkbox label='Usinagem Medida Final' onClick={() => this.check(9)} />
-                              <input disabled={this.state.habilitarInput[8]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={this.updateInput5} type="time" />
+                              <Checkbox label='Soldar Ponteira e Alinhamento' onClick={() => this.check(1)} />
+                              <input disabled={this.state.habilitarInput[0]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e,1)} type="time" />
+                              <Checkbox label='Desbaste para Limpeza' onClick={() => this.check(2)} />
+                              <input disabled={this.state.habilitarInput[1]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e,2)} type="time" />
+                              <Checkbox label='Camada de Solda I' onClick={() => this.check(3)} />
+                              <input disabled={this.state.habilitarInput[2]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e,3)} type="time" />
+                              <Checkbox label='Usinagem Para Desbaste I' onClick={() => this.check(4)} />
+                              <input disabled={this.state.habilitarInput[3]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e,4)} type="time" />
+                              <Checkbox label='Camada de Solda II' onClick={() => this.check(5)} />
+                              <input disabled={this.state.habilitarInput[4]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e,5)} type="time" />
+                              <Checkbox label='Usinagem Para Desbaste II' onClick={() => this.check(6)} />
+                              <input disabled={this.state.habilitarInput[5]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e,6)} type="time" />
+                              <Checkbox label='Camada de Solda III' onClick={() => this.check(7)} />
+                              <input disabled={this.state.habilitarInput[6]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e,7)} type="time" />
+                              <Checkbox label='Usinagem Para Desbaste III' onClick={() => this.check(8)} />
+                              <input disabled={this.state.habilitarInput[7]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e,8)} type="time" />
+                              <Checkbox label='Desbaste na Lixadeira' onClick={() => this.check(9)} />
+                              <input disabled={this.state.habilitarInput[8]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e,9)} type="time" />
+                              <Checkbox label='Usinagem Final' onClick={() => this.check(10)} />
+                              <input disabled={this.state.habilitarInput[9]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e,10)} type="time" />
                             </FormGroup>
                           </div>
                         </Col>
