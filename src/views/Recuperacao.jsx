@@ -47,6 +47,7 @@ import ToolkitProvider, {
 } from 'react-bootstrap-table2-toolkit';
 
 import ReactApexChart from "react-apexcharts";
+import BarChart from 'components/Grafico_Comparativo/barChart';
 const { SearchBar, ClearSearchButton } = Search;
 const { ExportCSVButton } = CSVExport;
 
@@ -76,6 +77,8 @@ class Recuperacao extends Component {
     this.cliente = this.cliente.bind(this);
     this.tipo = this.tipo.bind(this);
     this.data_inicial = this.data_inicial.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+
 
     this.state = {
       orcamento: '',
@@ -153,6 +156,8 @@ class Recuperacao extends Component {
       tempo_id_oitava_etapa: '',
       tempo_id_nona_etapa: '',
       tempo_id_decima_etapa: '',
+      modalCompare: false,
+      id_recuperacao_editar: ''
     }
   };
 
@@ -781,6 +786,13 @@ class Recuperacao extends Component {
     })
   }
 
+  async graficoComparativo(idrecuperacao){
+    await this.setState({ modalCompare: true, showModalConsultaRecuperacao: false, id_recuperacao_editar: idrecuperacao })
+  }
+  
+  closeModal(){
+    this.setState({ modalCompare: !this.state.modalCompare, showModalConsultaRecuperacao: true })
+  }
   render() {
     const self = this;
 
@@ -810,6 +822,15 @@ class Recuperacao extends Component {
             }
             className="fa fa-pie-chart"
             style={{ color: 'green', fontSize: 20 }}
+          />
+          <i
+            onClick={() =>
+              this.graficoComparativo(
+                JSON.stringify(row.idrecuperacao),
+              )
+            }
+            className="fa fa-bar-chart"
+            style={{ color: '#ccc', fontSize: 20, marginLeft: 10 }}
           />
         </div>
       );
@@ -844,6 +865,7 @@ class Recuperacao extends Component {
     ];
     return (
       <div>
+        <BarChart open={this.state.modalCompare} close={this.closeModal} id_recuperacao={this.state.id_recuperacao_editar}/>
         <Modal
           show={this.state.showLoading}
           onHide={this.handleClose}
@@ -952,7 +974,8 @@ class Recuperacao extends Component {
             </Button>
           </Modal.Footer>
         </Modal>
-
+        
+        {/* Modal consultar recuperação */}
         <Modal
           show={this.state.showModalConsultaRecuperacao}
           onHide={() => this.setState({ showModalConsultaRecuperacao: false })}
@@ -999,6 +1022,7 @@ class Recuperacao extends Component {
             </Button>
           </Modal.Footer>
         </Modal>
+
         <div className="content" style={{ marginTop: '3%' }}>
           <Grid fluid>
             <Row>
