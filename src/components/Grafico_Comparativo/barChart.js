@@ -30,7 +30,7 @@ export default class barChart extends Component {
                     name: "series-2",
                     data: []
                 }
-            ]
+            ],
         };
     }
 
@@ -96,6 +96,9 @@ export default class barChart extends Component {
                 arrayDataPre: [...state.arrayDataPre, data]
             })
         }
+        console.log("array categorias: ", state.arrayCategorias);
+        console.log("array series: ", state.arrayDataPre);
+        
 
     }
 
@@ -112,39 +115,69 @@ export default class barChart extends Component {
                     name: "Gráfico Tempos Prévios",
                     data: this.state.arrayDataPre
                 }
-            ]
+            ],
         })
     }
 
-    async componentWillReceiveProps(props) {
-        const response = await api.post('/recuperacao/buscarTemposPre', {
-            idrecuperacao: props.id_recuperacao
+    async limparGrafico() {
+        console.log("CHAMANDO limpar");
+
+        await this.setState({
+            options: {
+                chart: {
+                    id: "basic-bar"
+                },
+                xaxis: {
+                    categories: []
+                }
+            },
+            series: [],
+            arrayDataPre: '',
+            arrayCategorias: '',
         })
 
-        for (let i = 0; i < response.data.length; i++) {
-            if (response.data[i].t1 != null)
-                this.preencherGrafico(response.data[i].t1, 1)
-            if (response.data[i].t2 != null)
-                this.preencherGrafico(response.data[i].t2, 2)
-            if (response.data[i].t3 != null)
-                this.preencherGrafico(response.data[i].t3, 3)
-            if (response.data[i].t4 != null)
-                this.preencherGrafico(response.data[i].t4, 4)
-            if (response.data[i].t5 != null)
-                this.preencherGrafico(response.data[i].t5, 5)
-            if (response.data[i].t6 != null)
-                this.preencherGrafico(response.data[i].t6, 6)
-            if (response.data[i].t7 != null)
-                this.preencherGrafico(response.data[i].t7, 7)
-            if (response.data[i].t8 != null)
-                this.preencherGrafico(response.data[i].t8, 8)
-            if (response.data[i].t9 != null)
-                this.preencherGrafico(response.data[i].t9, 9)
-            if (response.data[i].t10 != null)
-                this.preencherGrafico(response.data[i].t10, 10)
 
-        }
-        this.preencherArrayGrafico();
+    }
+
+    async componentWillReceiveProps(props) {
+        // if (props.id_recuperacao !== this.props.id_recuperacao) {
+            await this.limparGrafico();
+
+            console.log("props id recuperacao: ", props.id_recuperacao);
+            
+
+            const response = await api.post('/recuperacao/buscarTemposPre', {
+                idrecuperacao: props.id_recuperacao
+            })
+
+            console.log("consultar de tempos: ", response.data);
+            
+
+            for (let i = 0; i < response.data.length; i++) {
+                if (response.data[i].t1 != null)
+                    this.preencherGrafico(response.data[i].t1, 1)
+                if (response.data[i].t2 != null)
+                    this.preencherGrafico(response.data[i].t2, 2)
+                if (response.data[i].t3 != null)
+                    this.preencherGrafico(response.data[i].t3, 3)
+                if (response.data[i].t4 != null)
+                    this.preencherGrafico(response.data[i].t4, 4)
+                if (response.data[i].t5 != null)
+                    this.preencherGrafico(response.data[i].t5, 5)
+                if (response.data[i].t6 != null)
+                    this.preencherGrafico(response.data[i].t6, 6)
+                if (response.data[i].t7 != null)
+                    this.preencherGrafico(response.data[i].t7, 7)
+                if (response.data[i].t8 != null)
+                    this.preencherGrafico(response.data[i].t8, 8)
+                if (response.data[i].t9 != null)
+                    this.preencherGrafico(response.data[i].t9, 9)
+                if (response.data[i].t10 != null)
+                    this.preencherGrafico(response.data[i].t10, 10)
+
+            }
+            this.preencherArrayGrafico();
+        // }
     }
 
     render() {
@@ -154,7 +187,7 @@ export default class barChart extends Component {
             <div>
                 <Modal
                     show={self.open}
-                    onHide={self.close}
+                    onHide={() => (self.close(), this.limparGrafico())}
                     size="sm"
                 >
                     <Modal.Header closeButton>Gráfico Comparativo</Modal.Header>

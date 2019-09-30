@@ -562,7 +562,10 @@ class Recuperacao extends Component {
   async consultarRecuperacao() {
     const responseRecuperacao = await api.get('/get/consultarRecuperacaoStatus1');
 
-    this.setState({ arrayConsultarRecuperacao: responseRecuperacao.data, showModalConsultaRecuperacao: true })
+    if(responseRecuperacao.data != 0)
+      this.setState({ arrayConsultarRecuperacao: responseRecuperacao.data, showModalConsultaRecuperacao: true })
+    else 
+      alert("Nenhum cadastro foi efetuado!");
   }
 
   async validarEtapas() {
