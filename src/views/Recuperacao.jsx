@@ -357,7 +357,6 @@ class Recuperacao extends Component {
         data_inicial: this.state.data,
         tipo: this.state.tipo,
         info: this.state.infoGeral,
-        status_fim_etapa: 0
       });
     }
 
@@ -370,7 +369,6 @@ class Recuperacao extends Component {
         date: this.state.data,
         info: this.state.infoGeral,
         status: 1,
-        status_fim_etapa: 0
       });
       const responseIdRecuperacao = await api.post('posts/pegarUltimoCadastroRecuperacao');
 
@@ -385,7 +383,9 @@ class Recuperacao extends Component {
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
           tempo_pre: this.state.tempo_soldar_ponteira,
-          etapa: 1
+          etapa: 1,
+          status_fim_etapa: 0
+
         });
         const response = await api.post('/posts/pegarUltimoCadastro', {
           etapa: 1
@@ -395,6 +395,7 @@ class Recuperacao extends Component {
           id_recuperacao: this.state.id_recuperacao,
           id_primeira_etapa: response.data[0].id_primeira_etapa,
           etapa: 1,
+          
         });
 
       }
@@ -403,7 +404,9 @@ class Recuperacao extends Component {
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
           tempo_pre: this.state.tempo_desbaste_limpeza,
-          etapa: 2
+          etapa: 2,
+          status_fim_etapa: 0
+
         });
         const response2 = await api.post('/posts/pegarUltimoCadastro', {
           etapa: 2
@@ -420,7 +423,9 @@ class Recuperacao extends Component {
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
           tempo_pre: this.state.tempo_camada_solda,
-          etapa: 3
+          etapa: 3,
+          status_fim_etapa: 0
+
         });
         const response3 = await api.post('/posts/pegarUltimoCadastro', {
           etapa: 3
@@ -436,7 +441,9 @@ class Recuperacao extends Component {
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
           tempo_pre: this.state.tempo_usinagem_desbaste,
-          etapa: 4
+          etapa: 4,
+          status_fim_etapa: 0
+
         });
         const response4 = await api.post('/posts/pegarUltimoCadastro', {
           etapa: 4
@@ -452,7 +459,9 @@ class Recuperacao extends Component {
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
           tempo_pre: this.state.tempo_camada_solda2,
-          etapa: 5
+          etapa: 5,
+          status_fim_etapa: 0
+
         });
         const response5 = await api.post('/posts/pegarUltimoCadastro', {
           etapa: 5
@@ -468,7 +477,9 @@ class Recuperacao extends Component {
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
           tempo_pre: this.state.tempo_usinagem_desbaste2,
-          etapa: 6
+          etapa: 6,
+          status_fim_etapa: 0
+
         });
         const response6 = await api.post('/posts/pegarUltimoCadastro', {
           etapa: 6
@@ -484,7 +495,9 @@ class Recuperacao extends Component {
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
           tempo_pre: this.state.tempo_camada_solda3,
-          etapa: 7
+          etapa: 7,
+          status_fim_etapa: 0
+
         });
         const response7 = await api.post('/posts/pegarUltimoCadastro', {
           etapa: 7
@@ -500,7 +513,9 @@ class Recuperacao extends Component {
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
           tempo_pre: this.state.tempo_usinagem_desbaste3,
-          etapa: 8
+          etapa: 8,
+          status_fim_etapa: 0
+
         });
         const response8 = await api.post('/posts/pegarUltimoCadastro', {
           etapa: 8
@@ -516,7 +531,9 @@ class Recuperacao extends Component {
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
           tempo_pre: this.state.tempo_desbaste_lixadeira,
-          etapa: 9
+          etapa: 9,
+          status_fim_etapa: 0
+
         });
         const response9 = await api.post('/posts/pegarUltimoCadastro', {
           etapa: 9
@@ -532,7 +549,9 @@ class Recuperacao extends Component {
         await api.post('/posts/etapaCadastro', {
           tempo_parcial: 0,
           tempo_pre: this.state.tempo_usinagem_final,
-          etapa: 10
+          etapa: 10,
+          status_fim_etapa: 0
+
         });
         const response9 = await api.post('/posts/pegarUltimoCadastro', {
           etapa: 10
