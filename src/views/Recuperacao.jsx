@@ -157,31 +157,35 @@ class Recuperacao extends Component {
       tempo_id_nona_etapa: '',
       tempo_id_decima_etapa: '',
       modalCompare: false,
-      id_recuperacao_editar: ''
+      id_recuperacao_editar: '',
+      infoGeral: ''
     }
   };
 
   async updateInput(event, i) {
-    if(i==1)
-      await this.setState({ tempo_soldar_ponteira: event.target.value }) 
-    if(i==2)
-      await this.setState({ tempo_desbaste_limpeza: event.target.value })    
-    if(i==3)
-      await this.setState({ tempo_camada_solda: event.target.value })    
-    if(i==4)
-      await this.setState({ tempo_usinagem_desbaste: event.target.value })    
-    if(i==5)
-      await this.setState({ tempo_camada_solda2: event.target.value })    
-    if(i==6)
-      await this.setState({ tempo_usinagem_desbaste2: event.target.value })    
-    if(i==7)
-      await this.setState({ tempo_camada_solda3: event.target.value })    
-    if(i==8)
-      await this.setState({ tempo_usinagem_desbaste3: event.target.value })    
-    if(i==9)
-      await this.setState({ tempo_desbaste_lixadeira: event.target.value })    
-    if(i==10)
-      await this.setState({ tempo_usinagem_final: event.target.value })    
+    if (i == 1)
+      await this.setState({ tempo_soldar_ponteira: event.target.value })
+    if (i == 2)
+      await this.setState({ tempo_desbaste_limpeza: event.target.value })
+    if (i == 3)
+      await this.setState({ tempo_camada_solda: event.target.value })
+    if (i == 4)
+      await this.setState({ tempo_usinagem_desbaste: event.target.value })
+    if (i == 5)
+      await this.setState({ tempo_camada_solda2: event.target.value })
+    if (i == 6)
+      await this.setState({ tempo_usinagem_desbaste2: event.target.value })
+    if (i == 7)
+      await this.setState({ tempo_camada_solda3: event.target.value })
+    if (i == 8)
+      await this.setState({ tempo_usinagem_desbaste3: event.target.value })
+    if (i == 9)
+      await this.setState({ tempo_desbaste_lixadeira: event.target.value })
+    if (i == 10)
+      await this.setState({ tempo_usinagem_final: event.target.value })
+    if (i == 11) {
+      await this.setState({ infoGeral: event.target.value })
+    }
   }
 
 
@@ -351,7 +355,9 @@ class Recuperacao extends Component {
         ordem_servico: this.state.os,
         cliente: this.state.cliente,
         data_inicial: this.state.data,
-        tipo: this.state.tipo
+        tipo: this.state.tipo,
+        info: this.state.infoGeral,
+        status_fim_etapa: 0
       });
     }
 
@@ -362,8 +368,9 @@ class Recuperacao extends Component {
         cliente: this.state.cliente,
         tipo: this.state.tipo,
         date: this.state.data,
-        info: this.state.info,
+        info: this.state.infoGeral,
         status: 1,
+        status_fim_etapa: 0
       });
       const responseIdRecuperacao = await api.post('posts/pegarUltimoCadastroRecuperacao');
 
@@ -562,9 +569,9 @@ class Recuperacao extends Component {
   async consultarRecuperacao() {
     const responseRecuperacao = await api.get('/get/consultarRecuperacaoStatus1');
 
-    if(responseRecuperacao.data != 0)
+    if (responseRecuperacao.data != 0)
       this.setState({ arrayConsultarRecuperacao: responseRecuperacao.data, showModalConsultaRecuperacao: true })
-    else 
+    else
       alert("Nenhum cadastro foi efetuado!");
   }
 
@@ -690,19 +697,19 @@ class Recuperacao extends Component {
 
     // await this.setState({ tempoTotal: parseInt(this.state.tempo_id_primeira_etapa) + parseInt(this.state.tempo_id_segunda_etapa) + parseInt(this.state.tempo_id_terceira_etapa) + parseInt(this.state.tempo_id_quarta_etapa) + parseInt(this.state.tempo_id_quinta_etapa) + parseInt(this.state.tempo_solda2) + parseInt(this.state.tempo_solda3) + parseInt(this.state.tempo_usinagem2) + parseInt(this.state.tempo_usinagem3) })
     // console.log("tempo total: ", parseInt(this.state.tempoTotal));
-    
+
     this.setarValoresGrafico();
   }
 
   async editarTabela(idrecuperacao) {
     const response = await api.post('/posts/consultarRecuperacao', { idrecuperacao: idrecuperacao })
     console.log("consultar recuperação: ", response.data);
-    
+
     await this.setState({ etapasSetadas: response.data[0] })
     this.validarEtapas();
     this.buscarTempos();
     console.log("options: ", this.state.options);
-    
+
     this.setState({ showModalChart: true, showModalConsultaRecuperacao: false })
   }
 
@@ -710,70 +717,70 @@ class Recuperacao extends Component {
 
     if (this.state.idEtapa_validacao[0] == true && this.state.tempo_id_primeira_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Soldar Ponteira e Alinhamento'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
+        options: { labels: [...this.state.options.labels, 'Soldar Ponteira e Alinhamento'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
         series: [...this.state.series, parseFloat(this.state.tempo_id_primeira_etapa)]
-        })
+      })
     }
     if (this.state.idEtapa_validacao[1] == true && this.state.tempo_id_segunda_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Desbaste para Limpeza'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
+        options: { labels: [...this.state.options.labels, 'Desbaste para Limpeza'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
         series: [...this.state.series, parseFloat(this.state.tempo_id_segunda_etapa)]
       })
 
     }
     if (this.state.idEtapa_validacao[2] == true && this.state.tempo_id_terceira_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Camada de Solda I'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
-        series:  [...this.state.series, parseFloat(this.state.tempo_id_terceira_etapa)] 
+        options: { labels: [...this.state.options.labels, 'Camada de Solda I'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
+        series: [...this.state.series, parseFloat(this.state.tempo_id_terceira_etapa)]
       })
 
     }
     if (this.state.idEtapa_validacao[3] == true && this.state.tempo_id_quarta_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Usinagem para Desbaste I'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
-        series:  [...this.state.series, parseFloat(this.state.tempo_id_quarta_etapa)] 
+        options: { labels: [...this.state.options.labels, 'Usinagem para Desbaste I'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
+        series: [...this.state.series, parseFloat(this.state.tempo_id_quarta_etapa)]
       })
     }
     if (this.state.idEtapa_validacao[4] == true && this.state.tempo_id_quinta_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Camada de Solda II'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
-        series:  [...this.state.series, parseFloat(this.state.tempo_id_quinta_etapa)] 
+        options: { labels: [...this.state.options.labels, 'Camada de Solda II'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
+        series: [...this.state.series, parseFloat(this.state.tempo_id_quinta_etapa)]
       })
 
     }
     if (this.state.idEtapa_validacao[5] == true && this.state.tempo_id_sexta_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Usinagem para Desbaste II'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
-        series:  [...this.state.series, parseFloat(this.state.tempo_id_sexta_etapa)] 
+        options: { labels: [...this.state.options.labels, 'Usinagem para Desbaste II'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
+        series: [...this.state.series, parseFloat(this.state.tempo_id_sexta_etapa)]
       })
 
 
     }
     if (this.state.idEtapa_validacao[6] == true && this.state.tempo_id_setima_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Camada de Solda III'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
-        series:  [...this.state.series, parseFloat(this.state.tempo_id_setima_etapa)] 
+        options: { labels: [...this.state.options.labels, 'Camada de Solda III'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
+        series: [...this.state.series, parseFloat(this.state.tempo_id_setima_etapa)]
       })
 
     }
 
     if (this.state.idEtapa_validacao[7] == true && this.state.tempo_id_oitava_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Usinagem para Desbaste III'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
-        series:  [...this.state.series, parseFloat(this.state.tempo_id_oitava_etapa)] 
+        options: { labels: [...this.state.options.labels, 'Usinagem para Desbaste III'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
+        series: [...this.state.series, parseFloat(this.state.tempo_id_oitava_etapa)]
       })
 
     }
     if (this.state.idEtapa_validacao[8] == true && this.state.tempo_id_nona_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Desbaste na Lixadeira'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
-        series:  [...this.state.series, parseFloat(this.state.tempo_id_nona_etapa)] 
+        options: { labels: [...this.state.options.labels, 'Desbaste na Lixadeira'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
+        series: [...this.state.series, parseFloat(this.state.tempo_id_nona_etapa)]
       })
     }
     if (this.state.idEtapa_validacao[8] == true && this.state.tempo_id_nona_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Usinagem Final'], responsive: [{ breakpoint: 480, options: {chart: {width: 350}, legend: {position: 'bottom'}}}]},
-        series:  [...this.state.series, parseFloat(this.state.tempo_id_decima_etapa)] 
+        options: { labels: [...this.state.options.labels, 'Usinagem Final'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
+        series: [...this.state.series, parseFloat(this.state.tempo_id_decima_etapa)]
       })
     }
     console.log("options para ver label: ", this.state.options);
@@ -781,19 +788,19 @@ class Recuperacao extends Component {
 
   }
 
-  async limparDados(){
+  async limparDados() {
     await this.setState({
       showModalChart: false, showModalConsultaRecuperacao: true,
-      options: {labels: [], responsive: [{ breakpoint: 480, options: { chart: { width: 200}, legend: { position: 'bottom'}}}] }, 
+      options: { labels: [], responsive: [{ breakpoint: 480, options: { chart: { width: 200 }, legend: { position: 'bottom' } } }] },
       series: [], idEtapa_validacao: [], tempoTotal: ''
     })
   }
 
-  async graficoComparativo(idrecuperacao){
+  async graficoComparativo(idrecuperacao) {
     await this.setState({ modalCompare: true, showModalConsultaRecuperacao: false, id_recuperacao_editar: idrecuperacao })
   }
-  
-  closeModal(){
+
+  closeModal() {
     this.setState({ modalCompare: !this.state.modalCompare, showModalConsultaRecuperacao: true })
   }
   render() {
@@ -868,7 +875,7 @@ class Recuperacao extends Component {
     ];
     return (
       <div>
-        <BarChart open={this.state.modalCompare} close={this.closeModal} id_recuperacao={this.state.id_recuperacao_editar}/>
+        <BarChart open={this.state.modalCompare} close={this.closeModal} id_recuperacao={this.state.id_recuperacao_editar} />
         <Modal
           show={this.state.showLoading}
           onHide={this.handleClose}
@@ -971,13 +978,13 @@ class Recuperacao extends Component {
             <Button
               variant="secondary"
               onClick={() =>
-                this.limparDados() }
+                this.limparDados()}
             >
               Sair
             </Button>
           </Modal.Footer>
         </Modal>
-        
+
         {/* Modal consultar recuperação */}
         <Modal
           show={this.state.showModalConsultaRecuperacao}
@@ -1072,6 +1079,24 @@ class Recuperacao extends Component {
                           },
                         ]}
                       />
+                      <Row>
+                        <Col md="12">
+                          <label>Informações Gerais</label>
+                          <textarea style={{ width: '100%' }} onChange={(e) => this.updateInput(e, 11)} />
+                        </Col>
+                      </Row>
+                      {/* <FormInputs
+                        ncols={['col-md-12']}
+                        properties={[
+                          {
+                            label: 'Informações Gerais',
+                            type: 'text',
+                            bsClass: 'form-control',
+                            onChange: self.cliente,
+                            defaultValue: self.state.cliente
+                          },
+                        ]}
+                      /> */}
 
                       <Row>
                         <Col md={12}>
@@ -1079,25 +1104,25 @@ class Recuperacao extends Component {
                             <FormGroup controlId="formControlsTextarea">
                               <ControlLabel>Selecione a(s) etapa(s)</ControlLabel>
                               <Checkbox label='Soldar Ponteira e Alinhamento' onClick={() => this.check(1)} />
-                              <input disabled={this.state.habilitarInput[0]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e,1)} type="time" />
+                              <input disabled={this.state.habilitarInput[0]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 1)} type="time" />
                               <Checkbox label='Desbaste para Limpeza' onClick={() => this.check(2)} />
-                              <input disabled={this.state.habilitarInput[1]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e,2)} type="time" />
+                              <input disabled={this.state.habilitarInput[1]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 2)} type="time" />
                               <Checkbox label='Camada de Solda I' onClick={() => this.check(3)} />
-                              <input disabled={this.state.habilitarInput[2]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e,3)} type="time" />
+                              <input disabled={this.state.habilitarInput[2]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 3)} type="time" />
                               <Checkbox label='Usinagem Para Desbaste I' onClick={() => this.check(4)} />
-                              <input disabled={this.state.habilitarInput[3]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e,4)} type="time" />
+                              <input disabled={this.state.habilitarInput[3]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 4)} type="time" />
                               <Checkbox label='Camada de Solda II' onClick={() => this.check(5)} />
-                              <input disabled={this.state.habilitarInput[4]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e,5)} type="time" />
+                              <input disabled={this.state.habilitarInput[4]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 5)} type="time" />
                               <Checkbox label='Usinagem Para Desbaste II' onClick={() => this.check(6)} />
-                              <input disabled={this.state.habilitarInput[5]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e,6)} type="time" />
+                              <input disabled={this.state.habilitarInput[5]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 6)} type="time" />
                               <Checkbox label='Camada de Solda III' onClick={() => this.check(7)} />
-                              <input disabled={this.state.habilitarInput[6]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e,7)} type="time" />
+                              <input disabled={this.state.habilitarInput[6]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 7)} type="time" />
                               <Checkbox label='Usinagem Para Desbaste III' onClick={() => this.check(8)} />
-                              <input disabled={this.state.habilitarInput[7]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e,8)} type="time" />
+                              <input disabled={this.state.habilitarInput[7]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 8)} type="time" />
                               <Checkbox label='Desbaste na Lixadeira' onClick={() => this.check(9)} />
-                              <input disabled={this.state.habilitarInput[8]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e,9)} type="time" />
+                              <input disabled={this.state.habilitarInput[8]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 9)} type="time" />
                               <Checkbox label='Usinagem Final' onClick={() => this.check(10)} />
-                              <input disabled={this.state.habilitarInput[9]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e,10)} type="time" />
+                              <input disabled={this.state.habilitarInput[9]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 10)} type="time" />
                             </FormGroup>
                           </div>
                         </Col>
