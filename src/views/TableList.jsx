@@ -327,7 +327,7 @@ class TableList extends Component {
 
   render() {
     const self = this;
-    
+
     const notification = (
       <div>
         <i className="fa fa-globe" />
