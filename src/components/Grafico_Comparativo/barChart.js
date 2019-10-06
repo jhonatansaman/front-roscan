@@ -31,10 +31,23 @@ export default class barChart extends Component {
                     data: []
                 }
             ],
+            ordem_servico: '',
+            cliente: '',
+            tipo: ''
         };
     }
 
     async preencherGrafico(data, pos) {
+        var verificar = false
+        
+        if( (data.substring(1) == 0 && data.substring(2) == 1) || data.substring(3) > 0 || data.substring(4) > 0){
+            data.replace(/\D/g,"");
+            data = data.replace(/\D/g,"")/60;
+            verificar = true;
+        }
+        if(!verificar && (data.substring(0,1) > 0 || data.substring(1, 2) > 0) && (data.substring(3,4) > 0 || data.substring(4,5) > 0)){
+            data = data.replace(/\D/g,"")/60;
+        }
         const state = this.state;
         if (pos == 1) {
             this.setState({
@@ -96,16 +109,23 @@ export default class barChart extends Component {
                 arrayDataPre: [...state.arrayDataPre, data]
             })
         }
-        console.log("array categorias: ", state.arrayCategorias);
-        console.log("array series: ", state.arrayDataPre);
-        
+
 
     }
 
     preencherArrayGrafico() {
         this.setState({
             options: {
-                xaxis: { categories: this.state.arrayCategorias }
+                xaxis: {
+                    categories: this.state.arrayCategorias, labels: {
+                        style: {
+                            color: "#8898aa",
+                            fontSize: '13px',
+                            fontFamily: 'Nunito',
+                            cssClass: 'apexcharts-xaxis-label',
+                        }
+                    }
+                }
             }
         })
 
@@ -117,10 +137,11 @@ export default class barChart extends Component {
                 }
             ],
         })
+
+
     }
 
     async limparGrafico() {
-        console.log("CHAMANDO limpar");
 
         await this.setState({
             options: {
@@ -141,43 +162,26 @@ export default class barChart extends Component {
 
     async componentWillReceiveProps(props) {
         // if (props.id_recuperacao !== this.props.id_recuperacao) {
-            await this.limparGrafico();
+        await this.limparGrafico();
 
-            console.log("props id recuperacao: ", props.id_recuperacao);
-            
+        if (typeof (props.itemSelecionado) === 'object') {
+            await this.setState({ ordem_servico: props.itemSelecionado.ordem_servico, cliente: props.itemSelecionado.cliente, tipo: props.itemSelecionado.tipo })
 
             const response = await api.post('/recuperacao/buscarTemposPre', {
                 idrecuperacao: props.id_recuperacao
             })
+            const data = response.data;
 
-            console.log("consultar de tempos: ", response.data);
-            
-
-            for (let i = 0; i < response.data.length; i++) {
-                if (response.data[i].t1 != null)
-                    this.preencherGrafico(response.data[i].t1, 1)
-                if (response.data[i].t2 != null)
-                    this.preencherGrafico(response.data[i].t2, 2)
-                if (response.data[i].t3 != null)
-                    this.preencherGrafico(response.data[i].t3, 3)
-                if (response.data[i].t4 != null)
-                    this.preencherGrafico(response.data[i].t4, 4)
-                if (response.data[i].t5 != null)
-                    this.preencherGrafico(response.data[i].t5, 5)
-                if (response.data[i].t6 != null)
-                    this.preencherGrafico(response.data[i].t6, 6)
-                if (response.data[i].t7 != null)
-                    this.preencherGrafico(response.data[i].t7, 7)
-                if (response.data[i].t8 != null)
-                    this.preencherGrafico(response.data[i].t8, 8)
-                if (response.data[i].t9 != null)
-                    this.preencherGrafico(response.data[i].t9, 9)
-                if (response.data[i].t10 != null)
-                    this.preencherGrafico(response.data[i].t10, 10)
-
-            }
+            data.forEach(obj => {
+                for (let i = 1; i < 11; i++) {
+                    if (obj[`t${i}`] != null)
+                        this.preencherGrafico(obj[`t${i}`], i)
+                }
+            })
             this.preencherArrayGrafico();
-        // }
+            // }
+        }
+
     }
 
     render() {
@@ -188,9 +192,11 @@ export default class barChart extends Component {
                 <Modal
                     show={self.open}
                     onHide={() => (self.close(), this.limparGrafico())}
-                    size="sm"
+                    size="lg"
                 >
-                    <Modal.Header closeButton>Gráfico Comparativo</Modal.Header>
+                    <Modal.Header closeButton><p style={{ fontSize: 16, marginBottom: 0, fontWeight: 'bold' }}>Ordem de Serviço: {state.ordem_servico}</p>
+                        <p style={{ fontSize: 12, marginBottom: 0 }}>Cliente: {state.cliente}, Tipo: {state.tipo}</p>
+                    </Modal.Header>
                     <Modal.Body
                         style={{
                             justifyContent: 'center',
