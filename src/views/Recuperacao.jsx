@@ -1059,7 +1059,7 @@ class Recuperacao extends Component {
             <Row>
               <Col md={12}>
                 <Card
-                  title="Cadastro de Importação"
+                  title="Cadastro de Recuperação"
                   content={
                     <form>
                       <FormInputs
