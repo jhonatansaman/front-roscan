@@ -200,7 +200,7 @@ export default class barChart extends Component {
 
     }
 
-    //esses são meus tempos pré
+    //esses são meus tempos pré s
     async temposPre() {
         const response = await api.post('/recuperacao/buscarTemposPre', {
             idrecuperacao: this.props.id_recuperacao
