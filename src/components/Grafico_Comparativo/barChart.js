@@ -4,7 +4,7 @@ import {
 } from 'react-bootstrap';
 import Chart from "react-apexcharts";
 import api from '../../services/api';
-
+//
 
 export default class barChart extends Component {
     constructor(props) {
