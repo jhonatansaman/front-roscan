@@ -269,13 +269,14 @@ export default class barChart extends Component {
                             alignItems: 'center',
                         }}
                     >
-                        <div style={{ marginTop: 50, marginBottom: 50 }}>
+                        <div style={{ marginTop: 50, marginBottom: 50, textAlign: 'center' }}>
                             <Chart
                                 options={this.state.options}
                                 series={this.state.series}
                                 type="bar"
                                 width="550"
                             />
+                            <p style={{fontSize: 12}}>Unidade de medida: <b>Horas</b></p>
                         </div>
                     </Modal.Body>
                 </Modal>
