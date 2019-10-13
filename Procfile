@@ -1,1 +1,1 @@
-web: yarn start, yarn install --ignore-engines
+web: yarn --ignore-engines
