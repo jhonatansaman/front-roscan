@@ -41,29 +41,33 @@ export default class barChart extends Component {
     async preencherGrafico(data, pos, data2) {
         console.log("data: ", data);
         console.log("data2: ", data2);
-        
+
         var verificar = false
         var verificar2 = false
 
-        if ((data.substring(1) == 0 && data.substring(2) == 1) || data.substring(3) > 0 || data.substring(4) > 0) {
-            data.replace(/\D/g, "");
-            data = data.replace(/\D/g, "") / 60;
-            verificar = true;
-        }
-        if (!verificar && (data.substring(0, 1) > 0 || data.substring(1, 2) > 0) && (data.substring(3, 4) > 0 || data.substring(4, 5) > 0)) {
-            data = data.replace(/\D/g, "") / 60;
-            data = data.num.toFixed(2).slice(0,-1)
-        }
-        if ((data2.substring(1) == 0 && data2.substring(2) == 1) || data2.substring(3) > 0 || data2.substring(4) > 0) {
-            data2.replace(/\D/g, "");
-            data2 = data2.replace(/\D/g, "") / 60;
-            data2 = data2.toFixed(2)
-            verificar2 = true;
-        }
-        if (!verificar2 && (data2.substring(0, 1) > 0 || data2.substring(1, 2) > 0) && (data2.substring(3, 4) > 0 || data2.substring(4, 5) > 0)) {
-            data2 = data2.replace(/\D/g, "") / 60;
-            data2 = data2.toFixed(2)
+        if (data != null) {
+            if ((data.substring(1) == 0 && data.substring(2) == 1) || data.substring(3) > 0 || data.substring(4) > 0) {
+                data.replace(/\D/g, "");
+                data = data.replace(/\D/g, "") / 60;
+                verificar = true;
+            }
+            if (!verificar && (data.substring(0, 1) > 0 || data.substring(1, 2) > 0) && (data.substring(3, 4) > 0 || data.substring(4, 5) > 0)) {
+                data = data.replace(/\D/g, "") / 60;
+                data = data.num.toFixed(2).slice(0, -1)
+            }
+            if (data2 != null) {
+                if ((data2.substring(1) == 0 && data2.substring(2) == 1) || data2.substring(3) > 0 || data2.substring(4) > 0) {
+                    data2.replace(/\D/g, "");
+                    data2 = data2.replace(/\D/g, "") / 60;
+                    data2 = data2.toFixed(2)
+                    verificar2 = true;
+                }
+                if (!verificar2 && (data2.substring(0, 1) > 0 || data2.substring(1, 2) > 0) && (data2.substring(3, 4) > 0 || data2.substring(4, 5) > 0)) {
+                    data2 = data2.replace(/\D/g, "") / 60;
+                    data2 = data2.toFixed(2)
 
+                }
+            }
         }
         const state = this.state;
         if (pos == 1) {
@@ -136,7 +140,7 @@ export default class barChart extends Component {
                 arrayDataTotal: [...state.arrayDataTotal, data2],
             })
         }
-        
+
         console.log("array data pre: ", this.state.arrayDataPre);
         console.log("array data total: ", this.state.arrayDataTotal);
 
@@ -172,7 +176,7 @@ export default class barChart extends Component {
             ],
         })
 
-        
+
 
     }
 
