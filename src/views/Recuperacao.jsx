@@ -132,6 +132,7 @@ class Recuperacao extends Component {
       idEtapa_validacao: [],
       options: {
         labels: [],
+        colors: [],
         responsive: [{
           breakpoint: 480,
           options: {
@@ -158,7 +159,12 @@ class Recuperacao extends Component {
       tempo_id_decima_etapa: '',
       modalCompare: false,
       id_recuperacao_editar: '',
-      infoGeral: ''
+      infoGeral: '',
+      infoBanco: '',
+      ordem_servico_consulta: '',
+      tipo_consulta: '',
+      cliente_consulta: '',
+      arrayChartComparativo: ''
     }
   };
 
@@ -208,13 +214,10 @@ class Recuperacao extends Component {
       data: item.date,
       cliente: item.cliente,
       tipo: item.tipo,
+      infoBanco: item.info,
       buscouRecuperacao: true,
     })
 
-    console.log("os: ", this.state.os);
-    console.log("data: ", this.state.data);
-    console.log("cliente: ", this.state.cliente);
-    console.log("tipo: ", this.state.tipo);
   }
 
   async check(opcao) {
@@ -330,8 +333,6 @@ class Recuperacao extends Component {
     }
 
     this.setState({ habilitarBtnCadastrar: false })
-    console.log("array etapas: ", this.state.arrayEtapas);
-    console.log("input habilitar: ", this.state.habilitarInput);
   }
 
   async cadastrar() {
@@ -390,12 +391,11 @@ class Recuperacao extends Component {
         const response = await api.post('/posts/pegarUltimoCadastro', {
           etapa: 1
         })
-        console.log("response id cadastrado: ", response.data[0].id_primeira_etapa)
         await api.post('posts/updateRecuperacao', {
           id_recuperacao: this.state.id_recuperacao,
           id_primeira_etapa: response.data[0].id_primeira_etapa,
           etapa: 1,
-          
+
         });
 
       }
@@ -644,28 +644,26 @@ class Recuperacao extends Component {
 
     if (this.state.idEtapa_validacao[0] == true) {
       const receberTempo1 = await api.post('/posts/buscarTempoPreDefinido', { id_primeira_etapa: etapa.id_primeira_etapa, etapa: 1 })
-      console.log("Receber Tempo: ", receberTempo1.data[0].tempo_pre)
       if (receberTempo1.data[0].tempo_pre != null) {
-        this.setState({ tempo_id_primeira_etapa: receberTempo1.data[0].tempo_pre })
+        this.setState({
+          tempo_id_primeira_etapa: receberTempo1.data[0].tempo_pre
+        })
       }
     }
     if (this.state.idEtapa_validacao[1] == true) {
       const receberTempo2 = await api.post('/posts/buscarTempoPreDefinido', { id_segunda_etapa: etapa.id_segunda_etapa, etapa: 2 })
-      console.log("Receber Tempo: ", receberTempo2.data[0].tempo_pre)
       if (receberTempo2.data[0].tempo_pre != null) {
         this.setState({ tempo_id_segunda_etapa: receberTempo2.data[0].tempo_pre })
       }
     }
     if (this.state.idEtapa_validacao[2] == true) {
       const receberTempo3 = await api.post('/posts/buscarTempoPreDefinido', { id_terceira_etapa: etapa.id_terceira_etapa, etapa: 3 })
-      console.log("Receber Tempo: ", receberTempo3.data[0].tempo_pre)
       if (receberTempo3.data[0].tempo_pre != null) {
         this.setState({ tempo_id_terceira_etapa: receberTempo3.data[0].tempo_pre })
       }
     }
     if (this.state.idEtapa_validacao[3] == true) {
       const receberTempo4 = await api.post('/posts/buscarTempoPreDefinido', { id_quarta_etapa: etapa.id_quarta_etapa, etapa: 4 })
-      console.log("Receber Tempo: ", receberTempo4.data[0].tempo_pre)
       if (receberTempo4.data[0].tempo_pre != null) {
         this.setState({ tempo_id_quarta_etapa: receberTempo4.data[0].tempo_pre })
       }
@@ -673,42 +671,36 @@ class Recuperacao extends Component {
 
     if (this.state.idEtapa_validacao[4] == true) {
       const receberTempo5 = await api.post('/posts/buscarTempoPreDefinido', { id_quinta_etapa: etapa.id_quinta_etapa, etapa: 5 })
-      console.log("Receber Tempo: ", receberTempo5.data[0].tempo_pre)
       if (receberTempo5.data[0].tempo_pre != null) {
         this.setState({ tempo_id_quinta_etapa: receberTempo5.data[0].tempo_pre })
       }
     }
     if (this.state.idEtapa_validacao[5] == true) {
       const receberTempo6 = await api.post('/posts/buscarTempoPreDefinido', { id_sexta_etapa: etapa.id_sexta_etapa, etapa: 6 })
-      console.log("Receber Tempo: ", receberTempo6.data[0].tempo_pre)
       if (receberTempo6.data[0].tempo_pre != null) {
         this.setState({ tempo_id_sexta_etapa: receberTempo6.data[0].tempo_pre })
       }
     }
     if (this.state.idEtapa_validacao[6] == true) {
       const receberTempo7 = await api.post('/posts/buscarTempoPreDefinido', { id_setima_etapa: etapa.id_setima_etapa, etapa: 7 })
-      console.log("Receber Tempo: ", receberTempo7.data[0].tempo_pre)
       if (receberTempo7.data[0].tempo_pre != null) {
         this.setState({ tempo_id_setima_etapa: receberTempo7.data[0].tempo_pre })
       }
     }
     if (this.state.idEtapa_validacao[7] == true) {
       const receberTempo8 = await api.post('/posts/buscarTempoPreDefinido', { id_oitava_etapa: etapa.id_oitava_etapa, etapa: 8 })
-      console.log("Receber Tempo: ", receberTempo8.data[0].tempo_pre)
       if (receberTempo8.data[0].tempo_pre != null) {
         this.setState({ tempo_id_oitava_etapa: receberTempo8.data[0].tempo_pre })
       }
     }
     if (this.state.idEtapa_validacao[8] == true) {
       const receberTempo9 = await api.post('/posts/buscarTempoPreDefinido', { id_nona_etapa: etapa.id_nona_etapa, etapa: 9 })
-      console.log("Receber Tempo: ", receberTempo9.data[0].tempo_pre)
       if (receberTempo9.data[0].tempo_pre != null) {
         this.setState({ tempo_id_nona_etapa: receberTempo9.data[0].tempo_pre })
       }
     }
     if (this.state.idEtapa_validacao[9] == true) {
       const receberTempo10 = await api.post('/posts/buscarTempoPreDefinido', { id_decima_etapa: etapa.id_decima_etapa, etapa: 10 })
-      console.log("Receber Tempo: ", receberTempo10.data[0].tempo_pre)
       if (receberTempo10.data[0].tempo_pre != null) {
         this.setState({ tempo_id_decima_etapa: receberTempo10.data[0].tempo_pre })
       }
@@ -722,54 +714,63 @@ class Recuperacao extends Component {
 
   async editarTabela(idrecuperacao) {
     const response = await api.post('/posts/consultarRecuperacao', { idrecuperacao: idrecuperacao })
-    console.log("consultar recuperação: ", response.data);
 
-    await this.setState({ etapasSetadas: response.data[0] })
+    await this.setState({ etapasSetadas: response.data[0], ordem_servico_consulta: response.data[0].ordem_servico, cliente_consulta: response.data[0].cliente, tipo_consulta: response.data[0].tipo })
     this.validarEtapas();
     this.buscarTempos();
-    console.log("options: ", this.state.options);
+
+    console.log("ETAPAS SETADAS: ", this.state.etapasSetadas);
 
     this.setState({ showModalChart: true, showModalConsultaRecuperacao: false })
   }
 
   async setarValoresGrafico() {
+    var verificar = false;
 
     if (this.state.idEtapa_validacao[0] == true && this.state.tempo_id_primeira_etapa != 0) {
+      if ((this.state.tempo_id_primeira_etapa.substring(1) == 0 && this.state.tempo_id_primeira_etapa.substring(2) == 1) || this.state.tempo_id_primeira_etapa.substring(3) > 0 || this.state.tempo_id_primeira_etapa.substring(4) > 0) {
+        this.state.tempo_id_primeira_etapa.replace(/\D/g, "");
+        this.state.tempo_id_primeira_etapa = this.state.tempo_id_primeira_etapa.replace(/\D/g, "") / 60;
+        verificar = true;
+      }
+      if (!verificar && (this.state.tempo_id_primeira_etapa.substring(0, 1) > 0 || this.state.tempo_id_primeira_etapa.substring(1, 2) > 0) && (this.state.tempo_id_primeira_etapa.substring(3, 4) > 0 || this.state.tempo_id_primeira_etapa.substring(4, 5) > 0)) {
+        this.state.tempo_id_primeira_etapa = this.state.tempo_id_primeira_etapa.replace(/\D/g, "") / 60;
+      }
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Soldar Ponteira e Alinhamento'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
+        options: { labels: [...this.state.options.labels, 'Soldar Ponteira e Alinhamento'], colors: [...this.state.options.colors, '#ff0000'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
         series: [...this.state.series, parseFloat(this.state.tempo_id_primeira_etapa)]
       })
     }
     if (this.state.idEtapa_validacao[1] == true && this.state.tempo_id_segunda_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Desbaste para Limpeza'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
+        options: { labels: [...this.state.options.labels, 'Desbaste para Limpeza'], colors: [...this.state.options.colors, '#ff4000'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
         series: [...this.state.series, parseFloat(this.state.tempo_id_segunda_etapa)]
       })
 
     }
     if (this.state.idEtapa_validacao[2] == true && this.state.tempo_id_terceira_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Camada de Solda I'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
+        options: { labels: [...this.state.options.labels, 'Camada de Solda I'], colors: [...this.state.options.colors, '#ff8000'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
         series: [...this.state.series, parseFloat(this.state.tempo_id_terceira_etapa)]
       })
 
     }
     if (this.state.idEtapa_validacao[3] == true && this.state.tempo_id_quarta_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Usinagem para Desbaste I'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
+        options: { labels: [...this.state.options.labels, 'Usinagem para Desbaste I'], colors: [...this.state.options.colors, '#ffbf00'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
         series: [...this.state.series, parseFloat(this.state.tempo_id_quarta_etapa)]
       })
     }
     if (this.state.idEtapa_validacao[4] == true && this.state.tempo_id_quinta_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Camada de Solda II'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
+        options: { labels: [...this.state.options.labels, 'Camada de Solda II'], colors: [...this.state.options.colors, '#ffff00'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
         series: [...this.state.series, parseFloat(this.state.tempo_id_quinta_etapa)]
       })
 
     }
     if (this.state.idEtapa_validacao[5] == true && this.state.tempo_id_sexta_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Usinagem para Desbaste II'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
+        options: { labels: [...this.state.options.labels, 'Usinagem para Desbaste II'], colors: [...this.state.options.colors, '#80ff00'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
         series: [...this.state.series, parseFloat(this.state.tempo_id_sexta_etapa)]
       })
 
@@ -777,7 +778,7 @@ class Recuperacao extends Component {
     }
     if (this.state.idEtapa_validacao[6] == true && this.state.tempo_id_setima_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Camada de Solda III'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
+        options: { labels: [...this.state.options.labels, 'Camada de Solda III'], colors: [...this.state.options.colors, '#00ffff'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
         series: [...this.state.series, parseFloat(this.state.tempo_id_setima_etapa)]
       })
 
@@ -785,38 +786,37 @@ class Recuperacao extends Component {
 
     if (this.state.idEtapa_validacao[7] == true && this.state.tempo_id_oitava_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Usinagem para Desbaste III'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
+        options: { labels: [...this.state.options.labels, 'Usinagem para Desbaste III'], colors: [...this.state.options.colors, '#00bfff'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
         series: [...this.state.series, parseFloat(this.state.tempo_id_oitava_etapa)]
       })
 
     }
     if (this.state.idEtapa_validacao[8] == true && this.state.tempo_id_nona_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Desbaste na Lixadeira'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
+        options: { labels: [...this.state.options.labels, 'Desbaste na Lixadeira'], colors: [...this.state.options.colors, '#0080ff'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
         series: [...this.state.series, parseFloat(this.state.tempo_id_nona_etapa)]
       })
     }
     if (this.state.idEtapa_validacao[8] == true && this.state.tempo_id_nona_etapa != 0) {
       await this.setState({
-        options: { labels: [...this.state.options.labels, 'Usinagem Final'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
+        options: { labels: [...this.state.options.labels, 'Usinagem Final'], colors: [...this.state.options.colors, '#8000ff'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
         series: [...this.state.series, parseFloat(this.state.tempo_id_decima_etapa)]
       })
     }
-    console.log("options para ver label: ", this.state.options);
-    console.log("para ver as series: ", this.state.series);
 
   }
 
   async limparDados() {
     await this.setState({
       showModalChart: false, showModalConsultaRecuperacao: true,
-      options: { labels: [], responsive: [{ breakpoint: 480, options: { chart: { width: 200 }, legend: { position: 'bottom' } } }] },
+      options: { labels: [], colors: [], responsive: [{ breakpoint: 480, options: { chart: { width: 200 }, legend: { position: 'bottom' } } }] },
       series: [], idEtapa_validacao: [], tempoTotal: ''
     })
   }
 
   async graficoComparativo(idrecuperacao) {
-    await this.setState({ modalCompare: true, showModalConsultaRecuperacao: false, id_recuperacao_editar: idrecuperacao })
+    const response = await api.post('/posts/consultarRecuperacao', { idrecuperacao: idrecuperacao })
+    await this.setState({ modalCompare: true, arrayChartComparativo: response.data[0], showModalConsultaRecuperacao: false, id_recuperacao_editar: idrecuperacao })
   }
 
   closeModal() {
@@ -894,7 +894,7 @@ class Recuperacao extends Component {
     ];
     return (
       <div>
-        <BarChart open={this.state.modalCompare} close={this.closeModal} id_recuperacao={this.state.id_recuperacao_editar} />
+        <BarChart open={this.state.modalCompare} itemSelecionado={this.state.arrayChartComparativo} close={this.closeModal} id_recuperacao={this.state.id_recuperacao_editar} />
         <Modal
           show={this.state.showLoading}
           onHide={this.handleClose}
@@ -987,7 +987,9 @@ class Recuperacao extends Component {
           onHide={() => this.limparDados()}
         >
           <Modal.Header closeButton>
-            <Modal.Title>Consulta de Recuperação</Modal.Title>
+            <Modal.Title><p style={{ fontWeight: 'bold', marginBottom: 0 }}>Ordem de Serviço: {this.state.ordem_servico_consulta}</p>
+              <p style={{ fontSize: 12, marginBottom: 0 }}>Cliente: {this.state.cliente_consulta} Tipo: {this.state.tipo_consulta}</p>
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <ReactApexChart options={this.state.options} series={this.state.series} type="pie" width="550" />
@@ -1057,7 +1059,7 @@ class Recuperacao extends Component {
             <Row>
               <Col md={12}>
                 <Card
-                  title="Cadastro de Importação"
+                  title="Cadastro de Recuperação"
                   content={
                     <form>
                       <FormInputs
@@ -1101,7 +1103,7 @@ class Recuperacao extends Component {
                       <Row>
                         <Col md="12">
                           <label>Informações Gerais</label>
-                          <textarea style={{ width: '100%' }} onChange={(e) => this.updateInput(e, 11)} />
+                          <textarea style={{ width: '100%' }} name="description" value={this.state.infoBanco} onChange={(e) => this.updateInput(e, 11)} />
                         </Col>
                       </Row>
                       {/* <FormInputs
