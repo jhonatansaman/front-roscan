@@ -16,8 +16,8 @@
 
 */
 import Dashboard from "views/Dashboard.jsx";
-import UserProfile from "views/UserProfile.jsx";
-import TableList from "views/TableList.jsx";
+import Importacao from "views/Importacao.jsx";
+import Recuperacao from "views/Recuperacao.jsx";
 import Typography from "views/Typography.jsx";
 import Icons from "views/Icons.jsx";
 import Maps from "views/Maps.jsx";
@@ -36,14 +36,14 @@ const dashboardRoutes = [
     path: "/importacao",
     name: "Importação",
     icon: "pe-7s-user",
-    component: UserProfile,
+    component: Importacao,
     layout: "/admin"
   },
   {
     path: "/recuperacao",
     name: "Recuperação",
     icon: "pe-7s-user",
-    component: TableList,
+    component: Recuperacao,
     layout: "/admin"
   },
   // {
