@@ -321,8 +321,8 @@ class TableList extends Component {
   }
 
   mudarPage() {
-    this.props.history.push({ pathname: '/admin/importacao' })
-
+    window.location.reload();
+    //teste
   }
 
   render() {

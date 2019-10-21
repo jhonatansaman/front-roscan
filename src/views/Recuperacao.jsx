@@ -337,6 +337,7 @@ class Recuperacao extends Component {
 
   async cadastrar() {
 
+
     await this.setState({ showLoading: true });
 
     const sleep = m => new Promise(r => setTimeout(r, m));
@@ -567,8 +568,7 @@ class Recuperacao extends Component {
   }
 
   mudarPage() {
-    this.props.history.push({ pathname: '/admin/importacao' })
-
+    window.location.reload();
   }
 
   async ordem_servico(event) {
