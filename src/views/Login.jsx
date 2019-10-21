@@ -15,7 +15,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import api from '../services/api'
 
-import Background from '../assets/img/reactlogo.png'
+import Background from '../assets/img/sidebar-3.jpg'
+const labelOffset = -6
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -49,7 +50,6 @@ const useStyles = makeStyles(theme => ({
 export default function SignInSide(props) {
   const classes = useStyles();
 
-
   const [email_usuario, setEmail] = useState('');
   const [senha_usuario, setSenha] = useState('');
 
@@ -58,13 +58,13 @@ export default function SignInSide(props) {
     console.log("senha usuario: ", senha_usuario);
 
     const res = await api.post('/posts/buscar', { email: email_usuario, senha: senha_usuario })
-    
+
     console.log("res: ", res.data);
-    
+
     if (res.data == 1) {
       localStorage.setItem('login', 'on');
       localStorage.setItem('usuario', JSON.stringify(res.data[0]));
-      props.history.push({pathname: "/admin/importacao"});
+      props.history.push({ pathname: "/admin/importacao" });
     }
     else alert('Login/senha invalidos');
   }
@@ -78,8 +78,8 @@ export default function SignInSide(props) {
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Login SPA
+          <Typography component="h1" variant="h4">
+            Login Roscan
           </Typography>
           <form className={classes.form} noValidate method="POST" encType="application/json" action="//http:localhost:3333/login/verify">
             <TextField
@@ -94,6 +94,24 @@ export default function SignInSide(props) {
               name="email"
               autoComplete="email"
               autoFocus
+              /* styles the label component */
+              InputLabelProps={{
+                style: {
+                  fontSize: 15,
+                  labelRoot: {
+                    fontSize: 30,
+                    color: "red",
+                    "&$labelFocused": {
+                      color: "purple"
+                    }
+                  },
+                },
+              }}
+              inputProps={{
+              style: {
+                fontSize: 15,
+              },
+            }}
             />
             <TextField
               variant="outlined"
@@ -107,6 +125,23 @@ export default function SignInSide(props) {
               type="password"
               id="password"
               autoComplete="current-password"
+              InputLabelProps={{
+                style: {
+                  fontSize: 15,
+                  labelRoot: {
+                    fontSize: 30,
+                    color: "red",
+                    "&$labelFocused": {
+                      color: "purple"
+                    }
+                  },
+                },
+              }}
+              inputProps={{
+              style: {
+                fontSize: 15,
+              },
+            }}
             />
             {/*<FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -119,6 +154,7 @@ export default function SignInSide(props) {
               value="acessar"
               id="acessar"
               className={classes.submit}
+              style={{ height: 40, fontSize: 15 }}
               onClick={() => login()}
             >
               Entrar
