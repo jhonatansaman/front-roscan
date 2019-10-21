@@ -121,7 +121,7 @@ class Recuperacao extends Component {
       showLoading: false,
       loading: true,
       showModalConfirmar: false,
-      habilitarInput: [true, true, true, true, true, true, true, true, true],
+      habilitarInput: [true, true, true, true, true, true, true, true, true, true],
       ordem_servico: '',
       data_inicial: '',
       clienteEditar: '',
@@ -340,16 +340,6 @@ class Recuperacao extends Component {
 
     await this.setState({ showLoading: true });
 
-    const sleep = m => new Promise(r => setTimeout(r, m));
-
-    await Promise.all([
-      setTimeout(() => this.setState({ showLoading: false }), 2000),
-    ]);
-
-    await sleep(2250);
-
-    this.setState({ showModalConfirmar: true })
-
     //se buscou recuperação, cadastrar a partir do que veio do app
     if (this.state.buscouRecuperacao) {
       await api.post('/posts/attCadastroRecuperacao', {
@@ -564,7 +554,7 @@ class Recuperacao extends Component {
         });
       }
     }
-
+    this.setState({ showLoading: false })
   }
 
   mudarPage() {

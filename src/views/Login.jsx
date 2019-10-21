@@ -1,115 +1,143 @@
-import React, {Component} from 'react';
-import {
-  Row,
-  Form,
-  FormGroup,
-  FormControl,
-  FormLabel,
-  Button,
-  HelpBlock,
-} from 'react-bootstrap';
-import './login.sass';
-// import {
-//   isEmail,
-//   isEmpty,
-//   isLength,
-//   isContainWhiteSpace,
-// } from 'shared/validator';
+import React, { useState } from 'react';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Link from '@material-ui/core/Link';
+import Paper from '@material-ui/core/Paper';
+import Box from '@material-ui/core/Box';
+import Grid from '@material-ui/core/Grid';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 
-import api from '../services/api';
+import api from '../services/api'
 
-class Login extends Component {
-  constructor(props) {
-    super(props);
-    this.updateInput = this.updateInput.bind(this);
-    this.updateInput2 = this.updateInput2.bind(this);
+import Background from '../assets/img/reactlogo.png'
 
-    this.state = {
-      formData: {}, // Contains login form data
-      errors: {}, // Contains login field errors
-      formSubmitted: false, // Indicates submit status of login form
-      loading: false, // Indicates in progress state of login form
-      email: '',
-      senha: '',
-    };
-  }
+const useStyles = makeStyles(theme => ({
+  root: {
+    height: '100vh',
+  },
+  image: {
+    backgroundImage: `url(${Background})`,
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  },
+  paper: {
+    margin: theme.spacing(8, 4),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.primary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
 
-  updateInput(event) {
-    this.setState({email: event.target.value});
-  }
-  updateInput2(event) {
-    this.setState({senha: event.target.value});
-  }
+export default function SignInSide(props) {
+  const classes = useStyles();
 
-  //   login = e => {
-  //     e.preventDefault();
 
-  //     let errors = this.validateLoginForm();
-  //   };
+  const [email_usuario, setEmail] = useState('');
+  const [senha_usuario, setSenha] = useState('');
 
-  entrar = async () => {
-    let email = this.state.email;
-    let senha = this.state.senha;
+  async function login() {
+    console.log("email usuario: ", email_usuario);
+    console.log("senha usuario: ", senha_usuario);
 
-    const response = await api.post('/posts/buscar', {
-      email: email,
-      senha: senha,
-    });
-
-    if (response.data == 1) {
-      alert('Login efetuado com sucesso');
-      this.props.history.push({
-        pathname: '/admin/importacao',
-      });
-    } else {
-      alert('Login/senha inválidos');
+    const res = await api.post('/posts/buscar', { email: email_usuario, senha: senha_usuario })
+    
+    console.log("res: ", res.data);
+    
+    if (res.data == 1) {
+      localStorage.setItem('login', 'on');
+      localStorage.setItem('usuario', JSON.stringify(res.data[0]));
+      props.history.push({pathname: "/admin/importacao"});
     }
-  };
-  render() {
-    return (
-      <div className="Login">
-        <Row>
-          <form>
-            <div style={{textAlign: 'center'}}>
-              <img
-                src={require('../assets/img/reactlogo.png')}
-                style={{width: 200, height: 80, marginBottom: 10}}
-              />
-            </div>
-            <FormGroup controlId="email">
-              E-mail
-              <FormControl
-                type="text"
-                name="email"
-                placeholder="Entre com seu e-mail"
-                onChange={this.updateInput}
-              />
-              {/* {errors.email &&
-                                // <HelpBlock>{errors.email}</HelpBlock>
-                            } */}
-            </FormGroup>
-            <FormGroup controlId="password">
-              Senha
-              <FormControl
-                type="password"
-                name="password"
-                placeholder="Entre com sua senha"
-                onChange={this.updateInput2}
-              />
-              {/* {errors.password &&
-                                // <HelpBlock>{errors.password}</HelpBlock>
-                            } */}
-            </FormGroup>
-            <div style={{textAlign: 'center'}}>
-              <Button onClick={() => this.entrar()} bsStyle="primary">
-                Entrar
-              </Button>
-            </div>
-          </form>
-        </Row>
-      </div>
-    );
+    else alert('Login/senha invalidos');
   }
-}
 
-export default Login;
+  return (
+    <Grid container component="main" className={classes.root}>
+      <CssBaseline />
+      <Grid item xs={false} sm={4} md={7} className={classes.image} />
+      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Login SPA
+          </Typography>
+          <form className={classes.form} noValidate method="POST" encType="application/json" action="//http:localhost:3333/login/verify">
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              value={email_usuario}
+              onChange={e => setEmail(e.target.value)}
+              fullWidth
+              id="email_usuario"
+              label="E-mail"
+              name="email"
+              autoComplete="email"
+              autoFocus
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              value={senha_usuario}
+              onChange={e => setSenha(e.target.value)}
+              name="senha_usuario"
+              label="Senha"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+            {/*<FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />*/}
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              value="acessar"
+              id="acessar"
+              className={classes.submit}
+              onClick={() => login()}
+            >
+              Entrar
+            </Button>
+            {/*<Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="#" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Grid>*/}
+          </form>
+        </div>
+      </Grid>
+    </Grid>
+  );
+}
