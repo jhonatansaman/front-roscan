@@ -35,6 +35,7 @@ import { Checkbox } from 'semantic-ui-react'
 import { Card } from 'components/Card/Card.jsx';
 import { FormInputs } from 'components/FormInputs/FormInputs.jsx';
 import { UserCard } from 'components/UserCard/UserCard.jsx';
+import moment from 'moment';
 import Button from 'components/CustomButton/CustomButton.jsx';
 import api from '../services/api';
 import { ClipLoader, BounceLoader } from 'react-spinners';
@@ -334,6 +335,7 @@ class Recuperacao extends Component {
 
     this.setState({ habilitarBtnCadastrar: false })
   }
+  
 
   async cadastrar() {
 
@@ -555,6 +557,7 @@ class Recuperacao extends Component {
       }
     }
     this.setState({ showLoading: false })
+    window.location.reload();
   }
 
   mudarPage() {
@@ -718,50 +721,50 @@ class Recuperacao extends Component {
     var verificar = false;
 
     if (this.state.idEtapa_validacao[0] == true && this.state.tempo_id_primeira_etapa != 0) {
-      if ((this.state.tempo_id_primeira_etapa.substring(1) == 0 && this.state.tempo_id_primeira_etapa.substring(2) == 1) || this.state.tempo_id_primeira_etapa.substring(3) > 0 || this.state.tempo_id_primeira_etapa.substring(4) > 0) {
-        this.state.tempo_id_primeira_etapa.replace(/\D/g, "");
-        this.state.tempo_id_primeira_etapa = this.state.tempo_id_primeira_etapa.replace(/\D/g, "") / 60;
-        verificar = true;
-      }
-      if (!verificar && (this.state.tempo_id_primeira_etapa.substring(0, 1) > 0 || this.state.tempo_id_primeira_etapa.substring(1, 2) > 0) && (this.state.tempo_id_primeira_etapa.substring(3, 4) > 0 || this.state.tempo_id_primeira_etapa.substring(4, 5) > 0)) {
-        this.state.tempo_id_primeira_etapa = this.state.tempo_id_primeira_etapa.replace(/\D/g, "") / 60;
-      }
+      // if ((this.state.tempo_id_primeira_etapa.substring(1) == 0 && this.state.tempo_id_primeira_etapa.substring(2) == 1) || this.state.tempo_id_primeira_etapa.substring(3) > 0 || this.state.tempo_id_primeira_etapa.substring(4) > 0) {
+      //   this.state.tempo_id_primeira_etapa.replace(/\D/g, "");
+      //   this.state.tempo_id_primeira_etapa = this.state.tempo_id_primeira_etapa.replace(/\D/g, "") / 60;
+      //   verificar = true;
+      // }
+      // if (!verificar && (this.state.tempo_id_primeira_etapa.substring(0, 1) > 0 || this.state.tempo_id_primeira_etapa.substring(1, 2) > 0) && (this.state.tempo_id_primeira_etapa.substring(3, 4) > 0 || this.state.tempo_id_primeira_etapa.substring(4, 5) > 0)) {
+      //   this.state.tempo_id_primeira_etapa = this.state.tempo_id_primeira_etapa.replace(/\D/g, "") / 60;
+      // }
       await this.setState({
         options: { labels: [...this.state.options.labels, 'Soldar Ponteira e Alinhamento'], colors: [...this.state.options.colors, '#ff0000'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
-        series: [...this.state.series, parseFloat(this.state.tempo_id_primeira_etapa)]
+        series: [...this.state.series, moment.duration(this.state.tempo_id_primeira_etapa).asHours()]
       })
     }
     if (this.state.idEtapa_validacao[1] == true && this.state.tempo_id_segunda_etapa != 0) {
       await this.setState({
         options: { labels: [...this.state.options.labels, 'Desbaste para Limpeza'], colors: [...this.state.options.colors, '#ff4000'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
-        series: [...this.state.series, parseFloat(this.state.tempo_id_segunda_etapa)]
+        series: [...this.state.series, moment.duration(this.state.tempo_id_segunda_etapa).asHours()]
       })
 
     }
     if (this.state.idEtapa_validacao[2] == true && this.state.tempo_id_terceira_etapa != 0) {
       await this.setState({
         options: { labels: [...this.state.options.labels, 'Camada de Solda I'], colors: [...this.state.options.colors, '#ff8000'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
-        series: [...this.state.series, parseFloat(this.state.tempo_id_terceira_etapa)]
+        series: [...this.state.series,  moment.duration(this.state.tempo_id_terceira_etapa).asHours()]
       })
 
     }
     if (this.state.idEtapa_validacao[3] == true && this.state.tempo_id_quarta_etapa != 0) {
       await this.setState({
         options: { labels: [...this.state.options.labels, 'Usinagem para Desbaste I'], colors: [...this.state.options.colors, '#ffbf00'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
-        series: [...this.state.series, parseFloat(this.state.tempo_id_quarta_etapa)]
+        series: [...this.state.series,  moment.duration(this.state.tempo_id_quarta_etapa).asHours()]
       })
     }
     if (this.state.idEtapa_validacao[4] == true && this.state.tempo_id_quinta_etapa != 0) {
       await this.setState({
         options: { labels: [...this.state.options.labels, 'Camada de Solda II'], colors: [...this.state.options.colors, '#ffff00'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
-        series: [...this.state.series, parseFloat(this.state.tempo_id_quinta_etapa)]
+        series: [...this.state.series,  moment.duration(this.state.tempo_id_quinta_etapa).asHours()]
       })
 
     }
     if (this.state.idEtapa_validacao[5] == true && this.state.tempo_id_sexta_etapa != 0) {
       await this.setState({
         options: { labels: [...this.state.options.labels, 'Usinagem para Desbaste II'], colors: [...this.state.options.colors, '#80ff00'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
-        series: [...this.state.series, parseFloat(this.state.tempo_id_sexta_etapa)]
+        series: [...this.state.series,  moment.duration(this.state.tempo_id_sexta_etapa).asHours()]
       })
 
 
@@ -769,7 +772,7 @@ class Recuperacao extends Component {
     if (this.state.idEtapa_validacao[6] == true && this.state.tempo_id_setima_etapa != 0) {
       await this.setState({
         options: { labels: [...this.state.options.labels, 'Camada de Solda III'], colors: [...this.state.options.colors, '#00ffff'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
-        series: [...this.state.series, parseFloat(this.state.tempo_id_setima_etapa)]
+        series: [...this.state.series,  moment.duration(this.state.tempo_id_setima_etapa).asHours()]
       })
 
     }
@@ -777,20 +780,20 @@ class Recuperacao extends Component {
     if (this.state.idEtapa_validacao[7] == true && this.state.tempo_id_oitava_etapa != 0) {
       await this.setState({
         options: { labels: [...this.state.options.labels, 'Usinagem para Desbaste III'], colors: [...this.state.options.colors, '#00bfff'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
-        series: [...this.state.series, parseFloat(this.state.tempo_id_oitava_etapa)]
+        series: [...this.state.series,  moment.duration(this.state.tempo_id_oitava_etapa).asHours()]
       })
 
     }
     if (this.state.idEtapa_validacao[8] == true && this.state.tempo_id_nona_etapa != 0) {
       await this.setState({
         options: { labels: [...this.state.options.labels, 'Desbaste na Lixadeira'], colors: [...this.state.options.colors, '#0080ff'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
-        series: [...this.state.series, parseFloat(this.state.tempo_id_nona_etapa)]
+        series: [...this.state.series,  moment.duration(this.state.tempo_id_nona_etapa).asHours()]
       })
     }
     if (this.state.idEtapa_validacao[8] == true && this.state.tempo_id_nona_etapa != 0) {
       await this.setState({
         options: { labels: [...this.state.options.labels, 'Usinagem Final'], colors: [...this.state.options.colors, '#8000ff'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
-        series: [...this.state.series, parseFloat(this.state.tempo_id_decima_etapa)]
+        series: [...this.state.series,  moment.duration(this.state.tempo_id_decima_etapa).asHours()]
       })
     }
 
