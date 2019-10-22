@@ -15,7 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import api from '../services/api'
 
-import Background from '../assets/img/sidebar-3.jpg'
+import Background from '../assets/img/loginImage.jpeg'
 const labelOffset = -6
 
 const useStyles = makeStyles(theme => ({
@@ -64,7 +64,7 @@ export default function SignInSide(props) {
     if (res.data == 1) {
       localStorage.setItem('login', 'on');
       localStorage.setItem('usuario', JSON.stringify(res.data[0]));
-      props.history.push({ pathname: "/admin/importacao" });
+      props.history.push({ pathname: "/admin/recuperacao" });
     }
     else alert('Login/senha invalidos');
   }
