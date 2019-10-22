@@ -78,8 +78,8 @@ export default function SignInSide(props) {
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Login SPA
+          <Typography component="h1" variant="h4">
+            Login Roscan
           </Typography>
           <form className={classes.form} noValidate method="POST" encType="application/json" action="//http:localhost:3333/login/verify">
             <TextField
@@ -123,7 +123,7 @@ export default function SignInSide(props) {
             >
               Entrar
             </Button>
-            {/*<Grid container>
+            <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
                   Forgot password?
@@ -134,7 +134,7 @@ export default function SignInSide(props) {
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
-            </Grid>*/}
+            </Grid>
           </form>
         </div>
       </Grid>
