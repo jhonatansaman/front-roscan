@@ -1093,7 +1093,7 @@ class Recuperacao extends Component {
                       <Row>
                         <Col md="12">
                           <label>Informações Gerais</label>
-                          <textarea style={{ width: '100%' }} name="description" value={this.state.infoBanco} onChange={(e) => this.updateInput(e, 11)} />
+                          <input defaultValue={this.state.infoBanco} style={{ width: '100%', height: 50}} onChange={(e) => this.updateInput(e, 11)}/>
                         </Col>
                       </Row>
                       {/* <FormInputs

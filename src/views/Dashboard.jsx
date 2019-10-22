@@ -35,6 +35,8 @@ import {
   legendBar
 } from "variables/Variables.jsx";
 
+import api from '../services/api';
+
 class Dashboard extends Component {
   createLegend(json) {
     var legend = [];
@@ -46,46 +48,69 @@ class Dashboard extends Component {
     }
     return legend;
   }
+
+  state = {
+    contAndamento: 0,
+  }
+
+  async buscarRecuperacoes() {
+    const r1Andamento = await api.get('/get/consultarRecuperacaoStatus1');
+    
+    let contAuxAndamento = 0;
+    r1Andamento.data.map(item => {
+      contAuxAndamento++;
+    })
+    this.setState({ contAndamento: contAuxAndamento })
+    
+  }
+
+
+  async componentDidMount(){
+   await this.buscarRecuperacoes();
+  }
+
   render() {
+    const state = this.state;
     return (
       <div className="content">
         <Grid fluid>
           <Row>
             <Col lg={3} sm={6}>
-              {/* <StatsCard
+              <StatsCard
                 bigIcon={<i className="pe-7s-server text-warning" />}
-                statsText="Capacity"
-                statsValue="105GB"
+                statsText="Recuperações"
+                statsValue={state.contAndamento}
                 statsIcon={<i className="fa fa-refresh" />}
                 statsIconText="Updated now"
-              /> */}
+                style={{fontSize: 8}}
+              />
             </Col>
             <Col lg={3} sm={6}>
-              {/* <StatsCard
+              <StatsCard
                 bigIcon={<i className="pe-7s-wallet text-success" />}
                 statsText="Revenue"
                 statsValue="$1,345"
                 statsIcon={<i className="fa fa-calendar-o" />}
                 statsIconText="Last day"
-              /> */}
+              />
             </Col>
             <Col lg={3} sm={6}>
-              {/* <StatsCard
+              <StatsCard
                 bigIcon={<i className="pe-7s-graph1 text-danger" />}
                 statsText="Errors"
                 statsValue="23"
                 statsIcon={<i className="fa fa-clock-o" />}
                 statsIconText="In the last hour"
-              /> */}
+              />
             </Col>
             <Col lg={3} sm={6}>
-              {/* <StatsCard
+              <StatsCard
                 bigIcon={<i className="fa fa-twitter text-info" />}
                 statsText="Followers"
                 statsValue="+45"
                 statsIcon={<i className="fa fa-refresh" />}
                 statsIconText="Updated now"
-              /> */}
+              />
             </Col>
           </Row>
           <Row>
