@@ -46,6 +46,8 @@ import ToolkitProvider, {
   Search,
   CSVExport,
 } from 'react-bootstrap-table2-toolkit';
+import { Link, Redirect } from 'react-router-dom';
+
 
 import ReactApexChart from "react-apexcharts";
 import BarChart from 'components/Grafico_Comparativo/barChart';
@@ -335,7 +337,7 @@ class Recuperacao extends Component {
 
     this.setState({ habilitarBtnCadastrar: false })
   }
-  
+
 
   async cadastrar() {
 
@@ -744,27 +746,27 @@ class Recuperacao extends Component {
     if (this.state.idEtapa_validacao[2] == true && this.state.tempo_id_terceira_etapa != 0) {
       await this.setState({
         options: { labels: [...this.state.options.labels, 'Camada de Solda I'], colors: [...this.state.options.colors, '#ff8000'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
-        series: [...this.state.series,  moment.duration(this.state.tempo_id_terceira_etapa).asHours()]
+        series: [...this.state.series, moment.duration(this.state.tempo_id_terceira_etapa).asHours()]
       })
 
     }
     if (this.state.idEtapa_validacao[3] == true && this.state.tempo_id_quarta_etapa != 0) {
       await this.setState({
         options: { labels: [...this.state.options.labels, 'Usinagem para Desbaste I'], colors: [...this.state.options.colors, '#ffbf00'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
-        series: [...this.state.series,  moment.duration(this.state.tempo_id_quarta_etapa).asHours()]
+        series: [...this.state.series, moment.duration(this.state.tempo_id_quarta_etapa).asHours()]
       })
     }
     if (this.state.idEtapa_validacao[4] == true && this.state.tempo_id_quinta_etapa != 0) {
       await this.setState({
         options: { labels: [...this.state.options.labels, 'Camada de Solda II'], colors: [...this.state.options.colors, '#ffff00'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
-        series: [...this.state.series,  moment.duration(this.state.tempo_id_quinta_etapa).asHours()]
+        series: [...this.state.series, moment.duration(this.state.tempo_id_quinta_etapa).asHours()]
       })
 
     }
     if (this.state.idEtapa_validacao[5] == true && this.state.tempo_id_sexta_etapa != 0) {
       await this.setState({
         options: { labels: [...this.state.options.labels, 'Usinagem para Desbaste II'], colors: [...this.state.options.colors, '#80ff00'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
-        series: [...this.state.series,  moment.duration(this.state.tempo_id_sexta_etapa).asHours()]
+        series: [...this.state.series, moment.duration(this.state.tempo_id_sexta_etapa).asHours()]
       })
 
 
@@ -772,7 +774,7 @@ class Recuperacao extends Component {
     if (this.state.idEtapa_validacao[6] == true && this.state.tempo_id_setima_etapa != 0) {
       await this.setState({
         options: { labels: [...this.state.options.labels, 'Camada de Solda III'], colors: [...this.state.options.colors, '#00ffff'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
-        series: [...this.state.series,  moment.duration(this.state.tempo_id_setima_etapa).asHours()]
+        series: [...this.state.series, moment.duration(this.state.tempo_id_setima_etapa).asHours()]
       })
 
     }
@@ -780,20 +782,20 @@ class Recuperacao extends Component {
     if (this.state.idEtapa_validacao[7] == true && this.state.tempo_id_oitava_etapa != 0) {
       await this.setState({
         options: { labels: [...this.state.options.labels, 'Usinagem para Desbaste III'], colors: [...this.state.options.colors, '#00bfff'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
-        series: [...this.state.series,  moment.duration(this.state.tempo_id_oitava_etapa).asHours()]
+        series: [...this.state.series, moment.duration(this.state.tempo_id_oitava_etapa).asHours()]
       })
 
     }
     if (this.state.idEtapa_validacao[8] == true && this.state.tempo_id_nona_etapa != 0) {
       await this.setState({
         options: { labels: [...this.state.options.labels, 'Desbaste na Lixadeira'], colors: [...this.state.options.colors, '#0080ff'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
-        series: [...this.state.series,  moment.duration(this.state.tempo_id_nona_etapa).asHours()]
+        series: [...this.state.series, moment.duration(this.state.tempo_id_nona_etapa).asHours()]
       })
     }
     if (this.state.idEtapa_validacao[8] == true && this.state.tempo_id_nona_etapa != 0) {
       await this.setState({
         options: { labels: [...this.state.options.labels, 'Usinagem Final'], colors: [...this.state.options.colors, '#8000ff'], responsive: [{ breakpoint: 480, options: { chart: { width: 350 }, legend: { position: 'bottom' } } }] },
-        series: [...this.state.series,  moment.duration(this.state.tempo_id_decima_etapa).asHours()]
+        series: [...this.state.series, moment.duration(this.state.tempo_id_decima_etapa).asHours()]
       })
     }
 
@@ -815,6 +817,13 @@ class Recuperacao extends Component {
   closeModal() {
     this.setState({ modalCompare: !this.state.modalCompare, showModalConsultaRecuperacao: true })
   }
+
+  sair() {
+    localStorage.removeItem('login');
+    localStorage.removeItem('usuario');
+    this.props.history.push({ pathname: '/login' })
+  }
+
   render() {
     const self = this;
 
@@ -885,221 +894,222 @@ class Recuperacao extends Component {
         formatter: botoes,
       },
     ];
-    return (
-      <div>
-        <BarChart open={this.state.modalCompare} itemSelecionado={this.state.arrayChartComparativo} close={this.closeModal} id_recuperacao={this.state.id_recuperacao_editar} />
-        <Modal
-          show={this.state.showLoading}
-          onHide={this.handleClose}
-          size="sm"
-        >
-          <Modal.Header closeButton>Carregando...</Modal.Header>
-          <Modal.Body
-            style={{
-              // background: 'transparent',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
+    if (localStorage.getItem('login') == 'on') {
+      return (
+        <div>
+          <BarChart open={this.state.modalCompare} itemSelecionado={this.state.arrayChartComparativo} close={this.closeModal} id_recuperacao={this.state.id_recuperacao_editar} />
+          <Modal
+            show={this.state.showLoading}
+            onHide={this.handleClose}
+            size="sm"
           >
-            <div style={{ marginTop: 50, marginBottom: 50 }}>
-              <BounceLoader
-                css={override}
-                sizeUnit={'px'}
-                size={60}
-                color={'#123b7a'}
-                loading={this.state.loading}
-              />
+            <Modal.Header closeButton>Carregando...</Modal.Header>
+            <Modal.Body
+              style={{
+                // background: 'transparent',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <div style={{ marginTop: 50, marginBottom: 50 }}>
+                <BounceLoader
+                  css={override}
+                  sizeUnit={'px'}
+                  size={60}
+                  color={'#123b7a'}
+                  loading={this.state.loading}
+                />
 
-            </div>
-          </Modal.Body>
-        </Modal>
+              </div>
+            </Modal.Body>
+          </Modal>
 
-        <Modal
-          show={this.state.showModalConfirmar}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Alerta</Modal.Title>
-          </Modal.Header>
+          <Modal
+            show={this.state.showModalConfirmar}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Alerta</Modal.Title>
+            </Modal.Header>
 
-          <Modal.Body>
-            <p>Salvo com sucesso!</p>
-          </Modal.Body>
+            <Modal.Body>
+              <p>Salvo com sucesso!</p>
+            </Modal.Body>
 
-          <Modal.Footer>
-            <Button onClick={() => this.mudarPage()} variant="primary">Ok</Button>
-          </Modal.Footer>
-        </Modal>
-        <Navbar fluid>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <a href="#pablo">Recuperação</a>
-            </Navbar.Brand>
-            <Navbar.Toggle onClick={this.mobileSidebarToggle} />
-          </Navbar.Header>
-          <Navbar.Collapse>
-            <Nav>
-              <NavDropdown
-                eventKey={2}
-                title={notification}
-                noCaret
-                id="basic-nav-dropdown"
-              >
-                {this.state.carregou ?
-                  this.state.arrayPreCadastro.map((item) => (
-                    <MenuItem eventKey={2.1} onClick={() => self.buscar(item)} >Ordem de Serviço: {item.ordem_servico}</MenuItem>
-                  ))
-                  :
-                  <MenuItem eventKey={2.1}>Nenhum Cadastro</MenuItem>
-                }
-              </NavDropdown>
-            </Nav>
-            <Nav pullRight>
-              <NavDropdown
-                eventKey={2}
-                title="Ações"
-                id="basic-nav-dropdown-right"
-              >
-                <MenuItem
-                  onClick={() =>
-                    this.consultarRecuperacao()
-                  }
-                  eventKey={2.1}
+            <Modal.Footer>
+              <Button onClick={() => this.mudarPage()} variant="primary">Ok</Button>
+            </Modal.Footer>
+          </Modal>
+          <Navbar fluid>
+            <Navbar.Header>
+              <Navbar.Brand>
+                <a href="#pablo">Recuperação</a>
+              </Navbar.Brand>
+              <Navbar.Toggle onClick={this.mobileSidebarToggle} />
+            </Navbar.Header>
+            <Navbar.Collapse>
+              <Nav>
+                <NavDropdown
+                  eventKey={2}
+                  title={notification}
+                  noCaret
+                  id="basic-nav-dropdown"
                 >
-                  Consultar Recuperações
+                  {this.state.carregou ?
+                    this.state.arrayPreCadastro.map((item) => (
+                      <MenuItem eventKey={2.1} onClick={() => self.buscar(item)} >Ordem de Serviço: {item.ordem_servico}</MenuItem>
+                    ))
+                    :
+                    <MenuItem eventKey={2.1}>Nenhum Cadastro</MenuItem>
+                  }
+                </NavDropdown>
+              </Nav>
+              <Nav pullRight>
+                <NavDropdown
+                  eventKey={2}
+                  title="Ações"
+                  id="basic-nav-dropdown-right"
+                >
+                  <MenuItem
+                    onClick={() =>
+                      this.consultarRecuperacao()
+                    }
+                    eventKey={2.1}
+                  >
+                    Consultar Recuperações
                 </MenuItem>
-              </NavDropdown>
-              <NavItem eventKey={3} href="#">
-                Sair
+                </NavDropdown>
+                <NavItem eventKey={3} href="#" onClick={() => this.sair()}>
+                  Sair
               </NavItem>
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
-        {/* modal de gráfico */}
-        <Modal
-          show={this.state.showModalChart}
-          onHide={() => this.limparDados()}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title><p style={{ fontWeight: 'bold', marginBottom: 0 }}>Ordem de Serviço: {this.state.ordem_servico_consulta}</p>
-              <p style={{ fontSize: 12, marginBottom: 0 }}>Cliente: {this.state.cliente_consulta} Tipo: {this.state.tipo_consulta}</p>
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <ReactApexChart options={this.state.options} series={this.state.series} type="pie" width="550" />
-            {/* <p>Tempo total: {this.state.tempoTotal}</p> */}
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                this.limparDados()}
-            >
-              Sair
+              </Nav>
+            </Navbar.Collapse>
+          </Navbar>
+          {/* modal de gráfico */}
+          <Modal
+            show={this.state.showModalChart}
+            onHide={() => this.limparDados()}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title><p style={{ fontWeight: 'bold', marginBottom: 0 }}>Ordem de Serviço: {this.state.ordem_servico_consulta}</p>
+                <p style={{ fontSize: 12, marginBottom: 0 }}>Cliente: {this.state.cliente_consulta} Tipo: {this.state.tipo_consulta}</p>
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <ReactApexChart options={this.state.options} series={this.state.series} type="pie" width="550" />
+              {/* <p>Tempo total: {this.state.tempoTotal}</p> */}
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  this.limparDados()}
+              >
+                Sair
             </Button>
-          </Modal.Footer>
-        </Modal>
+            </Modal.Footer>
+          </Modal>
 
-        {/* Modal consultar recuperação */}
-        <Modal
-          show={this.state.showModalConsultaRecuperacao}
-          onHide={() => this.setState({ showModalConsultaRecuperacao: false })}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Consulta de Recuperação</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <ToolkitProvider
-              keyField="id"
-              data={this.state.arrayConsultarRecuperacao}
-              columns={columns}
-              search
-            >
-              {props => (
-                <div>
-                  <SearchBar
-                    placeholder="Pesquisar"
-                    id="search_txt"
-                    style={{ width: 470, marginRight: 10 }}
-                    {...props.searchProps}
-                  />
-                  <Button onClick={() => this.clear(props)}>Limpar</Button>
-                  {/* <hr /> */}
-                  <BootstrapTable
-                    pagination={paginator()}
-                    {...props.baseProps}
-                  />
-                  <ExportCSVButton {...props.csvProps}>
-                    Exportar Excel
+          {/* Modal consultar recuperação */}
+          <Modal
+            show={this.state.showModalConsultaRecuperacao}
+            onHide={() => this.setState({ showModalConsultaRecuperacao: false })}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Consulta de Recuperação</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <ToolkitProvider
+                keyField="id"
+                data={this.state.arrayConsultarRecuperacao}
+                columns={columns}
+                search
+              >
+                {props => (
+                  <div>
+                    <SearchBar
+                      placeholder="Pesquisar"
+                      id="search_txt"
+                      style={{ width: 470, marginRight: 10 }}
+                      {...props.searchProps}
+                    />
+                    <Button onClick={() => this.clear(props)}>Limpar</Button>
+                    {/* <hr /> */}
+                    <BootstrapTable
+                      pagination={paginator()}
+                      {...props.baseProps}
+                    />
+                    <ExportCSVButton {...props.csvProps}>
+                      Exportar Excel
                   </ExportCSVButton>
-                </div>
-              )}
-            </ToolkitProvider>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                this.setState({ showModalConsultaRecuperacao: false })
-              }
-            >
-              Sair
+                  </div>
+                )}
+              </ToolkitProvider>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  this.setState({ showModalConsultaRecuperacao: false })
+                }
+              >
+                Sair
             </Button>
-          </Modal.Footer>
-        </Modal>
+            </Modal.Footer>
+          </Modal>
 
-        <div className="content" style={{ marginTop: '3%' }}>
-          <Grid fluid>
-            <Row>
-              <Col md={12}>
-                <Card
-                  title="Cadastro de Recuperação"
-                  content={
-                    <form>
-                      <FormInputs
-                        ncols={['col-md-6', 'col-md-6']}
-                        properties={[
-                          {
-                            label: 'Ordem de Serviço',
-                            type: 'text',
-                            bsClass: 'form-control',
-                            onChange: self.ordem_servico,
-                            defaultValue: self.state.os
-                          },
-                          {
-                            label: 'Data Inicial',
-                            type: 'date',
-                            bsClass: 'form-control',
-                            onChange: self.data_inicial,
-                            defaultValue: self.state.data
-                          },
-                        ]}
-                      />
-                      <FormInputs
-                        ncols={['col-md-6', 'col-md-6']}
-                        properties={[
-                          {
-                            label: 'Cliente',
-                            type: 'text',
-                            bsClass: 'form-control',
-                            onChange: self.cliente,
-                            defaultValue: self.state.cliente
-                          },
-                          {
-                            label: 'Tipo',
-                            type: 'text',
-                            bsClass: 'form-control',
-                            onChange: self.tipo,
-                            defaultValue: self.state.tipo
-                          },
-                        ]}
-                      />
-                      <Row>
-                        <Col md="12">
-                          <label>Informações Gerais</label>
-                          <input defaultValue={this.state.infoBanco} style={{ width: '100%', height: 50}} onChange={(e) => this.updateInput(e, 11)}/>
-                        </Col>
-                      </Row>
-                      {/* <FormInputs
+          <div className="content" style={{ marginTop: '3%' }}>
+            <Grid fluid>
+              <Row>
+                <Col md={12}>
+                  <Card
+                    title="Cadastro de Recuperação"
+                    content={
+                      <form>
+                        <FormInputs
+                          ncols={['col-md-6', 'col-md-6']}
+                          properties={[
+                            {
+                              label: 'Ordem de Serviço',
+                              type: 'text',
+                              bsClass: 'form-control',
+                              onChange: self.ordem_servico,
+                              defaultValue: self.state.os
+                            },
+                            {
+                              label: 'Data Inicial',
+                              type: 'date',
+                              bsClass: 'form-control',
+                              onChange: self.data_inicial,
+                              defaultValue: self.state.data
+                            },
+                          ]}
+                        />
+                        <FormInputs
+                          ncols={['col-md-6', 'col-md-6']}
+                          properties={[
+                            {
+                              label: 'Cliente',
+                              type: 'text',
+                              bsClass: 'form-control',
+                              onChange: self.cliente,
+                              defaultValue: self.state.cliente
+                            },
+                            {
+                              label: 'Tipo',
+                              type: 'text',
+                              bsClass: 'form-control',
+                              onChange: self.tipo,
+                              defaultValue: self.state.tipo
+                            },
+                          ]}
+                        />
+                        <Row>
+                          <Col md="12">
+                            <label>Informações Gerais</label>
+                            <input defaultValue={this.state.infoBanco} style={{ width: '100%', height: 50 }} onChange={(e) => this.updateInput(e, 11)} />
+                          </Col>
+                        </Row>
+                        {/* <FormInputs
                         ncols={['col-md-12']}
                         properties={[
                           {
@@ -1112,54 +1122,59 @@ class Recuperacao extends Component {
                         ]}
                       /> */}
 
-                      <Row>
-                        <Col md={12}>
-                          <div style={{ flexDirection: 'row' }}>
-                            <FormGroup controlId="formControlsTextarea">
-                              <ControlLabel>Selecione a(s) etapa(s)</ControlLabel>
-                              <Checkbox label='Soldar Ponteira e Alinhamento' onClick={() => this.check(1)} />
-                              <input disabled={this.state.habilitarInput[0]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 1)} type="time" />
-                              <Checkbox label='Desbaste para Limpeza' onClick={() => this.check(2)} />
-                              <input disabled={this.state.habilitarInput[1]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 2)} type="time" />
-                              <Checkbox label='Camada de Solda I' onClick={() => this.check(3)} />
-                              <input disabled={this.state.habilitarInput[2]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 3)} type="time" />
-                              <Checkbox label='Usinagem Para Desbaste I' onClick={() => this.check(4)} />
-                              <input disabled={this.state.habilitarInput[3]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 4)} type="time" />
-                              <Checkbox label='Camada de Solda II' onClick={() => this.check(5)} />
-                              <input disabled={this.state.habilitarInput[4]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 5)} type="time" />
-                              <Checkbox label='Usinagem Para Desbaste II' onClick={() => this.check(6)} />
-                              <input disabled={this.state.habilitarInput[5]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 6)} type="time" />
-                              <Checkbox label='Camada de Solda III' onClick={() => this.check(7)} />
-                              <input disabled={this.state.habilitarInput[6]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 7)} type="time" />
-                              <Checkbox label='Usinagem Para Desbaste III' onClick={() => this.check(8)} />
-                              <input disabled={this.state.habilitarInput[7]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 8)} type="time" />
-                              <Checkbox label='Desbaste na Lixadeira' onClick={() => this.check(9)} />
-                              <input disabled={this.state.habilitarInput[8]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 9)} type="time" />
-                              <Checkbox label='Usinagem Final' onClick={() => this.check(10)} />
-                              <input disabled={this.state.habilitarInput[9]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 10)} type="time" />
-                            </FormGroup>
-                          </div>
-                        </Col>
-                      </Row>
-                      <Button
-                        bsStyle="info"
-                        onClick={() => this.cadastrar()}
-                        pullRight
-                        fill
-                        disabled={this.state.habilitarBtnCadastrar}
-                      >
-                        Cadastrar
+                        <Row>
+                          <Col md={12}>
+                            <div style={{ flexDirection: 'row' }}>
+                              <FormGroup controlId="formControlsTextarea">
+                                <ControlLabel>Selecione a(s) etapa(s)</ControlLabel>
+                                <Checkbox label='Soldar Ponteira e Alinhamento' onClick={() => this.check(1)} />
+                                <input disabled={this.state.habilitarInput[0]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 1)} type="time" />
+                                <Checkbox label='Desbaste para Limpeza' onClick={() => this.check(2)} />
+                                <input disabled={this.state.habilitarInput[1]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 2)} type="time" />
+                                <Checkbox label='Camada de Solda I' onClick={() => this.check(3)} />
+                                <input disabled={this.state.habilitarInput[2]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 3)} type="time" />
+                                <Checkbox label='Usinagem Para Desbaste I' onClick={() => this.check(4)} />
+                                <input disabled={this.state.habilitarInput[3]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 4)} type="time" />
+                                <Checkbox label='Camada de Solda II' onClick={() => this.check(5)} />
+                                <input disabled={this.state.habilitarInput[4]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 5)} type="time" />
+                                <Checkbox label='Usinagem Para Desbaste II' onClick={() => this.check(6)} />
+                                <input disabled={this.state.habilitarInput[5]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 6)} type="time" />
+                                <Checkbox label='Camada de Solda III' onClick={() => this.check(7)} />
+                                <input disabled={this.state.habilitarInput[6]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 7)} type="time" />
+                                <Checkbox label='Usinagem Para Desbaste III' onClick={() => this.check(8)} />
+                                <input disabled={this.state.habilitarInput[7]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 8)} type="time" />
+                                <Checkbox label='Desbaste na Lixadeira' onClick={() => this.check(9)} />
+                                <input disabled={this.state.habilitarInput[8]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 9)} type="time" />
+                                <Checkbox label='Usinagem Final' onClick={() => this.check(10)} />
+                                <input disabled={this.state.habilitarInput[9]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 10)} type="time" />
+                              </FormGroup>
+                            </div>
+                          </Col>
+                        </Row>
+                        <Button
+                          bsStyle="info"
+                          onClick={() => this.cadastrar()}
+                          pullRight
+                          fill
+                          disabled={this.state.habilitarBtnCadastrar}
+                        >
+                          Cadastrar
                       </Button>
-                      <div className="clearfix" />
-                    </form>
-                  }
-                />
-              </Col>
-            </Row>
-          </Grid>
+                        <div className="clearfix" />
+                      </form>
+                    }
+                  />
+                </Col>
+              </Row>
+            </Grid>
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <Redirect to="/" from="" />
+      )
+    }
   }
 }
 

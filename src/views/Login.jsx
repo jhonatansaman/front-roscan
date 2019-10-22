@@ -159,7 +159,7 @@ export default function SignInSide(props) {
             >
               Entrar
             </Button>
-            <Grid container>
+            {/* <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
                   Forgot password?
@@ -170,7 +170,7 @@ export default function SignInSide(props) {
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
-            </Grid>
+            </Grid> */}
           </form>
         </div>
       </Grid>
