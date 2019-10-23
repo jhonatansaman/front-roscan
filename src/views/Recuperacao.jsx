@@ -129,6 +129,7 @@ class Recuperacao extends Component {
       buscouRecuperacao: false,
       arrayConsultarRecuperacao: '',
       showModalConsultaRecuperacao: false,
+      os_deletar: '', 
       idEtapa_validacao: [],
       options: {
         labels: [],
@@ -164,7 +165,8 @@ class Recuperacao extends Component {
       ordem_servico_consulta: '',
       tipo_consulta: '',
       cliente_consulta: '',
-      arrayChartComparativo: ''
+      arrayChartComparativo: '', 
+      idrecuperacao_deletar: '',
     }
   };
 
@@ -336,6 +338,17 @@ class Recuperacao extends Component {
   }
 
   async cadastrar() {
+    var bool = true
+
+    this.state.habilitarInput.map(item => {
+      if (item != true)
+        bool = false;
+    })
+
+    if (bool) {
+      alert("Deve ser cadastrado ao menos uma etapa!");
+      return 1;
+    }
 
     await this.setState({ showLoading: true });
 
@@ -812,6 +825,16 @@ class Recuperacao extends Component {
   closeModal() {
     this.setState({ modalCompare: !this.state.modalCompare, showModalConsultaRecuperacao: true })
   }
+
+  deletarOS(id, os){
+    this.setState({ showModalConsultaRecuperacao: false, showAlerta: true, idrecuperacao_deletar: id, os_deletar: os })
+  }
+
+  async deletar_OS(){
+    await api.post('/recuperacao/deletarRecuperacao', {
+      idrecuperacao: this.state.idrecuperacao_deletar
+    });
+  }
   render() {
     const self = this;
 
@@ -851,6 +874,15 @@ class Recuperacao extends Component {
             className="fa fa-bar-chart"
             style={{ color: '#ccc', fontSize: 20, marginLeft: 10 }}
           />
+          <i
+            onClick={() =>
+              this.deletarOS(
+                JSON.stringify(row.idrecuperacao, row.ordem_servico),
+              )
+            }
+            className="fa fa-trash"
+            style={{ color: 'red', fontSize: 20, marginLeft: 10 }}
+          />
         </div>
       );
     };
@@ -885,6 +917,28 @@ class Recuperacao extends Component {
     return (
       <div>
         <BarChart open={this.state.modalCompare} itemSelecionado={this.state.arrayChartComparativo} close={this.closeModal} id_recuperacao={this.state.id_recuperacao_editar} />
+        <Modal
+          show={this.state.showAlerta}
+          onHide={() => this.setState({ showAlerta: false, showModalConsultaRecuperacao: true })}
+          size="sm"
+        >
+          <Modal.Header closeButton>Alerta!</Modal.Header>
+          <Modal.Body
+            style={{
+              // background: 'transparent',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <div style={{ marginTop: 50, marginBottom: 50}}>
+              <p>Deseja deletar ordem de serviço {this.state.os_deletar}?</p>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={() => this.setState({ showAlerta: false, showModalConsultaRecuperacao: true })} variant="primary">Cancelar</Button>
+            <Button onClick={() => this.deletar_OS()} variant="primary">Sim</Button>
+          </Modal.Footer>
+        </Modal>
         <Modal
           show={this.state.showLoading}
           onHide={this.handleClose}
@@ -1093,7 +1147,7 @@ class Recuperacao extends Component {
                       <Row>
                         <Col md="12">
                           <label>Informações Gerais</label>
-                          <input defaultValue={this.state.infoBanco} style={{ width: '100%', height: 50}} onChange={(e) => this.updateInput(e, 11)}/>
+                          <input defaultValue={this.state.infoBanco} style={{ width: '100%', height: 50 }} onChange={(e) => this.updateInput(e, 11)} />
                         </Col>
                       </Row>
                       {/* <FormInputs
@@ -1114,26 +1168,37 @@ class Recuperacao extends Component {
                           <div style={{ flexDirection: 'row' }}>
                             <FormGroup controlId="formControlsTextarea">
                               <ControlLabel>Selecione a(s) etapa(s)</ControlLabel>
-                              <Checkbox label='Soldar Ponteira e Alinhamento' onClick={() => this.check(1)} />
-                              <input disabled={this.state.habilitarInput[0]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 1)} type="time" />
-                              <Checkbox label='Desbaste para Limpeza' onClick={() => this.check(2)} />
-                              <input disabled={this.state.habilitarInput[1]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 2)} type="time" />
-                              <Checkbox label='Camada de Solda I' onClick={() => this.check(3)} />
-                              <input disabled={this.state.habilitarInput[2]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 3)} type="time" />
-                              <Checkbox label='Usinagem Para Desbaste I' onClick={() => this.check(4)} />
-                              <input disabled={this.state.habilitarInput[3]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 4)} type="time" />
-                              <Checkbox label='Camada de Solda II' onClick={() => this.check(5)} />
-                              <input disabled={this.state.habilitarInput[4]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 5)} type="time" />
-                              <Checkbox label='Usinagem Para Desbaste II' onClick={() => this.check(6)} />
-                              <input disabled={this.state.habilitarInput[5]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 6)} type="time" />
-                              <Checkbox label='Camada de Solda III' onClick={() => this.check(7)} />
-                              <input disabled={this.state.habilitarInput[6]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 7)} type="time" />
-                              <Checkbox label='Usinagem Para Desbaste III' onClick={() => this.check(8)} />
-                              <input disabled={this.state.habilitarInput[7]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 8)} type="time" />
-                              <Checkbox label='Desbaste na Lixadeira' onClick={() => this.check(9)} />
-                              <input disabled={this.state.habilitarInput[8]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 9)} type="time" />
-                              <Checkbox label='Usinagem Final' onClick={() => this.check(10)} />
-                              <input disabled={this.state.habilitarInput[9]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 10)} type="time" />
+                              <div style={{ flexDirection: 'row', display: 'flex' }}>
+                                <Checkbox style={{ marginRight: 10 }} label='Soldar Ponteira e Alinhamento' onClick={() => this.check(1)} />
+                                <input style={{ height: 35 }} disabled={this.state.habilitarInput[0]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 1)} type="time" />
+                                <Checkbox style={{ marginLeft: 100, marginRight: 30 }} label='Desbaste para Limpeza' onClick={() => this.check(2)} />
+                                <input style={{ height: 35 }} disabled={this.state.habilitarInput[1]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 2)} type="time" />
+                              </div>
+                              <div style={{ flexDirection: 'row', display: 'flex' }}>
+                                <Checkbox style={{ marginRight: 96 }} label='Camada de Solda I' onClick={() => this.check(3)} />
+                                <input style={{ height: 35 }} disabled={this.state.habilitarInput[2]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 3)} type="time" />
+                                <Checkbox style={{ marginLeft: 101, marginRight: 13 }} label='Usinagem Para Desbaste I' onClick={() => this.check(4)} />
+                                <input style={{ height: 35 }} disabled={this.state.habilitarInput[3]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 4)} type="time" />
+                              </div>
+                              <div style={{ flexDirection: 'row', display: 'flex' }}>
+                                <Checkbox style={{ marginRight: 92 }} label='Camada de Solda II' onClick={() => this.check(5)} />
+                                <input style={{ height: 35 }} disabled={this.state.habilitarInput[4]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 5)} type="time" />
+                                <Checkbox style={{ marginLeft: 102, marginRight: 10 }} label='Usinagem Para Desbaste II' onClick={() => this.check(6)} />
+                                <input style={{ height: 35 }} disabled={this.state.habilitarInput[5]} defaultValue={'00:00'} min="00:00:00"
+                                  max="24:00:00" onChange={(e) => this.updateInput(e, 6)} type="time" />
+                              </div>
+                              <div style={{ flexDirection: 'row', display: 'flex' }}>
+                                <Checkbox style={{ marginRight: 89 }} label='Camada de Solda III' onClick={() => this.check(7)} />
+                                <input style={{ height: 35 }} disabled={this.state.habilitarInput[6]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 7)} type="time" />
+                                <Checkbox style={{ marginLeft: 102, marginRight: 8 }} label='Usinagem Para Desbaste III' onClick={() => this.check(8)} />
+                                <input style={{ height: 35 }} disabled={this.state.habilitarInput[7]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 8)} type="time" />
+                              </div>
+                              <div style={{ flexDirection: 'row', display: 'flex' }}>
+                                <Checkbox style={{ marginRight: 70 }} label='Desbaste na Lixadeira' onClick={() => this.check(9)} />
+                                <input style={{ height: 35 }} disabled={this.state.habilitarInput[8]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 9)} type="time" />
+                                <Checkbox style={{ marginLeft: 102, marginRight: 78 }} label='Usinagem Final' onClick={() => this.check(10)} />
+                                <input style={{ height: 35 }} disabled={this.state.habilitarInput[9]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 10)} type="time" />
+                              </div>
                             </FormGroup>
                           </div>
                         </Col>
