@@ -888,6 +888,15 @@ class Recuperacao extends Component {
             className="fa fa-bar-chart"
             style={{ color: '#ccc', fontSize: 20, marginLeft: 10 }}
           />
+          {/* <i
+            onClick={() =>
+              this.deletarOS(
+                JSON.stringify(row.idrecuperacao),
+              )
+            }
+            className="fa fa-edit"
+            style={{ color: 'blue', fontSize: 20, marginLeft: 10 }}
+          /> */}
           <i
             onClick={() =>
               this.deletarOS(
