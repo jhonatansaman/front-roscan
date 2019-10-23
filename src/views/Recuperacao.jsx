@@ -569,6 +569,7 @@ class Recuperacao extends Component {
       }
     }
     this.setState({ showLoading: false })
+    window.location.reload();
   }
 
   mudarPage() {
@@ -843,6 +844,8 @@ class Recuperacao extends Component {
     await api.post('/recuperacao/deletarRecuperacao', {
       idrecuperacao: this.state.idrecuperacao_deletar
     });
+
+    window.location.reload();
   }
   render() {
     const self = this;
