@@ -4,6 +4,7 @@ import {
 } from 'react-bootstrap';
 import Chart from "react-apexcharts";
 import api from '../../services/api';
+import moment from 'moment';
 //dsds
 
 export default class barChart extends Component {
@@ -45,99 +46,99 @@ export default class barChart extends Component {
         var verificar = false
         var verificar2 = false
 
-        if (data != null) {
-            if ((data.substring(1) == 0 && data.substring(2) == 1) || data.substring(3) > 0 || data.substring(4) > 0) {
-                data.replace(/\D/g, "");
-                data = data.replace(/\D/g, "") / 60;
-                verificar = true;
-            }
-            if (!verificar && (data.substring(0, 1) > 0 || data.substring(1, 2) > 0) && (data.substring(3, 4) > 0 || data.substring(4, 5) > 0)) {
-                data = data.replace(/\D/g, "") / 60;
-                data = data.num.toFixed(2).slice(0, -1)
-            }
-            if (data2 != null) {
-                if ((data2.substring(1) == 0 && data2.substring(2) == 1) || data2.substring(3) > 0 || data2.substring(4) > 0) {
-                    data2.replace(/\D/g, "");
-                    data2 = data2.replace(/\D/g, "") / 60;
-                    data2 = data2.toFixed(2)
-                    verificar2 = true;
-                }
-                if (!verificar2 && (data2.substring(0, 1) > 0 || data2.substring(1, 2) > 0) && (data2.substring(3, 4) > 0 || data2.substring(4, 5) > 0)) {
-                    data2 = data2.replace(/\D/g, "") / 60;
-                    data2 = data2.toFixed(2)
+        // if (data != null) {
+        //     if ((data.substring(1) == 0 && data.substring(2) == 1) || data.substring(3) > 0 || data.substring(4) > 0) {
+        //         data.replace(/\D/g, "");
+        //         data = data.replace(/\D/g, "") / 60;
+        //         verificar = true;
+        //     }
+        //     if (!verificar && (data.substring(0, 1) > 0 || data.substring(1, 2) > 0) && (data.substring(3, 4) > 0 || data.substring(4, 5) > 0)) {
+        //         data = data.replace(/\D/g, "") / 60;
+        //         data = data.num.toFixed(2).slice(0, -1)
+        //     }
+        //     if (data2 != null) {
+        //         if ((data2.substring(1) == 0 && data2.substring(2) == 1) || data2.substring(3) > 0 || data2.substring(4) > 0) {
+        //             data2.replace(/\D/g, "");
+        //             data2 = data2.replace(/\D/g, "") / 60;
+        //             data2 = data2.toFixed(2)
+        //             verificar2 = true;
+        //         }
+        //         if (!verificar2 && (data2.substring(0, 1) > 0 || data2.substring(1, 2) > 0) && (data2.substring(3, 4) > 0 || data2.substring(4, 5) > 0)) {
+        //             data2 = data2.replace(/\D/g, "") / 60;
+        //             data2 = data2.toFixed(2)
 
-                }
-            }
-        }
+        //         }
+        //     }
+        // }
         const state = this.state;
         if (pos == 1) {
             this.setState({
                 arrayCategorias: [...state.arrayCategorias, 'Soldar Ponteira e Alinhamento'],
-                arrayDataPre: [...state.arrayDataPre, data],
-                arrayDataTotal: [...state.arrayDataTotal, data2],
+                arrayDataPre: [...state.arrayDataPre, moment.duration(data).asHours()],
+                arrayDataTotal: [...state.arrayDataTotal, moment.duration(data2).asHours()],
             })
         }
         if (pos == 2) {
             this.setState({
                 arrayCategorias: [...state.arrayCategorias, 'Desbaste para Limpeza'],
-                arrayDataPre: [...state.arrayDataPre, data],
-                arrayDataTotal: [...state.arrayDataTotal, data2],
+                arrayDataPre: [...state.arrayDataPre, moment.duration(data).asHours()],
+                arrayDataTotal: [...state.arrayDataTotal, moment.duration(data2).asHours()],
             })
         }
         if (pos == 3) {
             this.setState({
                 arrayCategorias: [...state.arrayCategorias, 'Camada de Solda I'],
-                arrayDataPre: [...state.arrayDataPre, data],
-                arrayDataTotal: [...state.arrayDataTotal, data2],
+                arrayDataPre: [...state.arrayDataPre, moment.duration(data).asHours()],
+                arrayDataTotal: [...state.arrayDataTotal, moment.duration(data2).asHours()],
             })
         }
         if (pos == 4) {
             this.setState({
                 arrayCategorias: [...state.arrayCategorias, 'Usinagem para Desbaste I'],
-                arrayDataPre: [...state.arrayDataPre, data],
-                arrayDataTotal: [...state.arrayDataTotal, data2],
+                arrayDataPre: [...state.arrayDataPre, moment.duration(data).asHours()],
+                arrayDataTotal: [...state.arrayDataTotal, moment.duration(data2).asHours()],
             })
         }
         if (pos == 5) {
             this.setState({
                 arrayCategorias: [...state.arrayCategorias, 'Camada de Solda II'],
-                arrayDataPre: [...state.arrayDataPre, data],
-                arrayDataTotal: [...state.arrayDataTotal, data2],
+                arrayDataPre: [...state.arrayDataPre, moment.duration(data).asHours()],
+                arrayDataTotal: [...state.arrayDataTotal, moment.duration(data2).asHours()],
             })
         }
         if (pos == 6) {
             this.setState({
                 arrayCategorias: [...state.arrayCategorias, 'Usinagem para Desbate II'],
-                arrayDataPre: [...state.arrayDataPre, data],
-                arrayDataTotal: [...state.arrayDataTotal, data2],
+                arrayDataPre: [...state.arrayDataPre, moment.duration(data).asHours()],
+                arrayDataTotal: [...state.arrayDataTotal, moment.duration(data2).asHours()],
             })
         }
         if (pos == 7) {
             this.setState({
                 arrayCategorias: [...state.arrayCategorias, 'Camada de Solda III'],
-                arrayDataPre: [...state.arrayDataPre, data],
-                arrayDataTotal: [...state.arrayDataTotal, data2],
+                arrayDataPre: [...state.arrayDataPre, moment.duration(data).asHours()],
+                arrayDataTotal: [...state.arrayDataTotal, moment.duration(data2).asHours()],
             })
         }
         if (pos == 8) {
             this.setState({
                 arrayCategorias: [...state.arrayCategorias, 'Usinagem para Desbate III'],
-                arrayDataPre: [...state.arrayDataPre, data],
-                arrayDataTotal: [...state.arrayDataTotal, data2],
+                arrayDataPre: [...state.arrayDataPre, moment.duration(data).asHours()],
+                arrayDataTotal: [...state.arrayDataTotal, moment.duration(data2).asHours()],
             })
         }
         if (pos == 9) {
             this.setState({
                 arrayCategorias: [...state.arrayCategorias, 'Desbaste na Lixadeira'],
-                arrayDataPre: [...state.arrayDataPre, data],
-                arrayDataTotal: [...state.arrayDataTotal, data2],
+                arrayDataPre: [...state.arrayDataPre, moment.duration(data).asHours()],
+                arrayDataTotal: [...state.arrayDataTotal, moment.duration(data2).asHours()],
             })
         }
         if (pos == 10) {
             this.setState({
                 arrayCategorias: [...state.arrayCategorias, 'Usinagem Final'],
-                arrayDataPre: [...state.arrayDataPre, data],
-                arrayDataTotal: [...state.arrayDataTotal, data2],
+                arrayDataPre: [...state.arrayDataPre, moment.duration(data).asHours()],
+                arrayDataTotal: [...state.arrayDataTotal, moment.duration(data2).asHours()],
             })
         }
 

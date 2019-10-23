@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Grid,
   Row,
@@ -46,9 +46,9 @@ import {
 } from 'variables/Variables.jsx';
 import ChartistGraph from 'react-chartist';
 
-import {Card} from 'components/Card/Card.jsx';
-import {FormInputs} from 'components/FormInputs/FormInputs.jsx';
-import {UserCard} from 'components/UserCard/UserCard.jsx';
+import { Card } from 'components/Card/Card.jsx';
+import { FormInputs } from 'components/FormInputs/FormInputs.jsx';
+import { UserCard } from 'components/UserCard/UserCard.jsx';
 import Button from 'components/CustomButton/CustomButton.jsx';
 import api from '../services/api';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -60,9 +60,11 @@ import ToolkitProvider, {
 import Select from 'react-select';
 import { AST_Accessor } from 'terser';
 import { thisTypeAnnotation } from '@babel/types';
+import { Link, Redirect } from 'react-router-dom';
 
-const {SearchBar, ClearSearchButton} = Search;
-const {ExportCSVButton} = CSVExport;
+
+const { SearchBar, ClearSearchButton } = Search;
+const { ExportCSVButton } = CSVExport;
 
 // import avatar from 'assets/img/faces/face-3.jpg';
 
@@ -137,7 +139,7 @@ class Importacao extends Component {
       tempoPedidoEditar: '',
       dataPie2: {
         labels: [],
-        series:[]
+        series: []
       },
       legendPie2: {
         names: ["Importação", "Fabricação", "Projeto", "Finalização", "Pedido"],
@@ -160,7 +162,7 @@ class Importacao extends Component {
       '/get/consultarImportacao'
     );
 
-    this.setState({arrayConsultaImportacao: responseConsultarImportacao.data});
+    this.setState({ arrayConsultaImportacao: responseConsultarImportacao.data });
 
     console.log(
       'arrayConsultaImportacao: ',
@@ -169,107 +171,107 @@ class Importacao extends Component {
   }
 
   toggleCollapse = () => {
-    this.setState({isOpen: !this.state.isOpen});
+    this.setState({ isOpen: !this.state.isOpen });
   };
 
   async updateInput(event) {
-    await this.setState({orcamento: event.target.value, escOrcamento: true});
+    await this.setState({ orcamento: event.target.value, escOrcamento: true });
     console.log("escOrcamento: ", this.state.escOrcamento);
     console.log("escPedido: ", this.state.escPedido);
     console.log("escCliente: ", this.state.escCliente);
     console.log("escTipo: ", this.state.escTipo);
-    if(this.state.escTipo==true && this.state.escCliente==true && this.state.escPedido==true && this.state.escOrcamento==true)
-    this.setState({ habilitarBtnCadastrar: false })
+    if (this.state.escTipo == true && this.state.escCliente == true && this.state.escPedido == true && this.state.escOrcamento == true)
+      this.setState({ habilitarBtnCadastrar: false })
   }
   async updateInput2(event) {
-    await this.setState({pedido: event.target.value, escPedido: true});
-    
-    if(this.state.escTipo==true && this.state.escCliente==true && this.state.escPedido==true && this.state.escOrcamento==true)
-    this.setState({ habilitarBtnCadastrar: false })
+    await this.setState({ pedido: event.target.value, escPedido: true });
+
+    if (this.state.escTipo == true && this.state.escCliente == true && this.state.escPedido == true && this.state.escOrcamento == true)
+      this.setState({ habilitarBtnCadastrar: false })
   }
   async updateInput3(event) {
-    await this.setState({cliente: event.target.value, escCliente: true});
+    await this.setState({ cliente: event.target.value, escCliente: true });
 
-    if(this.state.escTipo==true && this.state.escCliente==true && this.state.escPedido==true && this.state.escOrcamento==true)
-    this.setState({ habilitarBtnCadastrar: false })
+    if (this.state.escTipo == true && this.state.escCliente == true && this.state.escPedido == true && this.state.escOrcamento == true)
+      this.setState({ habilitarBtnCadastrar: false })
   }
   async updateInput4(event) {
-    await this.setState({tipo: event.target.value, escTipo: true});
-  
-    if(this.state.escTipo==true && this.state.escCliente==true && this.state.escPedido==true && this.state.escOrcamento==true)
-    this.setState({ habilitarBtnCadastrar: false })
+    await this.setState({ tipo: event.target.value, escTipo: true });
+
+    if (this.state.escTipo == true && this.state.escCliente == true && this.state.escPedido == true && this.state.escOrcamento == true)
+      this.setState({ habilitarBtnCadastrar: false })
   }
   InputEditarTempo(event) {
-    this.setState({tempo_pedidoEditar: event.target.value});
+    this.setState({ tempo_pedidoEditar: event.target.value });
   }
   InputEditarTempoProjeto(event) {
-    this.setState({tempo_projetoViagemEditar: event.target.value});
+    this.setState({ tempo_projetoViagemEditar: event.target.value });
   }
   InputEditarTempoProjeto2(event) {
-    this.setState({tempo_projetoMedidasEditar: event.target.value});
+    this.setState({ tempo_projetoMedidasEditar: event.target.value });
   }
   InputEditarTempoProjeto3(event) {
-    this.setState({tempo_projetoDesenhoTecnicoEditar: event.target.value});
+    this.setState({ tempo_projetoDesenhoTecnicoEditar: event.target.value });
   }
   InputEditarTempoProjeto4(event) {
-    this.setState({tempo_projetoRevisaoEditar: event.target.value});
+    this.setState({ tempo_projetoRevisaoEditar: event.target.value });
   }
   InputEditarTempoFabricacao(event) {
-    this.setState({tempo_FabricacaoEditar: event.target.value});
+    this.setState({ tempo_FabricacaoEditar: event.target.value });
   }
   InputEditarTempoImportacao(event) {
-    this.setState({tempo_importacaoArmazemEditar: event.target.value});
+    this.setState({ tempo_importacaoArmazemEditar: event.target.value });
   }
   InputEditarTempoImportacao2(event) {
-    this.setState({tempo_importacaoViagemNavioEditar: event.target.value});
+    this.setState({ tempo_importacaoViagemNavioEditar: event.target.value });
   }
   InputEditarTempoImportacao3(event) {
-    this.setState({tempo_importacaoNacionalizacaoEditar: event.target.value});
+    this.setState({ tempo_importacaoNacionalizacaoEditar: event.target.value });
   }
   InputEditarTempoImportacao4(event) {
-    this.setState({tempo_importacaoFreteEditar: event.target.value});
+    this.setState({ tempo_importacaoFreteEditar: event.target.value });
   }
   InputEditarTempoFinalizacao(event) {
-    this.setState({tempo_finalizacaoDesembarqueEditar: event.target.value});
+    this.setState({ tempo_finalizacaoDesembarqueEditar: event.target.value });
   }
   InputEditarTempoFinalizacao2(event) {
-    this.setState({tempo_finalizacaoConferenciaEditar: event.target.value});
+    this.setState({ tempo_finalizacaoConferenciaEditar: event.target.value });
   }
   InputEditarTempoFinalizacao3(event) {
-    this.setState({tempo_finalizacaoFreteClienteEditar: event.target.value});
+    this.setState({ tempo_finalizacaoFreteClienteEditar: event.target.value });
   }
   InputEditarTempoFinalizacao4(event) {
-    this.setState({tempo_finalizacaoTrocaEditar: event.target.value});
+    this.setState({ tempo_finalizacaoTrocaEditar: event.target.value });
   }
   InputEditarTempoFinalizacao5(event) {
-    this.setState({tempo_finalizacaoEmbarqueEditar: event.target.value});
+    this.setState({ tempo_finalizacaoEmbarqueEditar: event.target.value });
   }
-  
+
 
   async cadastro_dias_padrao() {
-    await api.post('/posts/cadTempoPedido',{
+    await api.post('/posts/cadTempoPedido', {
       tempo: 1
     });
 
-    await api.post('/posts/cadTempoProjeto',{
+    await api.post('/posts/cadTempoProjeto', {
       viagem: 1,
       medidas: 1,
       desenho_tecnico: 5,
       revisao: 1
     });
 
-    await api.post('/posts/cadTempoFabricacao',{
+    await api.post('/posts/cadTempoFabricacao', {
       tempo_fabricacao: 45
     });
 
-    await api.post('/posts/cadTempoImportacao',{
+    await api.post('/posts/cadTempoImportacao', {
       espera_armazem: 15,
       viagem_navio: 37,
       nacionalizacao: 5,
       frete_roscan: 1
     });
 
-    await api.post('/posts/cadTempoFinalizacao',{
+    await api.post('/posts/cadTempoFinalizacao', {
       desembarque: 2,
       conferencia_projeto: 3,
       troca_embalagem: 2,
@@ -279,7 +281,7 @@ class Importacao extends Component {
   }
 
   cadastrar = async () => {
-    
+
     await this.cadastro_dias_padrao();
 
     const idTempoPedido = await api.get('/get/lastTempoPedido');
@@ -336,11 +338,11 @@ class Importacao extends Component {
       showModalConsultaImportacao: false,
     });
 
-    this.setState({showModalEditar: true});
+    this.setState({ showModalEditar: true });
   };
 
   handleChange = async selectedOption => {
-    this.setState({selectedOption});
+    this.setState({ selectedOption });
     console.log(`Option selected:`, selectedOption.label);
     await this.setState({
       materialSelecionado: selectedOption.label,
@@ -376,7 +378,7 @@ class Importacao extends Component {
     console.log("tempo desenho_tecnico ", responseIdTempoProjeto.data[0].desenho_tecnico)
     console.log("tempo revisao ", responseIdTempoProjeto.data[0].revisao)
 
-    this.setState({ 
+    this.setState({
       tempo_projetoViagemEditar: responseIdTempoProjeto.data[0].viagem,
       tempo_projetoMedidasEditar: responseIdTempoProjeto.data[0].medidas,
       tempo_projetoDesenhoTecnicoEditar: responseIdTempoProjeto.data[0].desenho_tecnico,
@@ -399,7 +401,7 @@ class Importacao extends Component {
     console.log("tempo nacionalizacao ", responseIdTempoImportacao.data[0].nacionalizacao)
     console.log("tempo frete roscan ", responseIdTempoImportacao.data[0].frete_roscan)
 
-    this.setState({ 
+    this.setState({
       tempo_importacaoArmazemEditar: responseIdTempoImportacao.data[0].espera_armazem,
       tempo_importacaoViagemNavioEditar: responseIdTempoImportacao.data[0].viagem_navio,
       tempo_importacaoNacionalizacaoEditar: responseIdTempoImportacao.data[0].nacionalizacao,
@@ -417,7 +419,7 @@ class Importacao extends Component {
       id_tempo_finalizacao: this.state.id_tempo_finalizacaoEditar
     })
 
-    await this.setState({ 
+    await this.setState({
       tempo_finalizacaoDesembarqueEditar: responseIdTempoImportacao.data[0].desembarque,
       tempo_finalizacaoConferenciaEditar: responseIdTempoImportacao.data[0].conferencia_projeto,
       tempo_finalizacaoTrocaEditar: responseIdTempoImportacao.data[0].troca_embalagem,
@@ -448,7 +450,7 @@ class Importacao extends Component {
     })
 
     console.log("tempo pedido: ", responseIdTempoPedido.data[0].tempo);
-    let percentual = (responseIdTempoPedido.data[0].tempo*100)/116
+    let percentual = (responseIdTempoPedido.data[0].tempo * 100) / 116
     console.log("PERCENTUAL: ", Math.round(percentual));
     console.log("________________");
 
@@ -460,7 +462,7 @@ class Importacao extends Component {
     console.log("tempo importação (viagem navio): ", responseIdTempoImportacao.data[0].viagem_navio);
     console.log("tempo importação(nacionalização): ", responseIdTempoImportacao.data[0].nacionalizacao);
     console.log("tempo importação(frete roscan): ", responseIdTempoImportacao.data[0].frete_roscan);
-    let percentual2 = ((responseIdTempoImportacao.data[0].espera_armazem+responseIdTempoImportacao.data[0].viagem_navio+responseIdTempoImportacao.data[0].nacionalizacao+responseIdTempoImportacao.data[0].frete_roscan)*100)/116
+    let percentual2 = ((responseIdTempoImportacao.data[0].espera_armazem + responseIdTempoImportacao.data[0].viagem_navio + responseIdTempoImportacao.data[0].nacionalizacao + responseIdTempoImportacao.data[0].frete_roscan) * 100) / 116
     console.log("PERCENTUAL: ", Math.round(percentual2));
     console.log("________________");
 
@@ -469,7 +471,7 @@ class Importacao extends Component {
     })
 
     console.log("tempo fabricação: ", responseIdFabricacao.data[0].tempo_fabricacao);
-    let percentual3 = (responseIdFabricacao.data[0].tempo_fabricacao*100)/116
+    let percentual3 = (responseIdFabricacao.data[0].tempo_fabricacao * 100) / 116
     console.log("PERCENTUAL: ", Math.round(percentual3));
     console.log("________________");
 
@@ -481,7 +483,7 @@ class Importacao extends Component {
     console.log("tempo projeto(MEDIDAS): ", responseIdTempoProjeto.data[0].medidas);
     console.log("tempo projeto(desenho técnico): ", responseIdTempoProjeto.data[0].desenho_tecnico);
     console.log("tempo projeto(revisao): ", responseIdTempoProjeto.data[0].revisao);
-    let percentual4 = ((responseIdTempoProjeto.data[0].viagem+responseIdTempoProjeto.data[0].medidas+responseIdTempoProjeto.data[0].desenho_tecnico+responseIdTempoProjeto.data[0].revisao)*100)/116
+    let percentual4 = ((responseIdTempoProjeto.data[0].viagem + responseIdTempoProjeto.data[0].medidas + responseIdTempoProjeto.data[0].desenho_tecnico + responseIdTempoProjeto.data[0].revisao) * 100) / 116
     console.log("PERCENTUAL: ", Math.round(percentual4));
     console.log("________________");
 
@@ -495,27 +497,27 @@ class Importacao extends Component {
     console.log("tempo finaliação(troca embalagem): ", responseIdTempoFinalizacao.data[0].troca_embalagem);
     console.log("tempo finaliação(embarque): ", responseIdTempoFinalizacao.data[0].embarque);
     console.log("tempo finaliação(frete_cliente): ", responseIdTempoFinalizacao.data[0].frete_cliente);
-    let calculardia = ((responseIdTempoFinalizacao.data[0].desembarque+responseIdTempoFinalizacao.data[0].conferencia_projeto+responseIdTempoFinalizacao.data[0].troca_embalagem+responseIdTempoFinalizacao.data[0].embarque))/24
+    let calculardia = ((responseIdTempoFinalizacao.data[0].desembarque + responseIdTempoFinalizacao.data[0].conferencia_projeto + responseIdTempoFinalizacao.data[0].troca_embalagem + responseIdTempoFinalizacao.data[0].embarque)) / 24
     console.log("CALCULAR DIA CALCULADO: ", Math.round(calculardia))
     console.log("FRETE CLIENTE : ", responseIdTempoFinalizacao.data[0].frete_cliente)
 
-    let percentual5  = ((Math.round(calculardia)+responseIdTempoFinalizacao.data[0].frete_cliente)*100)/116
+    let percentual5 = ((Math.round(calculardia) + responseIdTempoFinalizacao.data[0].frete_cliente) * 100) / 116
     console.log("PERCENTUAL: ", Math.round(percentual5));
     console.log("________________");
 
-     // var legendPie2 = {
-        //   names: ["Importação", "Fabricação", "Projeto", "Finalização", "Pedido"],
-        //   types: ["info", "danger", "warning"]
-        // };
+    // var legendPie2 = {
+    //   names: ["Importação", "Fabricação", "Projeto", "Finalização", "Pedido"],
+    //   types: ["info", "danger", "warning"]
+    // };
 
-    var percentual2Correto = Math.round(percentual2)+'%';
-    var percentual3Correto = Math.round(percentual3)+'%';
-    var percentual4Correto = Math.round(percentual4)+'%';
-    var percentual5Correto = Math.round(percentual5)+'%';
-    var percentualCorreto = Math.round(percentual)+'%';
-    
-    
-    await this.setState({ 
+    var percentual2Correto = Math.round(percentual2) + '%';
+    var percentual3Correto = Math.round(percentual3) + '%';
+    var percentual4Correto = Math.round(percentual4) + '%';
+    var percentual5Correto = Math.round(percentual5) + '%';
+    var percentualCorreto = Math.round(percentual) + '%';
+
+
+    await this.setState({
       dataPie2: {
         labels: [percentual2Correto, percentual3Correto, percentual4Correto, percentualCorreto, percentualCorreto],
         series: [Math.round(percentual2), Math.round(percentual3), Math.round(percentual4), Math.round(percentual5), Math.round(percentual)]
@@ -544,12 +546,12 @@ class Importacao extends Component {
       '/get/consultarImportacao'
     );
 
-    await this.setState({arrayConsultaImportacao: responseConsultarImportacao.data});
+    await this.setState({ arrayConsultaImportacao: responseConsultarImportacao.data });
 
     this.setState({ showModalConsultaImportacao: true })
   }
 
-  async editarTempoPedidoFato(){
+  async editarTempoPedidoFato() {
 
     console.log("tempo pedido editar: ", this.state.tempo_pedidoEditar);
 
@@ -561,7 +563,7 @@ class Importacao extends Component {
 
     this.setState({ showModalTempoPedido: false })
   }
-  async editarTempoProjetoFato(){
+  async editarTempoProjetoFato() {
 
     console.log("tempo projeot viagem: ", this.state.tempo_projetoViagemEditar);
     console.log("tempo projeto medidas: ", this.state.tempo_projetoMedidasEditar);
@@ -580,8 +582,8 @@ class Importacao extends Component {
     this.setState({ showModalTempoProjeto: false })
 
   }
-  
-  async editarTempoImportacaoFato(){
+
+  async editarTempoImportacaoFato() {
 
     console.log("tempo importação armazem: ", this.state.tempo_importacaoArmazemEditar);
     console.log("tempo importação navio: ", this.state.tempo_importacaoViagemNavioEditar);
@@ -600,8 +602,8 @@ class Importacao extends Component {
     this.setState({ showModalTempoImportacao: false })
 
   }
- 
-  async editarTempoFinalizacaoFato(){
+
+  async editarTempoFinalizacaoFato() {
 
     console.log("tempo finalização desembarque: ", this.state.tempo_finalizacaoDesembarqueEditar);
     console.log("tempo finalização conferencia: ", this.state.tempo_finalizacaoConferenciaEditar);
@@ -622,7 +624,7 @@ class Importacao extends Component {
     this.setState({ showModalTempoFinalizacao: false })
 
   }
-  async editarTempoFabricacaoFato(){
+  async editarTempoFabricacaoFato() {
 
     console.log("tempo pedido editar: ", this.state.tempo_FabricacaoEditar);
 
@@ -635,7 +637,12 @@ class Importacao extends Component {
     this.setState({ showModalTempoFabricacao: false })
 
   }
-  
+
+  sair() {
+    localStorage.removeItem('login');
+    localStorage.removeItem('usuario');
+    this.props.history.push({ pathname: '/login' })
+  }
 
 
   render() {
@@ -663,13 +670,13 @@ class Importacao extends Component {
               )
             }
             className="fa fa-edit"
-            style={{color: 'green', fontSize: 20}}
+            style={{ color: 'green', fontSize: 20 }}
           />
           <i
             className="fa fa-trash"
-            onClick={() => {}
+            onClick={() => { }
             }
-            style={{color: 'red', marginLeft: 20, fontSize: 20}}
+            style={{ color: 'red', marginLeft: 20, fontSize: 20 }}
           />
         </div>
       );
@@ -702,676 +709,682 @@ class Importacao extends Component {
         formatter: botoes,
       },
     ];
-    return (
-      <div>
-        <Navbar fluid>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <a href="#pablo">Importação</a>
-            </Navbar.Brand>
-            <Navbar.Toggle onClick={this.mobileSidebarToggle} />
-          </Navbar.Header>
-          <Navbar.Collapse>
-            <Nav pullRight>
-              <NavDropdown
-                eventKey={2}
-                title="Ações"
-                id="basic-nav-dropdown-right"
-              >
-                <MenuItem
-                  onClick={() =>
-                    this.modalConsultarImportacoes()
-                  }
-                  eventKey={2.1}
+    if (localStorage.getItem('login') == 'on') {
+      return (
+        <div>
+          <Navbar fluid>
+            <Navbar.Header>
+              <Navbar.Brand>
+                <a href="#pablo">Importação</a>
+              </Navbar.Brand>
+              <Navbar.Toggle onClick={this.mobileSidebarToggle} />
+            </Navbar.Header>
+            <Navbar.Collapse>
+              <Nav pullRight>
+                <NavDropdown
+                  eventKey={2}
+                  title="Ações"
+                  id="basic-nav-dropdown-right"
                 >
-                  Consultar Importações
-                </MenuItem>
-              </NavDropdown>
-              <NavItem eventKey={3} href="#">
-                Sair
-              </NavItem>
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
-
-        {/* Modal consultar Importação */}
-        <Modal
-          show={this.state.showModalConsultaImportacao}
-          onHide={() => this.setState({showModalConsultaImportacao: false})}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Consulta de Importações</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <ToolkitProvider
-              keyField="id"
-              data={this.state.arrayConsultaImportacao}
-              columns={columns}
-              search
-            >
-              {props => (
-                <div>
-                  <SearchBar
-                    placeholder="Pesquisar"
-                    id="search_txt"
-                    style={{width: 470, marginRight: 10}}
-                    {...props.searchProps}
-                  />
-                  <Button onClick={() => this.clear(props)}>Limpar</Button>
-                  {/* <hr /> */}
-                  <BootstrapTable
-                    pagination={paginator()}
-                    {...props.baseProps}
-                  />
-                  <ExportCSVButton {...props.csvProps}>
-                    Exportar Excel
-                  </ExportCSVButton>
-                </div>
-              )}
-            </ToolkitProvider>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                this.setState({showModalConsultaImportacao: false})
-              }
-            >
-              Sair
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        {/* Visualizar Gráfico */}
-        <Modal
-          show={this.state.showModalViewGrafico}
-          onHide={() =>
-            this.setState({showModalViewGrafico: false, showModalEditar: true})
-          }
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Visualizar Gráfico</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <ChartistGraph
-              style={{width: 350, height: 250, marginLeft: '20%'}}
-              data={this.state.dataPie2}
-              type="Pie"
-            />
-           <div className="legend">{this.createLegend(this.state.legendPie2)}</div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                this.setState({
-                  showModalViewGrafico: false,
-                  showModalEditar: true,
-                })
-              }
-            >
-              Sair
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        {/* Modal editar principal*/}
-        <Modal
-          show={this.state.showModalEditar}
-          onHide={() => this.setState({showModalEditar: false})}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title
-              id="contained-modal-title-vcenter"
-              className="tituloModal"
-            >
-              Editar Importação
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <FormInputs
-                ncols={['col-md-4', 'col-md-4', 'col-md-4']}
-                properties={[
-                  {
-                    label: 'ID',
-                    type: 'text',
-                    bsClass: 'form-control',
-                    // onChange: self.updateInputEditar,
-                    value: self.state.idEditar,
-                    placeholder: self.state.idEditar,
-                  },
-                  {
-                    label: 'Orçamento',
-                    type: 'text',
-                    bsClass: 'form-control',
-                    placeholder: 'Nome',
-                    // onChange: self.updateInput2Editar,
-                    value: self.state.orcamentoEditar,
-                    placeholder: self.state.orcamentoEditar,
-                  },
-                  {
-                    label: 'Cliente',
-                    type: 'text',
-                    bsClass: 'form-control',
-                    placeholder: 'Nome',
-                    // onChange: self.updateInput2Editar,
-                    value: self.state.clienteEditar,
-                    placeholder: self.state.clienteEditar,
-                  },
-                ]}
-              />
-
-              <FormInputs
-                ncols={['col-md-6', 'col-md-6']}
-                properties={[
-                  {
-                    label: 'Pedido',
-                    type: 'text',
-                    bsClass: 'form-control',
-                    placeholder: 'Nome',
-                    // onChange: self.updateInput2Editar,
-                    value: self.state.pedidoEditar,
-                    placeholder: self.state.pedidoEditar,
-                  },
-                  {
-                    label: 'Tipo',
-                    type: 'text',
-                    bsClass: 'form-control',
-                    placeholder: 'Nome',
-                    // onChange: self.updateInput2Editar,
-                    value: self.state.tipoEditar,
-                    placeholder: self.state.tipoEditar,
-                  },
-                ]}
-              />
-              <Row style={{marginBottom: '3%'}}>
-                <Col md={4}>
-                  <Button
-                    onClick={() => this.editarTempoPedido()}
+                  <MenuItem
+                    onClick={() =>
+                      this.modalConsultarImportacoes()
+                    }
+                    eventKey={2.1}
                   >
-                    Tempo Pedido
-                  </Button>
-                </Col>
-                <Col md={4}>
-                  <Button
-                   onClick={() => this.editarTempoProjeto()}
-                  >Tempo Projeto</Button>
-                </Col>
-                <Col md={4}>
-                  <Button
-                    onClick={() => this.editarTempoFabricacao()}
-                  >Tempo Fabricação</Button>
-                </Col>
-              </Row>
+                    Consultar Importações
+                </MenuItem>
+                </NavDropdown>
+                <NavItem eventKey={3} href="#"  onClick={() => this.sair()}>
+                  Sair
+              </NavItem>
+              </Nav>
+            </Navbar.Collapse>
+          </Navbar>
 
-              <Row style={{marginBottom: '3%'}}>
-                <Col md={4}>
-                  <Button
-                    onClick={() => this.editarTempoImportacao()}
-                  >Tempo Importação</Button>
-                </Col>
-                <Col md={4}>
-                  <Button
-                    onClick={() => this.editarTempoFinalizacao()}
-                  >Tempo Finalização</Button>
-                </Col>
-              </Row>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              onClick={() =>
-               this.visualizarGrafico()
-              }
-            >
-              Visualizar o Gráfico
+          {/* Modal consultar Importação */}
+          <Modal
+            show={this.state.showModalConsultaImportacao}
+            onHide={() => this.setState({ showModalConsultaImportacao: false })}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Consulta de Importações</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <ToolkitProvider
+                keyField="id"
+                data={this.state.arrayConsultaImportacao}
+                columns={columns}
+                search
+              >
+                {props => (
+                  <div>
+                    <SearchBar
+                      placeholder="Pesquisar"
+                      id="search_txt"
+                      style={{ width: 470, marginRight: 10 }}
+                      {...props.searchProps}
+                    />
+                    <Button onClick={() => this.clear(props)}>Limpar</Button>
+                    {/* <hr /> */}
+                    <BootstrapTable
+                      pagination={paginator()}
+                      {...props.baseProps}
+                    />
+                    <ExportCSVButton {...props.csvProps}>
+                      Exportar Excel
+                  </ExportCSVButton>
+                  </div>
+                )}
+              </ToolkitProvider>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  this.setState({ showModalConsultaImportacao: false })
+                }
+              >
+                Sair
             </Button>
-            <Button onClick={() => this.setState({showModalEditar: false})}>
-              Fechar
-            </Button>
-          </Modal.Footer>
-        </Modal>
+            </Modal.Footer>
+          </Modal>
 
-        {/* Modal tempo pedido */}
-        <Modal
-          show={this.state.showModalTempoPedido}
-          onHide={() =>
-            this.setState({showModalTempoPedido: false, showModalEditar: true})
-          }
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Tempo Pedido</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <FormInputs
-                ncols={['col-md-12']}
-                properties={[
-                  {
-                    label: 'Tempo Pedido',
-                    type: 'text',
-                    bsClass: 'form-control',
-                    placeholder: 'Nome',
-                    onChange: self.InputEditarTempo,
-                    // value: self.state.tempo_pedidoEditar,
-                    placeholder: self.state.tempo_pedidoEditar,
-                  },
-                ]}
+          {/* Visualizar Gráfico */}
+          <Modal
+            show={this.state.showModalViewGrafico}
+            onHide={() =>
+              this.setState({ showModalViewGrafico: false, showModalEditar: true })
+            }
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Visualizar Gráfico</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <ChartistGraph
+                style={{ width: 350, height: 250, marginLeft: '20%' }}
+                data={this.state.dataPie2}
+                type="Pie"
               />
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                this.editarTempoPedidoFato()
-              }
-            >
-              Editar
+              <div className="legend">{this.createLegend(this.state.legendPie2)}</div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  this.setState({
+                    showModalViewGrafico: false,
+                    showModalEditar: true,
+                  })
+                }
+              >
+                Sair
             </Button>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                this.setState({
-                  showModalTempoPedido: false,
-                  showModalEditar: true,
-                })
-              }
-            >
-              Sair
-            </Button>
-          </Modal.Footer>
-        </Modal>
+            </Modal.Footer>
+          </Modal>
 
-        {/* Modal tempo projeto */}
-        <Modal
-          show={this.state.showModalTempoProjeto}
-          onHide={() =>
-            this.setState({showModalTempoProjeto: false, showModalEditar: true})
-          }
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Tempo Projeto</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <FormInputs
-                ncols={['col-md-6', 'col-md-6']}
-                properties={[
-                  {
-                    label: 'Tempo Viagem',
-                    type: 'text',
-                    bsClass: 'form-control',
-                    placeholder: 'Nome',
-                    onChange: self.InputEditarTempoProjeto,
-                    // value: self.state.InputEditarTempo,
-                    placeholder: self.state.tempo_projetoViagemEditar,
-                  },
-                  {
-                    label: 'Tempo Medidas',
-                    type: 'text',
-                    bsClass: 'form-control',
-                    placeholder: 'Nome',
-                    onChange: self.InputEditarTempoProjeto2,
-                    // value: self.state.tempo_projetoMedidasEditar,
-                    placeholder: self.state.tempo_projetoMedidasEditar,
-                  },
-                ]}
-              />
-
-              <FormInputs
-                ncols={['col-md-6', 'col-md-6']}
-                properties={[
-                  {
-                    label: 'Tempo Desenho Técnico',
-                    type: 'text',
-                    bsClass: 'form-control',
-                    placeholder: 'Nome',
-                    onChange: self.InputEditarTempoProjeto3,
-                    // value: self.state.tempo_projetoDesenhoTecnicoEditar,
-                    placeholder: self.state.tempo_projetoDesenhoTecnicoEditar,
-                  },
-                  {
-                    label: 'Tempo Revisão',
-                    type: 'text',
-                    bsClass: 'form-control',
-                    placeholder: 'Nome',
-                    onChange: self.InputEditarTempoProjeto4,
-                    // value: self.state.tempo_projetoRevisaoEditar,
-                    placeholder: self.state.tempo_projetoRevisaoEditar,
-                  },
-                ]}
-              />
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                this.editarTempoProjetoFato()
-              }
-            >
-              Editar
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                this.setState({
-                  showModalTempoPedido: false,
-                  showModalEditar: true,
-                })
-              }
-            >
-              Sair
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        {/* Modal tempo importação */}
-        <Modal
-          show={this.state.showModalTempoImportacao}
-          onHide={() =>
-            this.setState({showModalTempoImportacao: false, showModalEditar: true})
-          }
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Tempo Importação</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <FormInputs
-                ncols={['col-md-6', 'col-md-6']}
-                properties={[
-                  {
-                    label: 'Tempo Espera Armazém',
-                    type: 'text',
-                    bsClass: 'form-control',
-                    placeholder: 'Nome',
-                    onChange: self.InputEditarTempoImportacao,
-                    // value: self.state.tempo_importacaoArmazemEditar,
-                    placeholder: self.state.tempo_importacaoArmazemEditar,
-                  },
-                  {
-                    label: 'Tempo Viagem Navio',
-                    type: 'text',
-                    bsClass: 'form-control',
-                    placeholder: 'Nome',
-                    onChange: self.InputEditarTempoImportacao2,
-                    // value: self.state.tempo_importacaoViagemNavioEditar,
-                    placeholder: self.state.tempo_importacaoViagemNavioEditar,
-                  },
-                ]}
-              />
-
-              <FormInputs
-                ncols={['col-md-6', 'col-md-6']}
-                properties={[
-                  {
-                    label: 'Tempo Nacionalização',
-                    type: 'text',
-                    bsClass: 'form-control',
-                    placeholder: 'Nome',
-                    onChange: self.InputEditarTempoImportacao3,
-                    // value: self.state.tempo_importacaoNacionalizacaoEditar,
-                    placeholder: self.state.tempo_importacaoNacionalizacaoEditar,
-                  },
-                  {
-                    label: 'Tempo Frete Roscan',
-                    type: 'text',
-                    bsClass: 'form-control',
-                    placeholder: 'Nome',
-                    onChange: self.InputEditarTempoImportacao4,
-                    // value: self.state.tempo_importacaoFreteEditar,
-                    placeholder: self.state.tempo_importacaoFreteEditar,
-                  },
-                ]}
-              />
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                this.editarTempoImportacaoFato()
-              }
-            >
-              Editar
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                this.setState({
-                  showModalTempoImportacao: false,
-                  showModalEditar: true,
-                })
-              }
-            >
-              Sair
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        {/* Modal tempo finalizacao */}
-        <Modal
-          show={this.state.showModalTempoFinalizacao}
-          onHide={() =>
-            this.setState({showModalTempoFinalizacao: false, showModalEditar: true})
-          }
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Tempo Finalização</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <FormInputs
-                ncols={['col-md-4', 'col-md-4', 'col-md-4']}
-                properties={[
-                  {
-                    label: 'Tempo Desembarque',
-                    type: 'text',
-                    bsClass: 'form-control',
-                    placeholder: 'Nome',
-                    onChange: self.InputEditarTempoFinalizacao,
-                    // value: self.state.tempo_finalizacaoDesembarqueEditar,
-                    placeholder: self.state.tempo_finalizacaoDesembarqueEditar,
-                  },
-                  {
-                    label: 'Tempo Conferência',
-                    type: 'text',
-                    bsClass: 'form-control',
-                    placeholder: 'Nome',
-                    onChange: self.InputEditarTempoFinalizacao2,
-                    // value:  self.state.tempo_finalizacaoConferenciaEditar,
-                    placeholder: self.state.tempo_finalizacaoConferenciaEditar,
-                  },
-                  {
-                    label: 'Tempo Frete Cliente',
-                    type: 'text',
-                    bsClass: 'form-control',
-                    placeholder: 'Nome',
-                    onChange: self.InputEditarTempoFinalizacao3,
-                    // value: self.state.tempo_finalizacaoFreteClienteEditar,
-                    placeholder: self.state.tempo_finalizacaoFreteClienteEditar,
-                  },
-                ]}
-              />
-
-              <FormInputs
-                ncols={['col-md-6', 'col-md-6']}
-                properties={[
-                  {
-                    label: 'Tempo Troca de Embalagem',
-                    type: 'text',
-                    bsClass: 'form-control',
-                    placeholder: 'Nome',
-                    onChange: self.InputEditarTempoFinalizacao4,
-                    // value: self.state.tempo_finalizacaoTrocaEditar,
-                    placeholder: self.state.tempo_finalizacaoTrocaEditar,
-                  },
-                  {
-                    label: 'Tempo Embarque',
-                    type: 'text',
-                    bsClass: 'form-control',
-                    placeholder: 'Nome',
-                    onChange: self.InputEditarTempoFinalizacao5,
-                    // value: self.state.tempo_finalizacaoEmbarqueEditar,
-                    placeholder: self.state.tempo_finalizacaoEmbarqueEditar,
-                  },
-                ]}
-              />
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                this.editarTempoFinalizacaoFato()
-              }
-            >
-              Editar
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                this.setState({
-                  showModalTempoFinalizacao: false,
-                  showModalEditar: true,
-                })
-              }
-            >
-              Sair
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        
-        {/* Modal tempo fabricação */}
-        <Modal
-          show={this.state.showModalTempoFabricacao}
-          onHide={() =>
-            this.setState({showModalTempoFabricacao: false, showModalEditar: true})
-          }
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Tempo Fabricação</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <FormInputs
-                ncols={['col-md-12']}
-                properties={[
-                  {
-                    label: 'Tempo Fabricação',
-                    type: 'text',
-                    bsClass: 'form-control',
-                    placeholder: 'Nome',
-                    onChange: self.InputEditarTempoFabricacao,
-                    // value: self.state.tempo_FabricacaoEditar,
-                    placeholder: self.state.tempo_FabricacaoEditar,
-                  },
-                ]}
-              />
-
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                this.editarTempoFabricacaoFato()
-              }
-            >
-              Editar
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                this.setState({
-                  showModalTempoFabricacao: false,
-                  showModalEditar: true,
-                })
-              }
-            >
-              Sair
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        <div className="content" style={{marginTop: '3%'}}>
-          <Grid fluid>
-            <Row>
-              <Col md={12}>
-                <Card
-                  title="Cadastro de Importação"
-                  content={
-                    <form>
-                      <FormInputs
-                        ncols={['col-md-6', 'col-md-6']}
-                        properties={[
-                          {
-                            label: 'Orçamento',
-                            type: 'text',
-                            bsClass: 'form-control',
-                            onChange: self.updateInput,
-                          },
-                          {
-                            label: 'Pedido',
-                            type: 'text',
-                            bsClass: 'form-control',
-                            // placeholder: 'Username',
-                            onChange: self.updateInput2,
-                          },
-                        ]}
-                      />
-                      <FormInputs
-                        ncols={['col-md-6', 'col-md-6']}
-                        properties={[
-                          {
-                            label: 'Cliente',
-                            type: 'text',
-                            bsClass: 'form-control',
-                            onChange: self.updateInput3,
-                          },
-                          {
-                            label: 'Tipo',
-                            type: 'text',
-                            bsClass: 'form-control',
-                            onChange: self.updateInput4,
-                          },
-                        ]}
-                      />
-
-                      <Row>
-                        <Col md={12}>
-                          <FormGroup controlId="formControlsTextarea">
-                            <ControlLabel>Descrição</ControlLabel>
-                            <FormControl
-                              rows="5"
-                              componentClass="textarea"
-                              bsClass="form-control"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Button
-                        bsStyle="info"
-                        onClick={() => this.cadastrar()}
-                        pullRight
-                        fill
-                        disabled={this.state.habilitarBtnCadastrar}
-                      >
-                        Cadastrar
-                      </Button>
-                      <div className="clearfix" />
-                    </form>
-                  }
+          {/* Modal editar principal*/}
+          <Modal
+            show={this.state.showModalEditar}
+            onHide={() => this.setState({ showModalEditar: false })}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title
+                id="contained-modal-title-vcenter"
+                className="tituloModal"
+              >
+                Editar Importação
+            </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form>
+                <FormInputs
+                  ncols={['col-md-4', 'col-md-4', 'col-md-4']}
+                  properties={[
+                    {
+                      label: 'ID',
+                      type: 'text',
+                      bsClass: 'form-control',
+                      // onChange: self.updateInputEditar,
+                      value: self.state.idEditar,
+                      placeholder: self.state.idEditar,
+                    },
+                    {
+                      label: 'Orçamento',
+                      type: 'text',
+                      bsClass: 'form-control',
+                      placeholder: 'Nome',
+                      // onChange: self.updateInput2Editar,
+                      value: self.state.orcamentoEditar,
+                      placeholder: self.state.orcamentoEditar,
+                    },
+                    {
+                      label: 'Cliente',
+                      type: 'text',
+                      bsClass: 'form-control',
+                      placeholder: 'Nome',
+                      // onChange: self.updateInput2Editar,
+                      value: self.state.clienteEditar,
+                      placeholder: self.state.clienteEditar,
+                    },
+                  ]}
                 />
-              </Col>
-            </Row>
-          </Grid>
+
+                <FormInputs
+                  ncols={['col-md-6', 'col-md-6']}
+                  properties={[
+                    {
+                      label: 'Pedido',
+                      type: 'text',
+                      bsClass: 'form-control',
+                      placeholder: 'Nome',
+                      // onChange: self.updateInput2Editar,
+                      value: self.state.pedidoEditar,
+                      placeholder: self.state.pedidoEditar,
+                    },
+                    {
+                      label: 'Tipo',
+                      type: 'text',
+                      bsClass: 'form-control',
+                      placeholder: 'Nome',
+                      // onChange: self.updateInput2Editar,
+                      value: self.state.tipoEditar,
+                      placeholder: self.state.tipoEditar,
+                    },
+                  ]}
+                />
+                <Row style={{ marginBottom: '3%' }}>
+                  <Col md={4}>
+                    <Button
+                      onClick={() => this.editarTempoPedido()}
+                    >
+                      Tempo Pedido
+                  </Button>
+                  </Col>
+                  <Col md={4}>
+                    <Button
+                      onClick={() => this.editarTempoProjeto()}
+                    >Tempo Projeto</Button>
+                  </Col>
+                  <Col md={4}>
+                    <Button
+                      onClick={() => this.editarTempoFabricacao()}
+                    >Tempo Fabricação</Button>
+                  </Col>
+                </Row>
+
+                <Row style={{ marginBottom: '3%' }}>
+                  <Col md={4}>
+                    <Button
+                      onClick={() => this.editarTempoImportacao()}
+                    >Tempo Importação</Button>
+                  </Col>
+                  <Col md={4}>
+                    <Button
+                      onClick={() => this.editarTempoFinalizacao()}
+                    >Tempo Finalização</Button>
+                  </Col>
+                </Row>
+              </Form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                onClick={() =>
+                  this.visualizarGrafico()
+                }
+              >
+                Visualizar o Gráfico
+            </Button>
+              <Button onClick={() => this.setState({ showModalEditar: false })}>
+                Fechar
+            </Button>
+            </Modal.Footer>
+          </Modal>
+
+          {/* Modal tempo pedido */}
+          <Modal
+            show={this.state.showModalTempoPedido}
+            onHide={() =>
+              this.setState({ showModalTempoPedido: false, showModalEditar: true })
+            }
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Tempo Pedido</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form>
+                <FormInputs
+                  ncols={['col-md-12']}
+                  properties={[
+                    {
+                      label: 'Tempo Pedido',
+                      type: 'text',
+                      bsClass: 'form-control',
+                      placeholder: 'Nome',
+                      onChange: self.InputEditarTempo,
+                      // value: self.state.tempo_pedidoEditar,
+                      placeholder: self.state.tempo_pedidoEditar,
+                    },
+                  ]}
+                />
+              </Form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  this.editarTempoPedidoFato()
+                }
+              >
+                Editar
+            </Button>
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  this.setState({
+                    showModalTempoPedido: false,
+                    showModalEditar: true,
+                  })
+                }
+              >
+                Sair
+            </Button>
+            </Modal.Footer>
+          </Modal>
+
+          {/* Modal tempo projeto */}
+          <Modal
+            show={this.state.showModalTempoProjeto}
+            onHide={() =>
+              this.setState({ showModalTempoProjeto: false, showModalEditar: true })
+            }
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Tempo Projeto</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form>
+                <FormInputs
+                  ncols={['col-md-6', 'col-md-6']}
+                  properties={[
+                    {
+                      label: 'Tempo Viagem',
+                      type: 'text',
+                      bsClass: 'form-control',
+                      placeholder: 'Nome',
+                      onChange: self.InputEditarTempoProjeto,
+                      // value: self.state.InputEditarTempo,
+                      placeholder: self.state.tempo_projetoViagemEditar,
+                    },
+                    {
+                      label: 'Tempo Medidas',
+                      type: 'text',
+                      bsClass: 'form-control',
+                      placeholder: 'Nome',
+                      onChange: self.InputEditarTempoProjeto2,
+                      // value: self.state.tempo_projetoMedidasEditar,
+                      placeholder: self.state.tempo_projetoMedidasEditar,
+                    },
+                  ]}
+                />
+
+                <FormInputs
+                  ncols={['col-md-6', 'col-md-6']}
+                  properties={[
+                    {
+                      label: 'Tempo Desenho Técnico',
+                      type: 'text',
+                      bsClass: 'form-control',
+                      placeholder: 'Nome',
+                      onChange: self.InputEditarTempoProjeto3,
+                      // value: self.state.tempo_projetoDesenhoTecnicoEditar,
+                      placeholder: self.state.tempo_projetoDesenhoTecnicoEditar,
+                    },
+                    {
+                      label: 'Tempo Revisão',
+                      type: 'text',
+                      bsClass: 'form-control',
+                      placeholder: 'Nome',
+                      onChange: self.InputEditarTempoProjeto4,
+                      // value: self.state.tempo_projetoRevisaoEditar,
+                      placeholder: self.state.tempo_projetoRevisaoEditar,
+                    },
+                  ]}
+                />
+              </Form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  this.editarTempoProjetoFato()
+                }
+              >
+                Editar
+            </Button>
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  this.setState({
+                    showModalTempoPedido: false,
+                    showModalEditar: true,
+                  })
+                }
+              >
+                Sair
+            </Button>
+            </Modal.Footer>
+          </Modal>
+
+          {/* Modal tempo importação */}
+          <Modal
+            show={this.state.showModalTempoImportacao}
+            onHide={() =>
+              this.setState({ showModalTempoImportacao: false, showModalEditar: true })
+            }
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Tempo Importação</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form>
+                <FormInputs
+                  ncols={['col-md-6', 'col-md-6']}
+                  properties={[
+                    {
+                      label: 'Tempo Espera Armazém',
+                      type: 'text',
+                      bsClass: 'form-control',
+                      placeholder: 'Nome',
+                      onChange: self.InputEditarTempoImportacao,
+                      // value: self.state.tempo_importacaoArmazemEditar,
+                      placeholder: self.state.tempo_importacaoArmazemEditar,
+                    },
+                    {
+                      label: 'Tempo Viagem Navio',
+                      type: 'text',
+                      bsClass: 'form-control',
+                      placeholder: 'Nome',
+                      onChange: self.InputEditarTempoImportacao2,
+                      // value: self.state.tempo_importacaoViagemNavioEditar,
+                      placeholder: self.state.tempo_importacaoViagemNavioEditar,
+                    },
+                  ]}
+                />
+
+                <FormInputs
+                  ncols={['col-md-6', 'col-md-6']}
+                  properties={[
+                    {
+                      label: 'Tempo Nacionalização',
+                      type: 'text',
+                      bsClass: 'form-control',
+                      placeholder: 'Nome',
+                      onChange: self.InputEditarTempoImportacao3,
+                      // value: self.state.tempo_importacaoNacionalizacaoEditar,
+                      placeholder: self.state.tempo_importacaoNacionalizacaoEditar,
+                    },
+                    {
+                      label: 'Tempo Frete Roscan',
+                      type: 'text',
+                      bsClass: 'form-control',
+                      placeholder: 'Nome',
+                      onChange: self.InputEditarTempoImportacao4,
+                      // value: self.state.tempo_importacaoFreteEditar,
+                      placeholder: self.state.tempo_importacaoFreteEditar,
+                    },
+                  ]}
+                />
+              </Form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  this.editarTempoImportacaoFato()
+                }
+              >
+                Editar
+            </Button>
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  this.setState({
+                    showModalTempoImportacao: false,
+                    showModalEditar: true,
+                  })
+                }
+              >
+                Sair
+            </Button>
+            </Modal.Footer>
+          </Modal>
+
+          {/* Modal tempo finalizacao */}
+          <Modal
+            show={this.state.showModalTempoFinalizacao}
+            onHide={() =>
+              this.setState({ showModalTempoFinalizacao: false, showModalEditar: true })
+            }
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Tempo Finalização</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form>
+                <FormInputs
+                  ncols={['col-md-4', 'col-md-4', 'col-md-4']}
+                  properties={[
+                    {
+                      label: 'Tempo Desembarque',
+                      type: 'text',
+                      bsClass: 'form-control',
+                      placeholder: 'Nome',
+                      onChange: self.InputEditarTempoFinalizacao,
+                      // value: self.state.tempo_finalizacaoDesembarqueEditar,
+                      placeholder: self.state.tempo_finalizacaoDesembarqueEditar,
+                    },
+                    {
+                      label: 'Tempo Conferência',
+                      type: 'text',
+                      bsClass: 'form-control',
+                      placeholder: 'Nome',
+                      onChange: self.InputEditarTempoFinalizacao2,
+                      // value:  self.state.tempo_finalizacaoConferenciaEditar,
+                      placeholder: self.state.tempo_finalizacaoConferenciaEditar,
+                    },
+                    {
+                      label: 'Tempo Frete Cliente',
+                      type: 'text',
+                      bsClass: 'form-control',
+                      placeholder: 'Nome',
+                      onChange: self.InputEditarTempoFinalizacao3,
+                      // value: self.state.tempo_finalizacaoFreteClienteEditar,
+                      placeholder: self.state.tempo_finalizacaoFreteClienteEditar,
+                    },
+                  ]}
+                />
+
+                <FormInputs
+                  ncols={['col-md-6', 'col-md-6']}
+                  properties={[
+                    {
+                      label: 'Tempo Troca de Embalagem',
+                      type: 'text',
+                      bsClass: 'form-control',
+                      placeholder: 'Nome',
+                      onChange: self.InputEditarTempoFinalizacao4,
+                      // value: self.state.tempo_finalizacaoTrocaEditar,
+                      placeholder: self.state.tempo_finalizacaoTrocaEditar,
+                    },
+                    {
+                      label: 'Tempo Embarque',
+                      type: 'text',
+                      bsClass: 'form-control',
+                      placeholder: 'Nome',
+                      onChange: self.InputEditarTempoFinalizacao5,
+                      // value: self.state.tempo_finalizacaoEmbarqueEditar,
+                      placeholder: self.state.tempo_finalizacaoEmbarqueEditar,
+                    },
+                  ]}
+                />
+              </Form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  this.editarTempoFinalizacaoFato()
+                }
+              >
+                Editar
+            </Button>
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  this.setState({
+                    showModalTempoFinalizacao: false,
+                    showModalEditar: true,
+                  })
+                }
+              >
+                Sair
+            </Button>
+            </Modal.Footer>
+          </Modal>
+
+          {/* Modal tempo fabricação */}
+          <Modal
+            show={this.state.showModalTempoFabricacao}
+            onHide={() =>
+              this.setState({ showModalTempoFabricacao: false, showModalEditar: true })
+            }
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Tempo Fabricação</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form>
+                <FormInputs
+                  ncols={['col-md-12']}
+                  properties={[
+                    {
+                      label: 'Tempo Fabricação',
+                      type: 'text',
+                      bsClass: 'form-control',
+                      placeholder: 'Nome',
+                      onChange: self.InputEditarTempoFabricacao,
+                      // value: self.state.tempo_FabricacaoEditar,
+                      placeholder: self.state.tempo_FabricacaoEditar,
+                    },
+                  ]}
+                />
+
+              </Form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  this.editarTempoFabricacaoFato()
+                }
+              >
+                Editar
+            </Button>
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  this.setState({
+                    showModalTempoFabricacao: false,
+                    showModalEditar: true,
+                  })
+                }
+              >
+                Sair
+            </Button>
+            </Modal.Footer>
+          </Modal>
+
+          <div className="content" style={{ marginTop: '3%' }}>
+            <Grid fluid>
+              <Row>
+                <Col md={12}>
+                  <Card
+                    title="Cadastro de Importação"
+                    content={
+                      <form>
+                        <FormInputs
+                          ncols={['col-md-6', 'col-md-6']}
+                          properties={[
+                            {
+                              label: 'Orçamento',
+                              type: 'text',
+                              bsClass: 'form-control',
+                              onChange: self.updateInput,
+                            },
+                            {
+                              label: 'Pedido',
+                              type: 'text',
+                              bsClass: 'form-control',
+                              // placeholder: 'Username',
+                              onChange: self.updateInput2,
+                            },
+                          ]}
+                        />
+                        <FormInputs
+                          ncols={['col-md-6', 'col-md-6']}
+                          properties={[
+                            {
+                              label: 'Cliente',
+                              type: 'text',
+                              bsClass: 'form-control',
+                              onChange: self.updateInput3,
+                            },
+                            {
+                              label: 'Tipo',
+                              type: 'text',
+                              bsClass: 'form-control',
+                              onChange: self.updateInput4,
+                            },
+                          ]}
+                        />
+
+                        <Row>
+                          <Col md={12}>
+                            <FormGroup controlId="formControlsTextarea">
+                              <ControlLabel>Descrição</ControlLabel>
+                              <FormControl
+                                rows="5"
+                                componentClass="textarea"
+                                bsClass="form-control"
+                              />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        <Button
+                          bsStyle="info"
+                          onClick={() => this.cadastrar()}
+                          pullRight
+                          fill
+                          disabled={this.state.habilitarBtnCadastrar}
+                        >
+                          Cadastrar
+                      </Button>
+                        <div className="clearfix" />
+                      </form>
+                    }
+                  />
+                </Col>
+              </Row>
+            </Grid>
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <Redirect to="/" from="" />
+      )
+    }
   }
 }
 
