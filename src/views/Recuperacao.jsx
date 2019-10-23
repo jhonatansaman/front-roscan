@@ -836,15 +836,17 @@ class Recuperacao extends Component {
 
   }
 
-  deletarOS(id, os){
-    this.setState({ showModalConsultaRecuperacao: false, showAlerta: true, idrecuperacao_deletar: id, os_deletar: os })
+  async deletarOS(id){
+    this.setState({ showModalConsultaRecuperacao: false, showAlerta: true, idrecuperacao_deletar: id })
+    const response = await api.post('/posts/consultarRecuperacao', { idrecuperacao: id })
+    this.setState({ os_deletar: response.data[0].ordem_servico})
   }
 
   async deletar_OS(){
     await api.post('/recuperacao/deletarRecuperacao', {
       idrecuperacao: this.state.idrecuperacao_deletar
     });
-
+    
     window.location.reload();
   }
   render() {
@@ -889,7 +891,7 @@ class Recuperacao extends Component {
           <i
             onClick={() =>
               this.deletarOS(
-                JSON.stringify(row.idrecuperacao, row.ordem_servico),
+                JSON.stringify(row.idrecuperacao),
               )
             }
             className="fa fa-trash"
