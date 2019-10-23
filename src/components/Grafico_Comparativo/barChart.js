@@ -74,71 +74,71 @@ export default class barChart extends Component {
         if (pos == 1) {
             this.setState({
                 arrayCategorias: [...state.arrayCategorias, 'Soldar Ponteira e Alinhamento'],
-                arrayDataPre: [...state.arrayDataPre, moment.duration(data).asHours()],
-                arrayDataTotal: [...state.arrayDataTotal, moment.duration(data2).asHours()],
+                arrayDataPre: [...state.arrayDataPre, Math.round(moment.duration(data).asHours(), 1)],
+                arrayDataTotal: [...state.arrayDataTotal, Math.round(moment.duration(data2).asHours(), 1)],
             })
         }
         if (pos == 2) {
             this.setState({
                 arrayCategorias: [...state.arrayCategorias, 'Desbaste para Limpeza'],
-                arrayDataPre: [...state.arrayDataPre, moment.duration(data).asHours()],
-                arrayDataTotal: [...state.arrayDataTotal, moment.duration(data2).asHours()],
+                arrayDataPre: [...state.arrayDataPre, Math.round(moment.duration(data).asHours(), 1)],
+                arrayDataTotal: [...state.arrayDataTotal, Math.round(moment.duration(data2).asHours(), 1)],
             })
         }
         if (pos == 3) {
             this.setState({
                 arrayCategorias: [...state.arrayCategorias, 'Camada de Solda I'],
-                arrayDataPre: [...state.arrayDataPre, moment.duration(data).asHours()],
-                arrayDataTotal: [...state.arrayDataTotal, moment.duration(data2).asHours()],
+                arrayDataPre: [...state.arrayDataPre, Math.round(moment.duration(data).asHours(), 1)],
+                arrayDataTotal: [...state.arrayDataTotal, Math.round(moment.duration(data2).asHours(), 1)],
             })
         }
         if (pos == 4) {
             this.setState({
                 arrayCategorias: [...state.arrayCategorias, 'Usinagem para Desbaste I'],
-                arrayDataPre: [...state.arrayDataPre, moment.duration(data).asHours()],
-                arrayDataTotal: [...state.arrayDataTotal, moment.duration(data2).asHours()],
+                arrayDataPre: [...state.arrayDataPre, Math.round(moment.duration(data).asHours(), 1)],
+                arrayDataTotal: [...state.arrayDataTotal, Math.round(moment.duration(data2).asHours(), 1)],
             })
         }
         if (pos == 5) {
             this.setState({
                 arrayCategorias: [...state.arrayCategorias, 'Camada de Solda II'],
-                arrayDataPre: [...state.arrayDataPre, moment.duration(data).asHours()],
-                arrayDataTotal: [...state.arrayDataTotal, moment.duration(data2).asHours()],
+                arrayDataPre: [...state.arrayDataPre, Math.round(moment.duration(data).asHours(), 1)],
+                arrayDataTotal: [...state.arrayDataTotal, Math.round(moment.duration(data2).asHours(), 1)],
             })
         }
         if (pos == 6) {
             this.setState({
                 arrayCategorias: [...state.arrayCategorias, 'Usinagem para Desbate II'],
-                arrayDataPre: [...state.arrayDataPre, moment.duration(data).asHours()],
-                arrayDataTotal: [...state.arrayDataTotal, moment.duration(data2).asHours()],
+                arrayDataPre: [...state.arrayDataPre, Math.round(moment.duration(data).asHours(), 1)],
+                arrayDataTotal: [...state.arrayDataTotal, Math.round(moment.duration(data2).asHours(), 1)],
             })
         }
         if (pos == 7) {
             this.setState({
                 arrayCategorias: [...state.arrayCategorias, 'Camada de Solda III'],
-                arrayDataPre: [...state.arrayDataPre, moment.duration(data).asHours()],
-                arrayDataTotal: [...state.arrayDataTotal, moment.duration(data2).asHours()],
+                arrayDataPre: [...state.arrayDataPre, Math.round(moment.duration(data).asHours(), 1)],
+                arrayDataTotal: [...state.arrayDataTotal, Math.round(moment.duration(data2).asHours(), 1)],
             })
         }
         if (pos == 8) {
             this.setState({
                 arrayCategorias: [...state.arrayCategorias, 'Usinagem para Desbate III'],
-                arrayDataPre: [...state.arrayDataPre, moment.duration(data).asHours()],
-                arrayDataTotal: [...state.arrayDataTotal, moment.duration(data2).asHours()],
+                arrayDataPre: [...state.arrayDataPre, Math.round(moment.duration(data).asHours(), 1)],
+                arrayDataTotal: [...state.arrayDataTotal, Math.round(moment.duration(data2).asHours(), 1)],
             })
         }
         if (pos == 9) {
             this.setState({
                 arrayCategorias: [...state.arrayCategorias, 'Desbaste na Lixadeira'],
-                arrayDataPre: [...state.arrayDataPre, moment.duration(data).asHours()],
-                arrayDataTotal: [...state.arrayDataTotal, moment.duration(data2).asHours()],
+                arrayDataPre: [...state.arrayDataPre, Math.round(moment.duration(data).asHours(), 1)],
+                arrayDataTotal: [...state.arrayDataTotal, Math.round(moment.duration(data2).asHours(), 1)],
             })
         }
         if (pos == 10) {
             this.setState({
                 arrayCategorias: [...state.arrayCategorias, 'Usinagem Final'],
-                arrayDataPre: [...state.arrayDataPre, moment.duration(data).asHours()],
-                arrayDataTotal: [...state.arrayDataTotal, moment.duration(data2).asHours()],
+                arrayDataPre: [...state.arrayDataPre, Math.round(moment.duration(data).asHours(), 1)],
+                arrayDataTotal: [...state.arrayDataTotal, Math.round(moment.duration(data2).asHours(), 1)],
             })
         }
 
