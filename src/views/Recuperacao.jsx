@@ -35,7 +35,6 @@ import { Checkbox } from 'semantic-ui-react'
 import { Card } from 'components/Card/Card.jsx';
 import { FormInputs } from 'components/FormInputs/FormInputs.jsx';
 import { UserCard } from 'components/UserCard/UserCard.jsx';
-import moment from 'moment';
 import Button from 'components/CustomButton/CustomButton.jsx';
 import api from '../services/api';
 import { ClipLoader, BounceLoader } from 'react-spinners';
@@ -46,8 +45,8 @@ import ToolkitProvider, {
   Search,
   CSVExport,
 } from 'react-bootstrap-table2-toolkit';
-import { Link, Redirect } from 'react-router-dom';
-
+import moment from 'moment';
+import {  Redirect } from "react-router-dom";
 
 import ReactApexChart from "react-apexcharts";
 import BarChart from 'components/Grafico_Comparativo/barChart';
@@ -132,6 +131,7 @@ class Recuperacao extends Component {
       buscouRecuperacao: false,
       arrayConsultarRecuperacao: '',
       showModalConsultaRecuperacao: false,
+      os_deletar: '', 
       idEtapa_validacao: [],
       options: {
         labels: [],
@@ -167,7 +167,8 @@ class Recuperacao extends Component {
       ordem_servico_consulta: '',
       tipo_consulta: '',
       cliente_consulta: '',
-      arrayChartComparativo: ''
+      arrayChartComparativo: '', 
+      idrecuperacao_deletar: '',
     }
   };
 
@@ -338,9 +339,18 @@ class Recuperacao extends Component {
     this.setState({ habilitarBtnCadastrar: false })
   }
 
-
   async cadastrar() {
+    var bool = true
 
+    this.state.habilitarInput.map(item => {
+      if (item != true)
+        bool = false;
+    })
+
+    if (bool) {
+      alert("Deve ser cadastrado ao menos uma etapa!");
+      return 1;
+    }
 
     await this.setState({ showLoading: true });
 
@@ -559,11 +569,11 @@ class Recuperacao extends Component {
       }
     }
     this.setState({ showLoading: false })
-    window.location.reload();
   }
 
   mudarPage() {
-    window.location.reload();
+    this.props.history.push({ pathname: '/admin/importacao' })
+
   }
 
   async ordem_servico(event) {
@@ -817,13 +827,23 @@ class Recuperacao extends Component {
   closeModal() {
     this.setState({ modalCompare: !this.state.modalCompare, showModalConsultaRecuperacao: true })
   }
-
-  sair() {
+  
+  sair(){
     localStorage.removeItem('login');
     localStorage.removeItem('usuario');
-    this.props.history.push({ pathname: '/login' })
+    this.props.history.push({ pathname: '/login' });
+
   }
 
+  deletarOS(id, os){
+    this.setState({ showModalConsultaRecuperacao: false, showAlerta: true, idrecuperacao_deletar: id, os_deletar: os })
+  }
+
+  async deletar_OS(){
+    await api.post('/recuperacao/deletarRecuperacao', {
+      idrecuperacao: this.state.idrecuperacao_deletar
+    });
+  }
   render() {
     const self = this;
 
@@ -863,6 +883,15 @@ class Recuperacao extends Component {
             className="fa fa-bar-chart"
             style={{ color: '#ccc', fontSize: 20, marginLeft: 10 }}
           />
+          <i
+            onClick={() =>
+              this.deletarOS(
+                JSON.stringify(row.idrecuperacao, row.ordem_servico),
+              )
+            }
+            className="fa fa-trash"
+            style={{ color: 'red', fontSize: 20, marginLeft: 10 }}
+          />
         </div>
       );
     };
@@ -894,222 +923,244 @@ class Recuperacao extends Component {
         formatter: botoes,
       },
     ];
-    if (localStorage.getItem('login') == 'on') {
-      return (
-        <div>
-          <BarChart open={this.state.modalCompare} itemSelecionado={this.state.arrayChartComparativo} close={this.closeModal} id_recuperacao={this.state.id_recuperacao_editar} />
-          <Modal
-            show={this.state.showLoading}
-            onHide={this.handleClose}
-            size="sm"
+    if(localStorage.getItem('login') == 'on') {
+    return (
+      <div>
+        <BarChart open={this.state.modalCompare} itemSelecionado={this.state.arrayChartComparativo} close={this.closeModal} id_recuperacao={this.state.id_recuperacao_editar} />
+        <Modal
+          show={this.state.showAlerta}
+          onHide={() => this.setState({ showAlerta: false, showModalConsultaRecuperacao: true })}
+          size="sm"
+        >
+          <Modal.Header closeButton>Alerta!</Modal.Header>
+          <Modal.Body
+            style={{
+              // background: 'transparent',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
           >
-            <Modal.Header closeButton>Carregando...</Modal.Header>
-            <Modal.Body
-              style={{
-                // background: 'transparent',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <div style={{ marginTop: 50, marginBottom: 50 }}>
-                <BounceLoader
-                  css={override}
-                  sizeUnit={'px'}
-                  size={60}
-                  color={'#123b7a'}
-                  loading={this.state.loading}
-                />
-
-              </div>
-            </Modal.Body>
-          </Modal>
-
-          <Modal
-            show={this.state.showModalConfirmar}
+            <div style={{ marginTop: 50, marginBottom: 50}}>
+              <p>Deseja deletar ordem de serviço {this.state.os_deletar}?</p>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={() => this.setState({ showAlerta: false, showModalConsultaRecuperacao: true })} variant="primary">Cancelar</Button>
+            <Button onClick={() => this.deletar_OS()} variant="primary">Sim</Button>
+          </Modal.Footer>
+        </Modal>
+        <Modal
+          show={this.state.showLoading}
+          onHide={this.handleClose}
+          size="sm"
+        >
+          <Modal.Header closeButton>Carregando...</Modal.Header>
+          <Modal.Body
+            style={{
+              // background: 'transparent',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
           >
-            <Modal.Header closeButton>
-              <Modal.Title>Alerta</Modal.Title>
-            </Modal.Header>
+            <div style={{ marginTop: 50, marginBottom: 50 }}>
+              <BounceLoader
+                css={override}
+                sizeUnit={'px'}
+                size={60}
+                color={'#123b7a'}
+                loading={this.state.loading}
+              />
 
-            <Modal.Body>
-              <p>Salvo com sucesso!</p>
-            </Modal.Body>
+            </div>
+          </Modal.Body>
+        </Modal>
 
-            <Modal.Footer>
-              <Button onClick={() => this.mudarPage()} variant="primary">Ok</Button>
-            </Modal.Footer>
-          </Modal>
-          <Navbar fluid>
-            <Navbar.Header>
-              <Navbar.Brand>
-                <a href="#pablo">Recuperação</a>
-              </Navbar.Brand>
-              <Navbar.Toggle onClick={this.mobileSidebarToggle} />
-            </Navbar.Header>
-            <Navbar.Collapse>
-              <Nav>
-                <NavDropdown
-                  eventKey={2}
-                  title={notification}
-                  noCaret
-                  id="basic-nav-dropdown"
-                >
-                  {this.state.carregou ?
-                    this.state.arrayPreCadastro.map((item) => (
-                      <MenuItem eventKey={2.1} onClick={() => self.buscar(item)} >Ordem de Serviço: {item.ordem_servico}</MenuItem>
-                    ))
-                    :
-                    <MenuItem eventKey={2.1}>Nenhum Cadastro</MenuItem>
-                  }
-                </NavDropdown>
-              </Nav>
-              <Nav pullRight>
-                <NavDropdown
-                  eventKey={2}
-                  title="Ações"
-                  id="basic-nav-dropdown-right"
-                >
-                  <MenuItem
-                    onClick={() =>
-                      this.consultarRecuperacao()
-                    }
-                    eventKey={2.1}
-                  >
-                    Consultar Recuperações
-                </MenuItem>
-                </NavDropdown>
-                <NavItem eventKey={3} href="#" onClick={() => this.sair()}>
-                  Sair
-              </NavItem>
-              </Nav>
-            </Navbar.Collapse>
-          </Navbar>
-          {/* modal de gráfico */}
-          <Modal
-            show={this.state.showModalChart}
-            onHide={() => this.limparDados()}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title><p style={{ fontWeight: 'bold', marginBottom: 0 }}>Ordem de Serviço: {this.state.ordem_servico_consulta}</p>
-                <p style={{ fontSize: 12, marginBottom: 0 }}>Cliente: {this.state.cliente_consulta} Tipo: {this.state.tipo_consulta}</p>
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <ReactApexChart options={this.state.options} series={this.state.series} type="pie" width="550" />
-              {/* <p>Tempo total: {this.state.tempoTotal}</p> */}
-            </Modal.Body>
-            <Modal.Footer>
-              <Button
-                variant="secondary"
-                onClick={() =>
-                  this.limparDados()}
+        <Modal
+          show={this.state.showModalConfirmar}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Alerta</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <p>Salvo com sucesso!</p>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button onClick={() => this.mudarPage()} variant="primary">Ok</Button>
+          </Modal.Footer>
+        </Modal>
+        <Navbar fluid>
+          <Navbar.Header>
+            <Navbar.Brand>
+              <a href="#pablo">Recuperação</a>
+            </Navbar.Brand>
+            <Navbar.Toggle onClick={this.mobileSidebarToggle} />
+          </Navbar.Header>
+          <Navbar.Collapse>
+            <Nav>
+              <NavDropdown
+                eventKey={2}
+                title={notification}
+                noCaret
+                id="basic-nav-dropdown"
               >
-                Sair
-            </Button>
-            </Modal.Footer>
-          </Modal>
-
-          {/* Modal consultar recuperação */}
-          <Modal
-            show={this.state.showModalConsultaRecuperacao}
-            onHide={() => this.setState({ showModalConsultaRecuperacao: false })}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Consulta de Recuperação</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <ToolkitProvider
-                keyField="id"
-                data={this.state.arrayConsultarRecuperacao}
-                columns={columns}
-                search
-              >
-                {props => (
-                  <div>
-                    <SearchBar
-                      placeholder="Pesquisar"
-                      id="search_txt"
-                      style={{ width: 470, marginRight: 10 }}
-                      {...props.searchProps}
-                    />
-                    <Button onClick={() => this.clear(props)}>Limpar</Button>
-                    {/* <hr /> */}
-                    <BootstrapTable
-                      pagination={paginator()}
-                      {...props.baseProps}
-                    />
-                    <ExportCSVButton {...props.csvProps}>
-                      Exportar Excel
-                  </ExportCSVButton>
-                  </div>
-                )}
-              </ToolkitProvider>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button
-                variant="secondary"
-                onClick={() =>
-                  this.setState({ showModalConsultaRecuperacao: false })
+                {this.state.carregou ?
+                  this.state.arrayPreCadastro.map((item) => (
+                    <MenuItem eventKey={2.1} onClick={() => self.buscar(item)} >Ordem de Serviço: {item.ordem_servico}</MenuItem>
+                  ))
+                  :
+                  <MenuItem eventKey={2.1}>Nenhum Cadastro</MenuItem>
                 }
+              </NavDropdown>
+            </Nav>
+            <Nav pullRight>
+              <NavDropdown
+                eventKey={2}
+                title="Ações"
+                id="basic-nav-dropdown-right"
               >
+                <MenuItem
+                  onClick={() =>
+                    this.consultarRecuperacao()
+                  }
+                  eventKey={2.1}
+                >
+                  Consultar Recuperações
+                </MenuItem>
+              </NavDropdown>
+              <NavItem eventKey={3} href="#" onClick={() => this.sair()} >
                 Sair
+              </NavItem>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+        {/* modal de gráfico */}
+        <Modal
+          show={this.state.showModalChart}
+          onHide={() => this.limparDados()}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title><p style={{ fontWeight: 'bold', marginBottom: 0 }}>Ordem de Serviço: {this.state.ordem_servico_consulta}</p>
+              <p style={{ fontSize: 12, marginBottom: 0 }}>Cliente: {this.state.cliente_consulta} Tipo: {this.state.tipo_consulta}</p>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <ReactApexChart options={this.state.options} series={this.state.series} type="pie" width="550" />
+            {/* <p>Tempo total: {this.state.tempoTotal}</p> */}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={() =>
+                this.limparDados()}
+            >
+              Sair
             </Button>
-            </Modal.Footer>
-          </Modal>
+          </Modal.Footer>
+        </Modal>
 
-          <div className="content" style={{ marginTop: '3%' }}>
-            <Grid fluid>
-              <Row>
-                <Col md={12}>
-                  <Card
-                    title="Cadastro de Recuperação"
-                    content={
-                      <form>
-                        <FormInputs
-                          ncols={['col-md-6', 'col-md-6']}
-                          properties={[
-                            {
-                              label: 'Ordem de Serviço',
-                              type: 'text',
-                              bsClass: 'form-control',
-                              onChange: self.ordem_servico,
-                              defaultValue: self.state.os
-                            },
-                            {
-                              label: 'Data Inicial',
-                              type: 'date',
-                              bsClass: 'form-control',
-                              onChange: self.data_inicial,
-                              defaultValue: self.state.data
-                            },
-                          ]}
-                        />
-                        <FormInputs
-                          ncols={['col-md-6', 'col-md-6']}
-                          properties={[
-                            {
-                              label: 'Cliente',
-                              type: 'text',
-                              bsClass: 'form-control',
-                              onChange: self.cliente,
-                              defaultValue: self.state.cliente
-                            },
-                            {
-                              label: 'Tipo',
-                              type: 'text',
-                              bsClass: 'form-control',
-                              onChange: self.tipo,
-                              defaultValue: self.state.tipo
-                            },
-                          ]}
-                        />
-                        <Row>
-                          <Col md="12">
-                            <label>Informações Gerais</label>
-                            <input defaultValue={this.state.infoBanco} style={{ width: '100%', height: 50 }} onChange={(e) => this.updateInput(e, 11)} />
-                          </Col>
-                        </Row>
-                        {/* <FormInputs
+        {/* Modal consultar recuperação */}
+        <Modal
+          show={this.state.showModalConsultaRecuperacao}
+          onHide={() => this.setState({ showModalConsultaRecuperacao: false })}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Consulta de Recuperação</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <ToolkitProvider
+              keyField="id"
+              data={this.state.arrayConsultarRecuperacao}
+              columns={columns}
+              search
+            >
+              {props => (
+                <div>
+                  <SearchBar
+                    placeholder="Pesquisar"
+                    id="search_txt"
+                    style={{ width: 470, marginRight: 10 }}
+                    {...props.searchProps}
+                  />
+                  <Button onClick={() => this.clear(props)}>Limpar</Button>
+                  {/* <hr /> */}
+                  <BootstrapTable
+                    pagination={paginator()}
+                    {...props.baseProps}
+                  />
+                  <ExportCSVButton {...props.csvProps}>
+                    Exportar Excel
+                  </ExportCSVButton>
+                </div>
+              )}
+            </ToolkitProvider>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={() =>
+                this.setState({ showModalConsultaRecuperacao: false })
+              }
+            >
+              Sair
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        <div className="content" style={{ marginTop: '3%' }}>
+          <Grid fluid>
+            <Row>
+              <Col md={12}>
+                <Card
+                  title="Cadastro de Recuperação"
+                  content={
+                    <form>
+                      <FormInputs
+                        ncols={['col-md-6', 'col-md-6']}
+                        properties={[
+                          {
+                            label: 'Ordem de Serviço',
+                            type: 'text',
+                            bsClass: 'form-control',
+                            onChange: self.ordem_servico,
+                            defaultValue: self.state.os
+                          },
+                          {
+                            label: 'Data Inicial',
+                            type: 'date',
+                            bsClass: 'form-control',
+                            onChange: self.data_inicial,
+                            defaultValue: self.state.data
+                          },
+                        ]}
+                      />
+                      <FormInputs
+                        ncols={['col-md-6', 'col-md-6']}
+                        properties={[
+                          {
+                            label: 'Cliente',
+                            type: 'text',
+                            bsClass: 'form-control',
+                            onChange: self.cliente,
+                            defaultValue: self.state.cliente
+                          },
+                          {
+                            label: 'Tipo',
+                            type: 'text',
+                            bsClass: 'form-control',
+                            onChange: self.tipo,
+                            defaultValue: self.state.tipo
+                          },
+                        ]}
+                      />
+                      <Row>
+                        <Col md="12">
+                          <label>Informações Gerais</label>
+                          <input defaultValue={this.state.infoBanco} style={{ width: '100%', height: 50 }} onChange={(e) => this.updateInput(e, 11)} />
+                        </Col>
+                      </Row>
+                      {/* <FormInputs
                         ncols={['col-md-12']}
                         properties={[
                           {
@@ -1122,59 +1173,70 @@ class Recuperacao extends Component {
                         ]}
                       /> */}
 
-                        <Row>
-                          <Col md={12}>
-                            <div style={{ flexDirection: 'row' }}>
-                              <FormGroup controlId="formControlsTextarea">
-                                <ControlLabel>Selecione a(s) etapa(s)</ControlLabel>
-                                <Checkbox label='Soldar Ponteira e Alinhamento' onClick={() => this.check(1)} />
-                                <input disabled={this.state.habilitarInput[0]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 1)} type="time" />
-                                <Checkbox label='Desbaste para Limpeza' onClick={() => this.check(2)} />
-                                <input disabled={this.state.habilitarInput[1]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 2)} type="time" />
-                                <Checkbox label='Camada de Solda I' onClick={() => this.check(3)} />
-                                <input disabled={this.state.habilitarInput[2]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 3)} type="time" />
-                                <Checkbox label='Usinagem Para Desbaste I' onClick={() => this.check(4)} />
-                                <input disabled={this.state.habilitarInput[3]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 4)} type="time" />
-                                <Checkbox label='Camada de Solda II' onClick={() => this.check(5)} />
-                                <input disabled={this.state.habilitarInput[4]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 5)} type="time" />
-                                <Checkbox label='Usinagem Para Desbaste II' onClick={() => this.check(6)} />
-                                <input disabled={this.state.habilitarInput[5]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 6)} type="time" />
-                                <Checkbox label='Camada de Solda III' onClick={() => this.check(7)} />
-                                <input disabled={this.state.habilitarInput[6]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 7)} type="time" />
-                                <Checkbox label='Usinagem Para Desbaste III' onClick={() => this.check(8)} />
-                                <input disabled={this.state.habilitarInput[7]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 8)} type="time" />
-                                <Checkbox label='Desbaste na Lixadeira' onClick={() => this.check(9)} />
-                                <input disabled={this.state.habilitarInput[8]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 9)} type="time" />
-                                <Checkbox label='Usinagem Final' onClick={() => this.check(10)} />
-                                <input disabled={this.state.habilitarInput[9]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 10)} type="time" />
-                              </FormGroup>
-                            </div>
-                          </Col>
-                        </Row>
-                        <Button
-                          bsStyle="info"
-                          onClick={() => this.cadastrar()}
-                          pullRight
-                          fill
-                          disabled={this.state.habilitarBtnCadastrar}
-                        >
-                          Cadastrar
+                      <Row>
+                        <Col md={12}>
+                          <div style={{ flexDirection: 'row' }}>
+                            <FormGroup controlId="formControlsTextarea">
+                              <ControlLabel>Selecione a(s) etapa(s)</ControlLabel>
+                              <div style={{ flexDirection: 'row', display: 'flex' }}>
+                                <Checkbox style={{ marginRight: 10 }} label='Soldar Ponteira e Alinhamento' onClick={() => this.check(1)} />
+                                <input style={{ height: 35 }} disabled={this.state.habilitarInput[0]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 1)} type="time" />
+                                <Checkbox style={{ marginLeft: 100, marginRight: 30 }} label='Desbaste para Limpeza' onClick={() => this.check(2)} />
+                                <input style={{ height: 35 }} disabled={this.state.habilitarInput[1]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 2)} type="time" />
+                              </div>
+                              <div style={{ flexDirection: 'row', display: 'flex' }}>
+                                <Checkbox style={{ marginRight: 96 }} label='Camada de Solda I' onClick={() => this.check(3)} />
+                                <input style={{ height: 35 }} disabled={this.state.habilitarInput[2]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 3)} type="time" />
+                                <Checkbox style={{ marginLeft: 101, marginRight: 13 }} label='Usinagem Para Desbaste I' onClick={() => this.check(4)} />
+                                <input style={{ height: 35 }} disabled={this.state.habilitarInput[3]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 4)} type="time" />
+                              </div>
+                              <div style={{ flexDirection: 'row', display: 'flex' }}>
+                                <Checkbox style={{ marginRight: 92 }} label='Camada de Solda II' onClick={() => this.check(5)} />
+                                <input style={{ height: 35 }} disabled={this.state.habilitarInput[4]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 5)} type="time" />
+                                <Checkbox style={{ marginLeft: 102, marginRight: 10 }} label='Usinagem Para Desbaste II' onClick={() => this.check(6)} />
+                                <input style={{ height: 35 }} disabled={this.state.habilitarInput[5]} defaultValue={'00:00'} min="00:00:00"
+                                  max="24:00:00" onChange={(e) => this.updateInput(e, 6)} type="time" />
+                              </div>
+                              <div style={{ flexDirection: 'row', display: 'flex' }}>
+                                <Checkbox style={{ marginRight: 89 }} label='Camada de Solda III' onClick={() => this.check(7)} />
+                                <input style={{ height: 35 }} disabled={this.state.habilitarInput[6]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 7)} type="time" />
+                                <Checkbox style={{ marginLeft: 102, marginRight: 8 }} label='Usinagem Para Desbaste III' onClick={() => this.check(8)} />
+                                <input style={{ height: 35 }} disabled={this.state.habilitarInput[7]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 8)} type="time" />
+                              </div>
+                              <div style={{ flexDirection: 'row', display: 'flex' }}>
+                                <Checkbox style={{ marginRight: 70 }} label='Desbaste na Lixadeira' onClick={() => this.check(9)} />
+                                <input style={{ height: 35 }} disabled={this.state.habilitarInput[8]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 9)} type="time" />
+                                <Checkbox style={{ marginLeft: 102, marginRight: 78 }} label='Usinagem Final' onClick={() => this.check(10)} />
+                                <input style={{ height: 35 }} disabled={this.state.habilitarInput[9]} defaultValue={'00:00'} min="00:00:00" max="24:00:00" onChange={(e) => this.updateInput(e, 10)} type="time" />
+                              </div>
+                            </FormGroup>
+                          </div>
+                        </Col>
+                      </Row>
+                      <Button
+                        bsStyle="info"
+                        onClick={() => this.cadastrar()}
+                        pullRight
+                        fill
+                        disabled={this.state.habilitarBtnCadastrar}
+                      >
+                        Cadastrar
                       </Button>
-                        <div className="clearfix" />
-                      </form>
-                    }
-                  />
-                </Col>
-              </Row>
-            </Grid>
-          </div>
+                      <div className="clearfix" />
+                    </form>
+                  }
+                />
+              </Col>
+            </Row>
+          </Grid>
         </div>
-      );
-    } else {
-      return (
-        <Redirect to="/" from="" />
-      )
-    }
+      </div>
+    );
+                } else {
+                  return(
+                    <Redirect to="/" from="" />
+                  )
+                }
   }
 }
 
