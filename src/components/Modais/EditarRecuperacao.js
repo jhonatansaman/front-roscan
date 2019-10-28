@@ -199,12 +199,14 @@ export default class EditarRecuperacao extends Component {
     }
 
     async editarDados(){
-        console.log("EDITAR DADOS: ", this.state.arrayEditarTempos)
+        var filtered = this.state.arrayEditarTempos.filter(function (el) {
+            return el != null;
+        });
 
-        // await api.post('/recuperacao/editarTempos', { arrayEditar: this.state.arrayEditarTempos })
-        // await this.setState({ arrayEditarTempos: [] });
-        // await this.limparDados();
-        // this.props.close();
+        await api.post('/recuperacao/editarTempos', { arrayEditar: filtered })
+        await this.setState({ arrayEditarTempos: [] });
+        await this.limparDados();
+        this.props.close();
     }
 
     render() {
