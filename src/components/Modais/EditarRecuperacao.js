@@ -21,7 +21,8 @@ export default class EditarRecuperacao extends Component {
             arrayTempoPos: '',
             arrayCategorias: '',
             bPre: false,
-            bPos: false
+            bPos: false,
+            arrayEditarTempos: [],
         })
     }
 
@@ -137,45 +138,45 @@ export default class EditarRecuperacao extends Component {
 
     }
 
-    async handleInput(e, key, item){
+    async handleInput(e, key, item, t){
        if(key == 0){
-            this.state.arrayEditarTempos[0] = { id: item.id, tempo: e.target.value, etapa: item.etapa }
+            this.state.arrayEditarTempos[0] = { id: item.id, tempo: e.target.value, etapa: item.etapa, coluna: t }
             this.forceUpdate();
        }
        if(key == 1){
-            this.state.arrayEditarTempos[1] = { id: item.id, tempo: e.target.value, etapa: item.etapa }
+            this.state.arrayEditarTempos[1] = { id: item.id, tempo: e.target.value, etapa: item.etapa, coluna: t }
             this.forceUpdate();
        }
        if(key == 2){
-            this.state.arrayEditarTempos[2] = { id: item.id, tempo: e.target.value, etapa: item.etapa }
+            this.state.arrayEditarTempos[2] = { id: item.id, tempo: e.target.value, etapa: item.etapa, coluna: t }
             this.forceUpdate();
        }
        if(key == 3){
-            this.state.arrayEditarTempos[3] = { id: item.id, tempo: e.target.value, etapa: item.etapa }
+            this.state.arrayEditarTempos[3] = { id: item.id, tempo: e.target.value, etapa: item.etapa, coluna: t }
             this.forceUpdate();
        }
        if(key == 4){
-            this.state.arrayEditarTempos[4] = { id: item.id, tempo: e.target.value, etapa: item.etapa }
+            this.state.arrayEditarTempos[4] = { id: item.id, tempo: e.target.value, etapa: item.etapa, coluna: t }
             this.forceUpdate();
        }
        if(key == 5){
-            this.state.arrayEditarTempos[5] = { id: item.id, tempo: e.target.value, etapa: item.etapa }
+            this.state.arrayEditarTempos[5] = { id: item.id, tempo: e.target.value, etapa: item.etapa, coluna: t }
             this.forceUpdate();
        }
        if(key == 6){
-            this.state.arrayEditarTempos[6] = { id: item.id, tempo: e.target.value, etapa: item.etapa }
+            this.state.arrayEditarTempos[6] = { id: item.id, tempo: e.target.value, etapa: item.etapa, coluna: t }
             this.forceUpdate();
        }
        if(key == 7){
-            this.state.arrayEditarTempos[7] = { id: item.id, tempo: e.target.value, etapa: item.etapa }
+            this.state.arrayEditarTempos[7] = { id: item.id, tempo: e.target.value, etapa: item.etapa, coluna: t }
             this.forceUpdate();
        }
        if(key == 8){
-            this.state.arrayEditarTempos[8] = { id: item.id, tempo: e.target.value, etapa: item.etapa }
+            this.state.arrayEditarTempos[8] = { id: item.id, tempo: e.target.value, etapa: item.etapa, coluna: t }
             this.forceUpdate();
        }
        if(key == 9){
-            this.state.arrayEditarTempos[9] = { id: item.id, tempo: e.target.value, etapa: item.etapa }
+            this.state.arrayEditarTempos[9] = { id: item.id, tempo: e.target.value, etapa: item.etapa, coluna: t }
             this.forceUpdate();
        }
        
@@ -198,10 +199,12 @@ export default class EditarRecuperacao extends Component {
     }
 
     async editarDados(){
-        console.log("array editar: ", this.state.arrayEditarTempos)
+        console.log("EDITAR DADOS: ", this.state.arrayEditarTempos)
+
         // await api.post('/recuperacao/editarTempos', { arrayEditar: this.state.arrayEditarTempos })
-        // this.setState({ arrayEditarTempos: [] });
-        this.props.close();
+        // await this.setState({ arrayEditarTempos: [] });
+        // await this.limparDados();
+        // this.props.close();
     }
 
     render() {
@@ -240,7 +243,7 @@ export default class EditarRecuperacao extends Component {
 
                                                         <div>
                                                             <p>{item.nome}</p>
-                                                            <input defaultValue={t} onChange={(e) => this.handleInput(e, index, item)} min="00:00:00" max="24:00:00" type="time" />
+                                                            <input defaultValue={t} onChange={(e) => this.handleInput(e, index, item, 'tempo_pre')} min="00:00:00" max="24:00:00" type="time" />
                                                         </div>
                                                     )
                                                 } else {
@@ -263,7 +266,7 @@ export default class EditarRecuperacao extends Component {
                                                     return (
                                                         <div>
                                                             <p>{item.nome}</p>
-                                                            <input onChange={(e) => this.handleInput(e, index, item)} defaultValue={t} min="00:00:00" max="24:00:00" type="time" />
+                                                            <input onChange={(e) => this.handleInput(e, index, item, 'tempo_pre')} defaultValue={t} min="00:00:00" max="24:00:00" type="time" />
                                                         </div>
                                                     )
                                                 } else {
@@ -290,7 +293,7 @@ export default class EditarRecuperacao extends Component {
                                                         return (
                                                             <div>
                                                                 <p>{item.nome}</p>
-                                                                <input key={index} onChange={(e) => this.handleInput(e, index, item)} defaultValue={t} min="00:00:00" max="24:00:00" type="time" />
+                                                                <input key={index} onChange={(e) => this.handleInput(e, index, item, 'tempo_total',)} defaultValue={t} min="00:00:00" max="24:00:00" type="time" />
                                                             </div>
                                                         )
                                                     } else {
@@ -313,7 +316,7 @@ export default class EditarRecuperacao extends Component {
                                                         return (
                                                             <div>
                                                                 <p>{item.nome}</p>
-                                                                <input key={index} onChange={(e) => this.handleInput(e, index, item)} defaultValue={t} min="00:00:00" max="24:00:00" type="time" />
+                                                                <input key={index} onChange={(e) => this.handleInput(e, index, item, 'tempo_total')} defaultValue={t} min="00:00:00" max="24:00:00" type="time" />
                                                             </div>
                                                         )
                                                     } else {
