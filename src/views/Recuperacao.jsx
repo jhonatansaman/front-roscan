@@ -50,6 +50,7 @@ import {  Redirect } from "react-router-dom";
 
 import ReactApexChart from "react-apexcharts";
 import BarChart from 'components/Grafico_Comparativo/barChart';
+import EditarRecuperacao from 'components/Modais/EditarRecuperacao';
 const { SearchBar, ClearSearchButton } = Search;
 const { ExportCSVButton } = CSVExport;
 
@@ -169,6 +170,7 @@ class Recuperacao extends Component {
       cliente_consulta: '',
       arrayChartComparativo: '', 
       idrecuperacao_deletar: '',
+      arrayEditar: ''
     }
   };
 
@@ -826,7 +828,10 @@ class Recuperacao extends Component {
   }
 
   closeModal() {
-    this.setState({ modalCompare: !this.state.modalCompare, showModalConsultaRecuperacao: true })
+    if(this.state.modalCompare)
+      this.setState({ modalCompare: !this.state.modalCompare, showModalConsultaRecuperacao: true })
+    else
+      this.setState({ showModalEditar: !this.state.showModalEditar, showModalConsultaRecuperacao: true })
   }
   
   sair(){
@@ -848,6 +853,11 @@ class Recuperacao extends Component {
     });
     
     window.location.reload();
+  }
+
+  async editarRecuperacao(id) {
+    const response = await api.post('/posts/consultarRecuperacao', { idrecuperacao: id })
+    this.setState({ arrayEditar: response.data[0],showModalConsultaRecuperacao: false , showModalEditar: true, idEditar: id })
   }
   render() {
     const self = this;
@@ -888,15 +898,15 @@ class Recuperacao extends Component {
             className="fa fa-bar-chart"
             style={{ color: '#ccc', fontSize: 20, marginLeft: 10 }}
           />
-          {/* <i
+          <i
             onClick={() =>
-              this.deletarOS(
+              this.editarRecuperacao(
                 JSON.stringify(row.idrecuperacao),
               )
             }
             className="fa fa-edit"
             style={{ color: 'blue', fontSize: 20, marginLeft: 10 }}
-          /> */}
+          />
           <i
             onClick={() =>
               this.deletarOS(
@@ -941,6 +951,7 @@ class Recuperacao extends Component {
     return (
       <div>
         <BarChart open={this.state.modalCompare} itemSelecionado={this.state.arrayChartComparativo} close={this.closeModal} id_recuperacao={this.state.id_recuperacao_editar} />
+        <EditarRecuperacao itemSelecionado={this.state.arrayEditar} open={this.state.showModalEditar} close={this.closeModal} />
         <Modal
           show={this.state.showAlerta}
           onHide={() => this.setState({ showAlerta: false, showModalConsultaRecuperacao: true })}

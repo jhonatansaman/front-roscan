@@ -1,0 +1,55 @@
+
+.container:after {
+    content: "";
+    display: table;
+    clear: both;
+    /* align-items: center;
+    text-align: center;
+    justify-content: center; */
+}
+.container2:after {
+    content: "";
+    display: table;
+    clear: both;
+    /* align-items: center;
+    text-align: center;
+    justify-content: center; */
+}
+
+.item1 {
+    float: left;
+    width: 23.5%;
+    padding: 10px;
+    /* height: 300px; Should be removed. Only for demonstration */
+  }
+
+.item2 {
+    float: left;
+    width: 23.5%;
+    padding: 10px;
+    /* height: 300px; Should be removed. Only for demonstration */
+  }
+
+.line {
+    border-style: solid;
+    border-width: 0.3px;
+    border-color: #bbb;
+    width: 47%;
+    margin-bottom: 20px;
+    margin-top: 5px;
+  } 
+
+.bPre{
+  width: 120px;
+}
+.bPre:focus{
+  background-color: #ccc;
+  -webkit-appearance: initial;
+}
+.bPre2{
+  width: 120px;
+  margin-left: 20px;
+}
+.bPre2:focus{
+  background-color: #ccc;
+}
