@@ -340,8 +340,22 @@ class Recuperacao extends Component {
 
     this.setState({ habilitarBtnCadastrar: false })
   }
+// mudar tete
+  async verificarOrdem(){
+    const r = await api.post('recuperacao/verificarOrdem', {
+      ordem_servico: this.state.os
+    })
+    return r.data;
+    
+  }
 
   async cadastrar() {
+
+    let verify = await this.verificarOrdem();
+    if(verify){
+      alert("Ordem de serviço já cadastrada!");
+      return 1;
+    }
     var bool = true
 
     this.state.habilitarInput.map(item => {
